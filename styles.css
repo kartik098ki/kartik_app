@@ -57,6 +57,7 @@ html, body {
   position: relative;
   overflow: hidden;
   background: var(--bg);
+  background-image: radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
 }
 
 /* =====================================================
@@ -568,7 +569,13 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 52px 16px 12px;
-  background: white;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .delivering-label {
@@ -1040,12 +1047,14 @@ html, body {
   transform: translateX(-50%);
   width: 100%;
   max-width: 430px;
-  background: white;
-  border-top: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   z-index: 100;
   padding-bottom: env(safe-area-inset-bottom, 0);
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.04);
 }
 
 .nav-btn {
