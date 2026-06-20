@@ -38,8 +38,8 @@ function loadState() {
     if (saved) {
       const parsed = JSON.parse(saved);
       appState.user   = parsed.user   || null;
-      appState.cart   = parsed.cart   || [];
-      appState.orders = parsed.orders || [];
+      appState.cart   = Array.isArray(parsed.cart) ? parsed.cart : [];
+      appState.orders = Array.isArray(parsed.orders) ? parsed.orders : [];
       appState.pnrData = parsed.pnrData || null;
     }
   } catch(e) {}
@@ -177,7 +177,7 @@ function navigateTo(pageId) {
   appState.currentPage = pageId;
 
   // Control bottom nav visibility
-  const hideNavPages = ['page-splash', 'page-cart', 'page-checkout'];
+  const hideNavPages = ['page-splash', 'page-pnr', 'page-cart', 'page-checkout'];
   const bottomNav = document.querySelector('.bottom-nav');
   if (bottomNav) {
     if (hideNavPages.includes(pageId)) {
@@ -384,17 +384,47 @@ async function checkLiveStatus() {
 function renderLiveTrainResult(d, trainNo) {
   let currentStation = '—';
   let nextStation = '—';
-  if (d.timeline) {
-    const current = d.timeline.find(t => t.status === 'current') || d.timeline.find(t => t.stationCode === d.currentStationCode);
+  
+  if (d.timeline && d.timeline.length > 0) {
+    // 1. Try to find the station with status 'current'
+    let current = d.timeline.find(t => t.status === 'current');
+    
+    // 2. If no 'current' station, try to find by currentStationCode
+    if (!current && d.currentStationCode) {
+      current = d.timeline.find(t => t.stationCode === d.currentStationCode);
+    }
+    
+    // 3. If still not found, get the last station with status 'passed'
+    if (!current) {
+      const passedStations = d.timeline.filter(t => t.status === 'passed');
+      if (passedStations.length > 0) {
+        current = passedStations[passedStations.length - 1];
+      }
+    }
+    
     if (current) {
-      currentStation = `${current.stationName} (${current.stationCode})`;
+      currentStation = `${current.stationName || current.stationCode} (${current.stationCode})`;
+      
+      // Find the next upcoming station/stoppage
       const currIdx = d.timeline.indexOf(current);
       if (currIdx !== -1 && currIdx < d.timeline.length - 1) {
-        const upcoming = d.timeline.slice(currIdx + 1).find(t => t.status === 'upcoming' || t.type === 'stoppage');
-        if (upcoming) nextStation = `${upcoming.stationName} (${upcoming.stationCode})`;
+        const upcoming = d.timeline.slice(currIdx + 1).find(t => t.status === 'upcoming' || t.status === 'current');
+        if (upcoming) {
+          nextStation = `${upcoming.stationName || upcoming.stationCode} (${upcoming.stationCode})`;
+        }
       }
-    } else if (d.currentStationCode) {
-      currentStation = d.currentStationCode;
+    } else {
+      if (d.currentStationCode) {
+        currentStation = d.currentStationCode;
+      }
+    }
+    
+    // If nextStation is still '—', find the first upcoming station in the whole timeline
+    if (nextStation === '—') {
+      const upcoming = d.timeline.find(t => t.status === 'upcoming');
+      if (upcoming) {
+        nextStation = `${upcoming.stationName || upcoming.stationCode} (${upcoming.stationCode})`;
+      }
     }
   }
 
@@ -1300,18 +1330,100 @@ document.addEventListener('touchend', (e) => {
 }, { passive: true });
 
 // =====================================================
+// CUSTOM DATE SELECTOR HELPER FUNCTIONS
+// =====================================================
+function renderCustomDatePicker(containerId, inputId) {
+  const container = document.getElementById(containerId);
+  const hiddenInput = document.getElementById(inputId);
+  if (!container || !hiddenInput) return;
+
+  const dates = [];
+  const today = new Date();
+
+  // Create next 7 days
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    dates.push(d);
+  }
+
+  let html = '';
+  const currentSelectedValue = hiddenInput.value || today.toISOString().slice(0, 10);
+  
+  dates.forEach((date, index) => {
+    const dateStr = date.toISOString().slice(0, 10);
+    const isSelected = dateStr === currentSelectedValue;
+    const dayName = index === 0 ? 'Today' : index === 1 ? 'Tomorrow' : date.toLocaleDateString('en-IN', { weekday: 'short' });
+    const dayNum = date.getDate();
+    const monthName = date.toLocaleDateString('en-IN', { month: 'short' });
+
+    html += `
+      <div class="date-item ${isSelected ? 'selected' : ''}" data-date="${dateStr}" onclick="selectCustomDate('${containerId}', '${inputId}', '${dateStr}', this)">
+        <span class="date-day">${dayName}</span>
+        <span class="date-num">${dayNum}</span>
+        <span class="date-day" style="font-size: 0.62rem; margin-top: 2px;">${monthName}</span>
+      </div>
+    `;
+  });
+
+  // Add an "Other" option that triggers native calendar
+  html += `
+    <div class="date-item other" onclick="triggerNativeDatePicker('${inputId}')">
+      <span class="date-day">Other</span>
+      <span class="date-num">📅</span>
+      <span class="date-day" style="font-size: 0.62rem; margin-top: 2px;">Calendar</span>
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+function selectCustomDate(containerId, inputId, dateStr, element) {
+  const container = document.getElementById(containerId);
+  const hiddenInput = document.getElementById(inputId);
+  if (!container || !hiddenInput) return;
+
+  container.querySelectorAll('.date-item').forEach(item => item.classList.remove('selected'));
+  if (element) {
+    element.classList.add('selected');
+  }
+
+  hiddenInput.value = dateStr;
+  const event = new Event('change');
+  hiddenInput.dispatchEvent(event);
+}
+
+function triggerNativeDatePicker(inputId) {
+  const hiddenInput = document.getElementById(inputId);
+  if (!hiddenInput) return;
+  
+  hiddenInput.style.display = 'block';
+  hiddenInput.focus();
+  hiddenInput.click();
+  
+  hiddenInput.onchange = function() {
+    hiddenInput.style.display = 'none';
+    const containerId = inputId === 'train-date-input' ? 'search-date-selector' : 'live-date-selector';
+    renderCustomDatePicker(containerId, inputId);
+  };
+}
+
+// =====================================================
 // INIT
 // =====================================================
 document.addEventListener('DOMContentLoaded', () => {
   loadState();
   setDefaultDates();
 
-  // Skip splash screen, show Home page directly
-  document.getElementById('page-shop').classList.add('active');
-  appState.currentPage = 'page-shop';
-  initShopPage();
+  // Render custom date pickers
+  renderCustomDatePicker('search-date-selector', 'train-date-input');
+  renderCustomDatePicker('live-date-selector', 'live-date-input');
+
+  // Start with Splash Screen
+  document.getElementById('page-splash').classList.add('active');
+  appState.currentPage = 'page-splash';
   const bottomNav = document.querySelector('.bottom-nav');
-  if (bottomNav) bottomNav.style.display = 'flex';
+  if (bottomNav) bottomNav.style.display = 'none';
 
   // If user already logged in, update account page
   if (appState.user) initAccountPage();
@@ -1326,10 +1438,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Add animation to FAB on hover
   const fab = document.getElementById('cart-fab');
-  fab.addEventListener('mouseenter', () => {
-    fab.style.transform = 'scale(1.06)';
-  });
-  fab.addEventListener('mouseleave', () => {
-    fab.style.transform = 'scale(1)';
-  });
+  if (fab) {
+    fab.addEventListener('mouseenter', () => {
+      fab.style.transform = 'scale(1.06)';
+    });
+    fab.addEventListener('mouseleave', () => {
+      fab.style.transform = 'scale(1)';
+    });
+  }
 });

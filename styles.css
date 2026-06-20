@@ -91,8 +91,9 @@ html, body {
   opacity: 0;
 }
 
-/* Hide bottom-nav when Splash, Cart, Checkout, or modal is active */
+/* Hide bottom-nav when Splash, PNR, Cart, Checkout, or modal is active */
 .app-wrapper:has(#page-splash.active) .bottom-nav,
+.app-wrapper:has(#page-pnr.active) .bottom-nav,
 .app-wrapper:has(#page-cart.active) .bottom-nav,
 .app-wrapper:has(#page-checkout.active) .bottom-nav,
 .app-wrapper:has(.modal-overlay:not(.hidden)) .bottom-nav {
@@ -2151,3 +2152,71 @@ html, body {
 @keyframes rippleAnim {
   to { transform: translate(-50%, -50%) scale(4); opacity: 0; }
 }
+
+/* Custom Date Selector */
+.custom-date-selector {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 12px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 12px;
+}
+
+.custom-date-selector::-webkit-scrollbar {
+  display: none;
+}
+
+.date-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  height: 64px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.date-item .date-day {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 4px;
+}
+
+.date-item .date-num {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text);
+  font-family: 'Poppins', sans-serif;
+}
+
+.date-item:active {
+  transform: scale(0.95);
+}
+
+.date-item.selected {
+  background: var(--orange);
+  border-color: var(--orange);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.date-item.selected .date-day {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.date-item.selected .date-num {
+  color: white;
+}
+
+.date-item.other {
+  border-style: dashed;
+}
+
