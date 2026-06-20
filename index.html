@@ -5,58 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>RailQuick — Essentials Delivered to Your Train Seat</title>
   <meta name="description" content="RailQuick delivers essential products to your seat in train. Snacks, beverages, hygiene, electronics — delivered at the next station in Delhi." />
+  <meta name="theme-color" content="#0F172A" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
-<!-- ==================== APP WRAPPER ==================== -->
 <div id="app" class="app-wrapper">
 
-  <!-- ==================== SPLASH / WELCOME PAGE ==================== -->
+  <!-- ==================== SPLASH PAGE ==================== -->
   <div id="page-splash" class="page active">
-    <div class="splash-bg" style="background-image: url('hero_bg.png')"></div>
-    <div class="splash-overlay" style="background: linear-gradient(180deg, rgba(15,23,42,0.6) 0%, rgba(15,23,42,0.95) 100%);"></div>
-    <div class="splash-content" style="display: flex; flex-direction: column; justify-content: center; height: 100%; padding: 40px 24px; text-align: center; gap: 30px;">
-      <div style="margin-top: auto;">
-        <h1 class="splash-brand" style="font-size: 3.2rem; font-weight: 900; letter-spacing: -1.5px; margin-bottom: 12px; font-family: 'Poppins', sans-serif;">
-          <span class="brand-rail" style="color: #FFFFFF; text-shadow: none;">Rail</span><span class="brand-quick" style="color: var(--green);">Quick</span>
+    <div class="splash-bg" style="background-image: url('splash_hero.png')"></div>
+    <div class="splash-overlay"></div>
+    <div class="splash-content">
+      <div class="splash-logo-wrapper">
+        <div class="splash-train-icon">
+          <svg width="52" height="52" viewBox="0 0 64 64" fill="none"><path d="M20 8h24a8 8 0 018 8v28a8 8 0 01-8 8H20a8 8 0 01-8-8V16a8 8 0 018-8z" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="2"/><rect x="18" y="20" width="28" height="14" rx="3" fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1.5"/><circle cx="24" cy="46" r="3" fill="white"/><circle cx="40" cy="46" r="3" fill="white"/><line x1="20" y1="52" x2="16" y2="58" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="44" y1="52" x2="48" y2="58" stroke="white" stroke-width="2" stroke-linecap="round"/><rect x="28" y="12" width="8" height="4" rx="2" fill="#FF6B2C"/></svg>
+        </div>
+        <h1 class="splash-brand">
+          <span class="brand-rail">Rail</span><span class="brand-quick">Quick</span>
         </h1>
-        <p class="splash-tagline-main" style="color: #94A3B8; font-size: 1.15rem; font-weight: 500; line-height: 1.5; max-width: 280px; margin: 0 auto;">Essentials Delivered to Your Train Seat</p>
+        <p class="splash-tagline">Essentials Delivery Platform</p>
+        <p class="splash-tagline-sub">Delivered to your seat in train</p>
       </div>
 
-      <div style="margin-top: auto; width: 100%; display: flex; flex-direction: column; gap: 24px; align-items: center;">
-        <div class="city-name" style="color: #64748B; font-size: 0.8rem; font-weight: 700; letter-spacing: 2px;">DELHI RAILWAY STATION</div>
-        <button class="btn-get-started" onclick="navigateTo('page-pnr')" style="background: var(--green); color: white; width: 100%; padding: 18px; border: none; border-radius: var(--radius-sm); font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 14px rgba(16,185,129,0.3);">
+      <div class="splash-bottom">
+        <div class="splash-divider">Launching in</div>
+        <div class="splash-city">DELHI</div>
+        <div class="splash-skyline">
+          <svg width="240" height="36" viewBox="0 0 240 36" fill="none">
+            <path d="M0 36 L10 28 L15 28 L20 20 L25 28 L30 28 L35 24 L40 24 L45 16 L50 24 L55 24 L60 28 L70 28 L75 12 L80 12 L82 8 L84 8 L86 4 L88 4 L90 0 L92 4 L94 4 L96 8 L98 8 L100 12 L105 12 L110 28 L120 28 L125 20 L128 20 L132 14 L136 20 L140 20 L145 28 L155 28 L160 22 L165 22 L168 16 L171 22 L175 22 L180 28 L190 28 L195 18 L200 18 L205 24 L210 24 L215 28 L225 28 L230 32 L240 36Z" fill="white" opacity="0.3"/>
+          </svg>
+        </div>
+        <p class="splash-hindi">Har Safar, Ab Aur Behtar</p>
+        <button class="btn-get-started" onclick="navigateTo('page-pnr')">
           Get Started
-          <span class="arrow-right">→</span>
+          <span class="arrow-circle">→</span>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- ==================== PNR / TRAIN STATUS PAGE ==================== -->
-  <div id="page-pnr" class="page tab-page">
+  <!-- ==================== PNR & TRAIN STATUS PAGE ==================== -->
+  <div id="page-pnr" class="page">
     <div class="pnr-hero">
-      <div class="pnr-hero-bg" style="background-image: url('hero_bg.png')"></div>
+      <div class="pnr-hero-bg" style="background-image: url('pnr_hero.png')"></div>
       <div class="pnr-hero-overlay"></div>
+      <button class="pnr-back-btn" onclick="navigateTo('page-splash')">←</button>
       <div class="pnr-hero-content">
-        <div>
-          <h1 class="pnr-hero-title">PNR & Train Status</h1>
-          <p class="pnr-hero-sub">Live updates. Hassle-free journey.</p>
-        </div>
+        <h1 class="pnr-hero-title">PNR & Train Status</h1>
+        <p class="pnr-hero-sub">Live updates. Hassle-free journey.</p>
       </div>
     </div>
 
     <div class="pnr-card">
-      <!-- Tab switcher -->
       <div class="pnr-tabs">
         <button class="pnr-tab active" id="tab-pnr" onclick="switchPNRTab('pnr')">
+          <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
           Check PNR Status
         </button>
         <button class="pnr-tab" id="tab-live" onclick="switchPNRTab('live')">
+          <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           Live Train Status
         </button>
       </div>
@@ -66,34 +76,34 @@
         <div class="input-group">
           <input type="number" id="pnr-input" class="rq-input" placeholder="Enter 10 digit PNR" maxlength="10" oninput="validatePNR(this)" />
           <span class="input-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
           </span>
         </div>
-        <button class="btn-primary full-width" id="btn-check-pnr" onclick="checkPNRStatus()">
-          Check Status
-        </button>
+        <button class="btn-primary full-width" onclick="checkPNRStatus()">Check Status</button>
+
         <div class="or-divider"><span>OR</span></div>
+
         <div class="section-header-small">
           <span class="section-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="16" rx="2"></rect><path d="M4 11h16"></path><path d="M12 3v8"></path><path d="m8 19-2 3"></path><path d="m16 19 2 3"></path></svg>
+            <svg class="icon-svg" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
           </span>
           Search Train
         </div>
         <div class="input-group">
           <input type="text" id="train-search-input" class="rq-input" placeholder="Train Number or Name" />
           <span class="input-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </span>
         </div>
         <div class="input-label">Journey Date</div>
         <div id="search-date-selector" class="custom-date-selector"></div>
         <input type="date" id="train-date-input" style="display: none;" />
         <button class="btn-orange full-width" onclick="searchTrain()">Search Train</button>
-        
-        <div class="pnr-skip-container" style="text-align: center; margin-top: 16px;">
-          <a href="#" class="pnr-skip-link" onclick="navigateTo('page-shop')" style="color: var(--text-light); font-size: 0.88rem; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; transition: color 0.2s;">
+
+        <div style="text-align: center; margin-top: 18px;">
+          <a href="#" class="pnr-skip-link" onclick="navigateTo('page-shop')">
             Skip & Browse Essentials
-            <svg class="icon-svg" viewBox="0 0 24 24" style="width: 16px; height: 16px; stroke-width: 2.5;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;stroke-width:2.5;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
         </div>
       </div>
@@ -103,51 +113,52 @@
         <div class="input-group">
           <input type="number" id="live-train-input" class="rq-input" placeholder="Enter Train Number (e.g. 12301)" />
           <span class="input-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="16" rx="2"></rect><path d="M4 11h16"></path><path d="M12 3v8"></path><path d="m8 19-2 3"></path><path d="m16 19 2 3"></path></svg>
+            <svg class="icon-svg" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
           </span>
         </div>
         <div class="input-label">Journey Date</div>
         <div id="live-date-selector" class="custom-date-selector"></div>
         <input type="date" id="live-date-input" style="display: none;" />
-        <button class="btn-primary full-width" onclick="checkLiveStatus()">
-          Get Live Status
-        </button>
+        <button class="btn-primary full-width" onclick="checkLiveStatus()">Get Live Status</button>
       </div>
 
-      <!-- Results Area -->
+      <!-- Results -->
       <div id="pnr-results" class="pnr-results hidden"></div>
-    </div>
+
+      <!-- Promo Banner -->
+      <div class="promo-banner">
+        <div class="promo-banner-text">
+          <div class="promo-banner-title">We deliver essentials at the next station</div>
+          <div class="promo-banner-sub">Quick · Safe · On time</div>
+        </div>
+        <div class="promo-banner-emoji">🎒</div>
+      </div>
     </div>
 
-    <!-- Continue to Shop -->
+    <!-- Continue to Shop Bar -->
     <div class="continue-shop-bar hidden" id="continue-bar">
       <div class="train-info-mini" id="train-info-mini"></div>
-      <button class="btn-orange" onclick="proceedToShop()">Order Essentials →</button>
+      <button class="btn-orange" onclick="proceedToShop()" style="padding:12px 20px;font-size:0.85rem;">Order Essentials →</button>
     </div>
   </div>
 
-  <!-- ==================== HOME / SHOP PAGE ==================== -->
+  <!-- ==================== SHOP PAGE ==================== -->
   <div id="page-shop" class="page tab-page">
-    <!-- Top bar -->
     <div class="shop-topbar">
-      <div class="shop-location">
-        <div class="shop-location-text">
-          <div class="delivering-label">Delivering in trains arriving in</div>
-          <div class="city-select">Delhi <span class="chevron">▾</span></div>
-        </div>
+      <div>
+        <div class="delivering-label">Delivering in trains arriving in</div>
+        <div class="city-select"><span class="city-orange">Delhi</span>&nbsp;▾</div>
       </div>
-      <div class="topbar-right">
-        <button class="notif-btn" onclick="showNotif()">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-          <span class="notif-badge" id="notif-count">2</span>
-        </button>
-      </div>
+      <button class="notif-btn" onclick="showNotif()">
+        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notif-count">2</span>
+      </button>
     </div>
 
-    <!-- Train info strip (shown if PNR checked) -->
+    <!-- Train Info Strip -->
     <div id="train-strip" class="train-strip hidden">
       <div class="train-strip-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="16" rx="2"></rect><path d="M4 11h16"></path><path d="M12 3v8"></path><path d="m8 19-2 3"></path><path d="m16 19 2 3"></path></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
       </div>
       <div class="train-strip-info">
         <div class="train-strip-name" id="strip-train-name">Train Name</div>
@@ -160,52 +171,44 @@
     <div class="search-container">
       <div class="search-bar" onclick="focusSearch()">
         <span class="search-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </span>
         <input type="text" id="product-search" class="search-input" placeholder="What do you need during your journey?" oninput="filterProducts(this.value)" />
       </div>
       <button class="search-btn" onclick="filterProducts(document.getElementById('product-search').value)">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="color:white;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
     </div>
 
-    <!-- Category Pills -->
+    <!-- Categories -->
     <div class="categories-scroll">
       <div class="category-pill active" onclick="filterCategory('all', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-        </div>
+        <div class="cat-icon">🛒</div>
         <div class="cat-label">All</div>
       </div>
       <div class="category-pill" onclick="filterCategory('snacks', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M8.5 8.5h.01"></path><path d="M15.5 8.5h.01"></path><path d="M8.5 15.5h.01"></path><path d="M15.5 15.5h.01"></path></svg>
-        </div>
+        <div class="cat-icon">🍿</div>
         <div class="cat-label">Snacks</div>
       </div>
       <div class="category-pill" onclick="filterCategory('beverages', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"></path><line x1="6" y1="2" x2="18" y2="2"></line><line x1="18" y1="2" x2="16" y2="22"></line><line x1="6" y1="2" x2="8" y2="22"></line><line x1="8" y1="22" x2="16" y2="22"></line><line x1="12" y1="2" x2="9" y2="12"></line></svg>
-        </div>
+        <div class="cat-icon">🥤</div>
         <div class="cat-label">Beverages</div>
       </div>
       <div class="category-pill" onclick="filterCategory('hygiene', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-4.3-7-11-7-11S5 10.7 5 15a7 7 0 0 0 7 7z"></path></svg>
-        </div>
+        <div class="cat-icon">🧴</div>
         <div class="cat-label">Hygiene</div>
       </div>
       <div class="category-pill" onclick="filterCategory('electronics', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-        </div>
+        <div class="cat-icon">📱</div>
         <div class="cat-label">Electronics</div>
       </div>
       <div class="category-pill" onclick="filterCategory('comfort', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-        </div>
-        <div class="cat-label">Comfort</div>
+        <div class="cat-icon">😴</div>
+        <div class="cat-label">Travel Comfort</div>
+      </div>
+      <div class="category-pill" onclick="filterCategory('all', this)">
+        <div class="cat-icon">⋯</div>
+        <div class="cat-label">More</div>
       </div>
     </div>
 
@@ -222,21 +225,18 @@
       </div>
     </div>
 
-    <!-- Top Picks -->
+    <!-- Products Section -->
     <div class="section-header" id="products-section">
       <span class="section-title">Top Picks for You</span>
       <button class="see-all" onclick="filterCategory('all', null)">See All</button>
     </div>
+    <div class="products-grid" id="products-grid"></div>
 
-    <div class="products-grid" id="products-grid">
-      <!-- Products are rendered by JS -->
-    </div>
-
-    <!-- Trust badges -->
+    <!-- Trust Badges -->
     <div class="trust-badges">
       <div class="trust-badge">
         <span class="trust-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <svg class="icon-svg" viewBox="0 0 24 24" style="color:#3B82F6;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </span>
         <div>
           <div class="trust-title">Safe Packaging</div>
@@ -245,7 +245,7 @@
       </div>
       <div class="trust-badge">
         <span class="trust-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <svg class="icon-svg" viewBox="0 0 24 24" style="color:#3B82F6;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </span>
         <div>
           <div class="trust-title">On-time Delivery</div>
@@ -263,10 +263,9 @@
       <button class="cart-clear" onclick="clearCart()">Clear</button>
     </div>
 
-    <!-- Delivery address card -->
     <div class="delivery-card" id="delivery-card">
       <span class="delivery-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="color:var(--orange);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       </span>
       <div class="delivery-info">
         <div class="delivery-title">Delivering to your seat</div>
@@ -275,58 +274,40 @@
       <button class="delivery-change" onclick="navigateTo('page-pnr')">Change</button>
     </div>
 
-    <!-- Cart items -->
-    <div id="cart-items-list" class="cart-items-list">
-      <!-- rendered by JS -->
-    </div>
+    <div id="cart-items-list" class="cart-items-list"></div>
 
-    <!-- Empty cart -->
     <div id="cart-empty" class="cart-empty hidden">
       <div class="empty-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 48px; height: 48px; color: var(--text-light);"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--text-light);"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
       </div>
       <div class="empty-title">Your cart is empty</div>
       <div class="empty-sub">Add essentials for your journey!</div>
       <button class="btn-orange" onclick="navigateTo('page-shop')">Browse Products</button>
     </div>
 
-    <!-- Promo Code Section -->
-    <div class="promo-section" style="background: white; border-radius: var(--radius); padding: 14px; margin-bottom: 16px; box-shadow: var(--card-shadow); display: flex; flex-direction: column; gap: 8px;">
-      <div style="font-size: 0.85rem; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 6px;">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px; color: var(--green);"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+    <!-- Promo Code -->
+    <div class="promo-section">
+      <div style="font-size:0.85rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;color:var(--orange);"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
         Apply Promo Code
       </div>
-      <div style="display: flex; gap: 8px;">
-        <input type="text" id="promo-input" class="rq-input" placeholder="Enter coupon code" style="margin-bottom: 0; padding: 10px 14px; text-transform: uppercase;" />
-        <button id="btn-apply-promo" onclick="applyPromoCode()" class="btn-orange" style="padding: 0 16px; white-space: nowrap; font-size: 0.88rem; border-radius: var(--radius-sm); font-weight: 700; height: 42px;">Apply</button>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="promo-input" class="rq-input" placeholder="Enter coupon code" style="margin-bottom:0;padding:10px 14px;text-transform:uppercase;" />
+        <button onclick="applyPromoCode()" class="btn-orange" style="padding:0 16px;white-space:nowrap;font-size:0.85rem;border-radius:var(--radius-sm);height:44px;">Apply</button>
       </div>
-      <div id="promo-status" style="font-size: 0.8rem; font-weight: 600; display: none; margin-top: 4px;"></div>
+      <div id="promo-status" style="font-size:0.78rem;font-weight:600;display:none;margin-top:6px;"></div>
     </div>
 
-    <!-- Price summary -->
+    <!-- Price Summary -->
     <div id="cart-summary" class="cart-summary">
-      <div class="summary-row">
-        <span>Subtotal</span>
-        <span id="summary-subtotal">₹0</span>
-      </div>
-      <div class="summary-row">
-        <span>Delivery fee</span>
-        <span class="delivery-fee-green">FREE</span>
-      </div>
-      <div class="summary-row">
-        <span>GST (5%)</span>
-        <span id="summary-gst">₹0</span>
-      </div>
+      <div class="summary-row"><span>Subtotal</span><span id="summary-subtotal">₹0</span></div>
+      <div class="summary-row"><span>Delivery fee</span><span class="delivery-fee-green">FREE</span></div>
+      <div class="summary-row"><span>GST (5%)</span><span id="summary-gst">₹0</span></div>
       <div class="summary-divider"></div>
-      <div class="summary-row summary-total">
-        <span>Total</span>
-        <span id="summary-total">₹0</span>
-      </div>
+      <div class="summary-row summary-total"><span>Total</span><span id="summary-total">₹0</span></div>
     </div>
 
-    <button class="btn-orange full-width checkout-btn" onclick="proceedToCheckout()">
-      Proceed to Checkout →
-    </button>
+    <button class="btn-orange full-width checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout →</button>
   </div>
 
   <!-- ==================== CHECKOUT PAGE ==================== -->
@@ -337,76 +318,45 @@
       <div></div>
     </div>
 
-    <!-- Progress Steps -->
     <div class="checkout-steps">
-      <div class="step active" id="step-1">
-        <div class="step-circle">1</div>
-        <div class="step-label">Details</div>
-      </div>
+      <div class="step active" id="step-1"><div class="step-circle">1</div><div class="step-label">Details</div></div>
       <div class="step-line"></div>
-      <div class="step" id="step-2">
-        <div class="step-circle">2</div>
-        <div class="step-label">Payment</div>
-      </div>
+      <div class="step" id="step-2"><div class="step-circle">2</div><div class="step-label">Payment</div></div>
       <div class="step-line"></div>
-      <div class="step" id="step-3">
-        <div class="step-circle">3</div>
-        <div class="step-label">Done</div>
-      </div>
+      <div class="step" id="step-3"><div class="step-circle">3</div><div class="step-label">Done</div></div>
     </div>
 
-    <!-- Delivery Details -->
+    <!-- Step 1: Details -->
     <div class="checkout-section" id="checkout-step-1">
       <h3 class="checkout-section-title">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; vertical-align: -2px; margin-right: 4px; color: var(--green);"><rect x="4" y="3" width="16" height="16" rx="2"></rect><path d="M4 11h16"></path><path d="M12 3v8"></path><path d="m8 19-2 3"></path><path d="m16 19 2 3"></path></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--orange);"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
         Delivery Details
       </h3>
-      <!-- Show PNR details if available -->
       <div class="checkout-detail-card" id="checkout-pnr-details">
-        <div class="detail-row">
-          <span class="detail-label">Train</span>
-          <span class="detail-value" id="checkout-train">—</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Coach / Seat</span>
-          <span class="detail-value" id="checkout-seat">—</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Station</span>
-          <span class="detail-value">New Delhi (NDLS)</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">ETA</span>
-          <span class="detail-value" id="checkout-eta" style="color:var(--green);font-weight:700;">~15 mins</span>
-        </div>
+        <div class="detail-row"><span class="detail-label">Train</span><span class="detail-value" id="checkout-train">—</span></div>
+        <div class="detail-row"><span class="detail-label">Coach / Seat</span><span class="detail-value" id="checkout-seat">—</span></div>
+        <div class="detail-row"><span class="detail-label">Station</span><span class="detail-value">New Delhi (NDLS)</span></div>
+        <div class="detail-row"><span class="detail-label">ETA</span><span class="detail-value" id="checkout-eta" style="color:var(--success);font-weight:700;">~15 mins</span></div>
       </div>
 
-      <!-- Otherwise show manual inputs -->
-      <div id="checkout-manual-details" class="hidden" style="display: flex; flex-direction: column; gap: 12px; background: white; border-radius: var(--radius); padding: 16px; box-shadow: var(--card-shadow); margin-bottom: 20px;">
-        <div style="font-size: 0.85rem; font-weight: 700; color: var(--navy); margin-bottom: 4px;">Enter Delivery Details Manually</div>
-        <div class="input-group" style="margin-bottom: 0;">
-          <input type="text" class="rq-input" id="manual-train" placeholder="Train Number or Name (e.g. 12002)" style="margin-bottom: 0;" />
-        </div>
-        <div style="display: flex; gap: 10px;">
-          <input type="text" class="rq-input" id="manual-coach" placeholder="Coach (e.g. C1)" style="margin-bottom: 0; flex: 1;" />
-          <input type="text" class="rq-input" id="manual-seat" placeholder="Seat (e.g. 24)" style="margin-bottom: 0; flex: 1;" />
+      <div id="checkout-manual-details" class="hidden" style="display:flex;flex-direction:column;gap:12px;background:white;border-radius:var(--radius);padding:16px;box-shadow:var(--card-shadow);margin-bottom:20px;">
+        <div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:4px;">Enter Delivery Details Manually</div>
+        <div class="input-group" style="margin-bottom:0;"><input type="text" class="rq-input" id="manual-train" placeholder="Train Number or Name" style="margin-bottom:0;" /></div>
+        <div style="display:flex;gap:10px;">
+          <input type="text" class="rq-input" id="manual-coach" placeholder="Coach (e.g. C1)" style="margin-bottom:0;flex:1;" />
+          <input type="text" class="rq-input" id="manual-seat" placeholder="Seat (e.g. 24)" style="margin-bottom:0;flex:1;" />
         </div>
       </div>
 
       <h3 class="checkout-section-title" style="margin-top:20px;">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; vertical-align: -2px; margin-right: 4px; color: var(--green);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--orange);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Contact Details
       </h3>
-      <div class="input-group">
-        <input type="text" class="rq-input" id="contact-name" placeholder="Full Name" />
-      </div>
-      <div class="input-group">
-        <input type="tel" class="rq-input" id="contact-phone" placeholder="Phone Number" />
-      </div>
+      <div class="input-group"><input type="text" class="rq-input" id="contact-name" placeholder="Full Name" /></div>
+      <div class="input-group"><input type="tel" class="rq-input" id="contact-phone" placeholder="Phone Number" /></div>
 
-      <!-- Order summary mini -->
       <h3 class="checkout-section-title" style="margin-top:20px;">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; vertical-align: -2px; margin-right: 4px; color: var(--green);"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--orange);"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
         Order Summary
       </h3>
       <div id="checkout-items-mini" class="checkout-items-mini"></div>
@@ -414,124 +364,71 @@
         <span>Total Amount</span>
         <span id="checkout-total-amt" style="font-weight:800;color:var(--navy);font-size:1.2rem;">₹0</span>
       </div>
-
-      <button class="btn-orange full-width" style="margin-top:20px;" onclick="goToPayment()">
-        Continue to Payment →
-      </button>
+      <button class="btn-orange full-width" style="margin-top:20px;" onclick="goToPayment()">Continue to Payment →</button>
     </div>
 
-    <!-- Payment Panel -->
+    <!-- Step 2: Payment -->
     <div class="checkout-section hidden" id="checkout-step-2">
       <h3 class="checkout-section-title">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; vertical-align: -2px; margin-right: 4px; color: var(--green);"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--orange);"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
         Choose Payment Method
       </h3>
       <div class="payment-options">
         <div class="payment-option selected" onclick="selectPayment(this, 'upi')" id="pay-upi">
-          <div class="pay-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-          </div>
-          <div class="pay-info">
-            <div class="pay-title">UPI Payment</div>
-            <div class="pay-sub">GPay, PhonePe, Paytm</div>
-          </div>
-          <div class="pay-check">✓</div>
+          <div class="pay-icon">🇮🇳</div>
+          <div class="pay-info"><div class="pay-title">UPI</div><div class="pay-sub">GPay, PhonePe, Paytm</div></div>
+          <div class="pay-radio"></div>
         </div>
         <div class="payment-option" onclick="selectPayment(this, 'card')" id="pay-card">
-          <div class="pay-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-          </div>
-          <div class="pay-info">
-            <div class="pay-title">Credit / Debit Card</div>
-            <div class="pay-sub">Visa, Mastercard, RuPay</div>
-          </div>
-          <div class="pay-check hidden">✓</div>
+          <div class="pay-icon">💳</div>
+          <div class="pay-info"><div class="pay-title">Debit / Credit Card</div><div class="pay-sub">Visa, Mastercard, RuPay</div></div>
+          <div class="pay-radio"></div>
         </div>
         <div class="payment-option" onclick="selectPayment(this, 'cod')" id="pay-cod">
-          <div class="pay-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="3"></circle><line x1="6" y1="12" x2="6.01" y2="12"></line><line x1="18" y1="12" x2="18.01" y2="12"></line></svg>
-          </div>
-          <div class="pay-info">
-            <div class="pay-title">Cash on Delivery</div>
-            <div class="pay-sub">Pay when delivered</div>
-          </div>
-          <div class="pay-check hidden">✓</div>
-        </div>
-        <div class="payment-option" onclick="selectPayment(this, 'wallet')" id="pay-wallet">
-          <div class="pay-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"></path><path d="M18 12a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h4v-6z"></path></svg>
-          </div>
-          <div class="pay-info">
-            <div class="pay-title">RailQuick Wallet</div>
-            <div class="pay-sub">Balance: ₹0.00</div>
-          </div>
-          <div class="pay-check hidden">✓</div>
+          <div class="pay-icon">💵</div>
+          <div class="pay-info"><div class="pay-title">Cash on Delivery</div><div class="pay-sub">Pay when delivered</div></div>
+          <div class="pay-radio"></div>
         </div>
       </div>
 
-      <!-- UPI input -->
-      <div id="upi-input-section" class="payment-detail-section">
+      <div id="upi-input-section" class="payment-detail-section" style="display:block;">
         <div class="input-group">
           <input type="text" class="rq-input" placeholder="Enter UPI ID (e.g. name@paytm)" id="upi-id-input" />
           <span class="input-icon">@</span>
         </div>
         <div class="upi-apps">
-          <div class="upi-app" onclick="selectUPIApp(this)">
-            <div class="upi-app-icon" style="background:#1a8cff;">G</div>
-            <div class="upi-app-name">GPay</div>
-          </div>
-          <div class="upi-app" onclick="selectUPIApp(this)">
-            <div class="upi-app-icon" style="background:#5f259f;">P</div>
-            <div class="upi-app-name">PhonePe</div>
-          </div>
-          <div class="upi-app" onclick="selectUPIApp(this)">
-            <div class="upi-app-icon" style="background:#00baf2;">Pt</div>
-            <div class="upi-app-name">Paytm</div>
-          </div>
+          <div class="upi-app" onclick="selectUPIApp(this)"><div class="upi-app-icon" style="background:#1a8cff;">G</div><div class="upi-app-name">GPay</div></div>
+          <div class="upi-app" onclick="selectUPIApp(this)"><div class="upi-app-icon" style="background:#5f259f;">P</div><div class="upi-app-name">PhonePe</div></div>
+          <div class="upi-app" onclick="selectUPIApp(this)"><div class="upi-app-icon" style="background:#00baf2;">Pt</div><div class="upi-app-name">Paytm</div></div>
         </div>
       </div>
 
       <div class="order-total-pay">
-        <span>Pay Total</span>
-        <span id="pay-total-amt" style="color:var(--green);font-weight:800;font-size:1.3rem;">₹0</span>
+        <span>To Pay</span>
+        <span id="pay-total-amt" style="color:var(--orange);font-weight:800;font-size:1.3rem;">₹0</span>
       </div>
 
       <button class="btn-orange full-width" style="margin-top:20px;" onclick="placeOrder()">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;vertical-align:-1px;margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-        Place Order Securely
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;color:white;margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Place Order
       </button>
       <p class="secure-note">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-1px;margin-right:4px;color:var(--green);"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-        SSL encrypted. Your payment is 100% secure.
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:14px;height:14px;color:var(--success);"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Your order is safe & secure
       </p>
     </div>
 
-    <!-- Order Success -->
+    <!-- Step 3: Success -->
     <div class="checkout-section hidden" id="checkout-step-3">
       <div class="order-success">
-        <div class="success-animation">
-          <div class="success-circle">
-            <span class="success-check">✓</span>
-          </div>
-        </div>
-        <h2 class="success-title">Order Placed!</h2>
+        <div class="success-animation"><div class="success-circle"><span class="success-check">✓</span></div></div>
+        <h2 class="success-title">Order Placed! 🎉</h2>
         <p class="success-sub">Your essentials are being prepared and will be delivered to your seat.</p>
-        <div class="order-id-badge">
-          Order ID: <strong id="order-id-display">RQ-XXXXXX</strong>
-        </div>
+        <div class="order-id-badge">Order ID: <strong id="order-id-display">RQ-XXXXXX</strong></div>
         <div class="delivery-estimate-card">
-          <div class="est-row">
-            <span>Delivering to</span>
-            <strong id="success-seat">Your Seat</strong>
-          </div>
-          <div class="est-row">
-            <span>Estimated time</span>
-            <strong style="color:var(--green);">15 – 20 mins</strong>
-          </div>
-          <div class="est-row">
-            <span>Station</span>
-            <strong>New Delhi (NDLS)</strong>
-          </div>
+          <div class="est-row"><span>Delivering to</span><strong id="success-seat">Your Seat</strong></div>
+          <div class="est-row"><span>Estimated time</span><strong style="color:var(--success);">15 – 20 mins</strong></div>
+          <div class="est-row"><span>Station</span><strong>New Delhi (NDLS)</strong></div>
         </div>
         <button class="btn-orange full-width" onclick="navigateTo('page-orders')">Track Order</button>
         <button class="btn-ghost full-width" style="margin-top:10px;" onclick="navigateTo('page-shop')">Continue Shopping</button>
@@ -546,12 +443,10 @@
       <h2 class="page-title">My Orders</h2>
       <div></div>
     </div>
-    <div id="orders-list" class="orders-list">
-      <!-- rendered by JS -->
-    </div>
+    <div id="orders-list" class="orders-list"></div>
     <div id="orders-empty" class="cart-empty">
       <div class="empty-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 48px; height: 48px; color: var(--text-light);"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+        <svg class="icon-svg" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--text-light);"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
       </div>
       <div class="empty-title">No orders yet</div>
       <div class="empty-sub">Start shopping to see your orders here!</div>
@@ -566,31 +461,27 @@
       <h2 class="page-title">Offers & Coupons</h2>
       <div></div>
     </div>
-    
-    <div class="offers-container" style="padding: 16px;">
-      <!-- Offer Card 1 -->
-      <div class="offer-card" style="background: white; border-radius: var(--radius); padding: 20px; margin-bottom: 16px; box-shadow: var(--card-shadow); border-left: 4px solid var(--green); display: flex; flex-direction: column; gap: 8px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: 800; font-size: 1.15rem; color: var(--text); letter-spacing: -0.2px;">15% OFF SAVINGS</span>
-          <span style="background: #ECFDF5; color: var(--green); padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.5px;">ACTIVE</span>
+    <div class="offers-container">
+      <div style="background:white;border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--card-shadow);border-left:4px solid var(--orange);display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-weight:800;font-size:1.1rem;color:var(--text);">15% OFF SAVINGS</span>
+          <span style="background:var(--orange-light);color:var(--orange);padding:4px 10px;border-radius:20px;font-size:0.7rem;font-weight:800;">ACTIVE</span>
         </div>
-        <div style="font-size: 0.85rem; color: var(--text-light); line-height: 1.45;">Save on snacks and beverages for your journey. Max discount ₹50.</div>
-        <div style="display: flex; justify-content: space-between; align-items: center; background: #F8FAFC; border: 1px dashed var(--border); padding: 10px 14px; border-radius: var(--radius-sm); margin-top: 6px;">
-          <code style="font-weight: 700; color: var(--navy); font-size: 0.95rem; font-family: monospace; letter-spacing: 1px;">RAILQUICK15</code>
-          <button onclick="copyCoupon('RAILQUICK15', this)" style="background: none; border: none; color: var(--green); font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s;">Copy</button>
+        <div style="font-size:0.85rem;color:var(--text-light);line-height:1.45;">Save on snacks and beverages for your journey. Max discount ₹50.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#F8FAFC;border:1px dashed var(--border);padding:10px 14px;border-radius:var(--radius-sm);margin-top:6px;">
+          <code style="font-weight:700;color:var(--navy);font-size:0.95rem;letter-spacing:1px;">RAILQUICK15</code>
+          <button onclick="copyCoupon('RAILQUICK15', this)" style="background:none;border:none;color:var(--orange);font-size:0.82rem;font-weight:700;cursor:pointer;">Copy</button>
         </div>
       </div>
-      
-      <!-- Offer Card 2 -->
-      <div class="offer-card" style="background: white; border-radius: var(--radius); padding: 20px; margin-bottom: 16px; box-shadow: var(--card-shadow); border-left: 4px solid var(--green); display: flex; flex-direction: column; gap: 8px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: 800; font-size: 1.15rem; color: var(--text); letter-spacing: -0.2px;">Free Delivery</span>
-          <span style="background: #ECFDF5; color: var(--green); padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.5px;">ACTIVE</span>
+      <div style="background:white;border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--card-shadow);border-left:4px solid var(--orange);display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-weight:800;font-size:1.1rem;color:var(--text);">Free Delivery</span>
+          <span style="background:var(--orange-light);color:var(--orange);padding:4px 10px;border-radius:20px;font-size:0.7rem;font-weight:800;">ACTIVE</span>
         </div>
-        <div style="font-size: 0.85rem; color: var(--text-light); line-height: 1.45;">Get free delivery on orders above ₹199 at Delhi Railway Station.</div>
-        <div style="display: flex; justify-content: space-between; align-items: center; background: #F8FAFC; border: 1px dashed var(--border); padding: 10px 14px; border-radius: var(--radius-sm); margin-top: 6px;">
-          <code style="font-weight: 700; color: var(--navy); font-size: 0.95rem; font-family: monospace; letter-spacing: 1px;">FREEDEL</code>
-          <button onclick="copyCoupon('FREEDEL', this)" style="background: none; border: none; color: var(--green); font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s;">Copy</button>
+        <div style="font-size:0.85rem;color:var(--text-light);line-height:1.45;">Get free delivery on orders above ₹199 at Delhi Railway Station.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#F8FAFC;border:1px dashed var(--border);padding:10px 14px;border-radius:var(--radius-sm);margin-top:6px;">
+          <code style="font-weight:700;color:var(--navy);font-size:0.95rem;letter-spacing:1px;">FREEDEL</code>
+          <button onclick="copyCoupon('FREEDEL', this)" style="background:none;border:none;color:var(--orange);font-size:0.82rem;font-weight:700;cursor:pointer;">Copy</button>
         </div>
       </div>
     </div>
@@ -604,26 +495,24 @@
       <div></div>
     </div>
 
-    <!-- Not logged in state -->
     <div id="account-login-section" class="account-section">
       <div class="account-banner">
         <div class="account-banner-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 48px; height: 48px; color: var(--green);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <svg class="icon-svg" viewBox="0 0 24 24" style="width:40px;height:40px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
         <h2 class="account-login-title">Sign in to RailQuick</h2>
         <p class="account-login-sub">Save orders, get personalized deals & track deliveries seamlessly.</p>
-        <button class="btn-google" onclick="googleSignIn()" id="btn-google-login">
+        <button class="btn-google" onclick="googleSignIn()">
           <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
           Continue with Google
         </button>
         <button class="btn-phone" onclick="showPhoneLogin()">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; vertical-align: -3px; margin-right: 6px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+          <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
           Continue with Phone
         </button>
       </div>
     </div>
 
-    <!-- Logged in state (hidden by default) -->
     <div id="account-logged-section" class="account-section hidden">
       <div class="account-profile-card">
         <div class="profile-avatar" id="profile-avatar">K</div>
@@ -635,72 +524,46 @@
       </div>
       <div class="account-menu">
         <div class="menu-item" onclick="navigateTo('page-orders')">
-          <span class="menu-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-          </span>
-          <span class="menu-text">My Orders</span>
-          <span class="menu-arrow">›</span>
+          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
+          <span class="menu-text">My Orders</span><span class="menu-arrow">›</span>
         </div>
         <div class="menu-item" onclick="navigateTo('page-pnr')">
-          <span class="menu-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="12" y1="5" x2="12" y2="19"></line></svg>
-          </span>
-          <span class="menu-text">PNR & Train Status</span>
-          <span class="menu-arrow">›</span>
+          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="12" y1="5" x2="12" y2="19"/></svg></span>
+          <span class="menu-text">PNR & Train Status</span><span class="menu-arrow">›</span>
+        </div>
+        <div class="menu-item" onclick="navigateTo('page-offers')">
+          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
+          <span class="menu-text">My Offers & Coupons</span><span class="menu-arrow">›</span>
         </div>
         <div class="menu-item">
-          <span class="menu-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
-          </span>
-          <span class="menu-text">My Offers & Coupons</span>
-          <span class="menu-arrow">›</span>
+          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
+          <span class="menu-text">Payment Methods</span><span class="menu-arrow">›</span>
         </div>
         <div class="menu-item">
-          <span class="menu-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-          </span>
-          <span class="menu-text">Payment Methods</span>
-          <span class="menu-arrow">›</span>
+          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
+          <span class="menu-text">Notifications</span><span class="menu-arrow">›</span>
         </div>
         <div class="menu-item">
-          <span class="menu-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-          </span>
-          <span class="menu-text">Notifications</span>
-          <span class="menu-arrow">›</span>
+          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          <span class="menu-text">Rate the App</span><span class="menu-arrow">›</span>
         </div>
         <div class="menu-item">
-          <span class="menu-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          </span>
-          <span class="menu-text">Rate the App</span>
-          <span class="menu-arrow">›</span>
-        </div>
-        <div class="menu-item">
-          <span class="menu-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="19.07" y1="4.93" x2="14.83" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="9.17" y1="14.83" x2="4.93" y2="19.07"></line></svg>
-          </span>
-          <span class="menu-text">Help & Support</span>
-          <span class="menu-arrow">›</span>
+          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/></svg></span>
+          <span class="menu-text">Help & Support</span><span class="menu-arrow">›</span>
         </div>
         <div class="menu-item danger" onclick="signOut()">
-          <span class="menu-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-          </span>
-          <span class="menu-text">Sign Out</span>
-          <span class="menu-arrow">›</span>
+          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
+          <span class="menu-text">Sign Out</span><span class="menu-arrow">›</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ==================== PRODUCT DETAIL MODAL ==================== -->
+  <!-- ==================== PRODUCT MODAL ==================== -->
   <div id="product-modal" class="modal-overlay hidden" onclick="closeModal(event)">
     <div class="modal-card" id="modal-card">
       <button class="modal-close" onclick="closeProductModal()">✕</button>
-      <div class="modal-img-wrapper">
-        <img id="modal-img" src="" alt="" class="modal-img" />
-      </div>
+      <div class="modal-img-wrapper"><img id="modal-img" src="" alt="" class="modal-img" /></div>
       <div class="modal-body">
         <div class="modal-category" id="modal-category">Category</div>
         <h2 class="modal-product-name" id="modal-name">Product Name</h2>
@@ -709,7 +572,7 @@
           <span class="modal-reviews" id="modal-reviews">(124 reviews)</span>
         </div>
         <div class="modal-price" id="modal-price">₹0</div>
-        <p class="modal-description" id="modal-desc">Product description goes here.</p>
+        <p class="modal-description" id="modal-desc">Product description.</p>
         <div class="modal-tags" id="modal-tags"></div>
         <div class="modal-qty-row">
           <div class="qty-control">
@@ -724,55 +587,45 @@
     </div>
   </div>
 
-  <!-- ==================== TOAST ==================== -->
+  <!-- Toast -->
   <div id="toast" class="toast hidden">
     <span id="toast-icon">✓</span>
     <span id="toast-msg">Added to cart!</span>
   </div>
 
-  <!-- ==================== CART FAB ==================== -->
+  <!-- Cart FAB -->
   <button id="cart-fab" class="cart-fab hidden" onclick="navigateTo('page-cart')">
-    <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px; color: white;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+    <svg class="icon-svg" viewBox="0 0 24 24" style="width:20px;height:20px;color:white;stroke-width:2.5;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
     <span class="cart-fab-count" id="cart-fab-count">0</span>
     <span class="cart-fab-price" id="cart-fab-price">₹0</span>
   </button>
 
-  <!-- ==================== LOADING OVERLAY ==================== -->
+  <!-- Loading -->
   <div id="loading-overlay" class="loading-overlay hidden">
     <div class="loading-spinner"></div>
     <div class="loading-text" id="loading-text">Fetching live data...</div>
   </div>
 
-  <!-- ==================== PERSISTENT BOTTOM NAV ==================== -->
+  <!-- Bottom Navigation -->
   <div class="bottom-nav">
     <button class="nav-btn active" id="nav-home" onclick="activateNav('home'); navigateTo('page-shop')">
-      <span class="nav-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-      </span>
+      <span class="nav-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
       <span class="nav-label">Home</span>
     </button>
     <button class="nav-btn" id="nav-pnr" onclick="activateNav('pnr'); navigateTo('page-pnr')">
-      <span class="nav-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="12" y1="5" x2="12" y2="19"></line></svg>
-      </span>
+      <span class="nav-icon"><svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="12" y1="5" x2="12" y2="19"/></svg></span>
       <span class="nav-label">PNR / Status</span>
     </button>
     <button class="nav-btn" id="nav-orders" onclick="activateNav('orders'); navigateTo('page-orders')">
-      <span class="nav-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-      </span>
+      <span class="nav-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
       <span class="nav-label">Orders</span>
     </button>
     <button class="nav-btn" id="nav-offers" onclick="activateNav('offers'); navigateTo('page-offers')">
-      <span class="nav-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
-      </span>
+      <span class="nav-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
       <span class="nav-label">Offers</span>
     </button>
     <button class="nav-btn" id="nav-account" onclick="activateNav('account'); navigateTo('page-account')">
-      <span class="nav-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-      </span>
+      <span class="nav-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
       <span class="nav-label">Account</span>
     </button>
   </div>
