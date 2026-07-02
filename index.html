@@ -622,7 +622,7 @@
 .page#page-splash { padding-bottom: 0 !important; overflow: hidden !important; background: linear-gradient(135deg, #002D24 0%, #004D3C 50%, #00201A 100%) !important; }
 
 /* Cart FAB adjustment for bottom nav */
-#cart-fab { bottom: 72px !important; }
+#cart-fab { bottom: env(safe-area-inset-bottom, 16px) !important; }
 
 /* Improved scrollbar hide */
 * { -webkit-tap-highlight-color: transparent; }
@@ -660,19 +660,9 @@
     <!-- Main Content Area -->
     <div class="relative z-20 flex flex-col h-full px-6 pt-5 pb-5 items-center justify-between text-center">
       <!-- Top Section -->
-      <div class="flex flex-col items-center gap-1 animate-fade-in-up w-full drop-shadow-2xl">
-        <!-- Logo Wrapper (Image-based branding) -->
-        <div class="flex flex-col items-center gap-2 mt-4">
-          <div class="w-64 h-20 flex items-center justify-center">
-            <img src="railquick_logo.png" alt="RailQuick Logo" class="w-full h-full object-contain">
-          </div>
-          <div class="text-center mt-1">
-            <p class="font-body text-[8px] text-white/70 font-extrabold uppercase tracking-[0.25em]">
-              Seat Delivery Platform
-            </p>
-          </div>
-        </div>
-        <p class="font-body text-[11px] text-white/90 font-medium mt-3 text-center leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+      <div class="flex flex-col items-center gap-1 animate-fade-in-up w-full drop-shadow-2xl mt-12">
+        <h1 class="text-5xl font-black text-white tracking-tighter leading-none mb-3">RailQuick</h1>
+        <p class="font-body text-[11px] text-white/90 font-medium text-center leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
           India's Premium Train Essentials Delivery.<br/>Fresh & sealed items directly to your seat.
         </p>
       </div>
@@ -688,8 +678,8 @@
         
         <!-- Call to Action -->
         <div class="w-full">
-          <button class="pulse-glow w-full bg-gradient-to-r from-[#FF6F61] via-[#FF8A7F] to-[#FF6F61] animate-gradient hover:brightness-110 active:scale-95 transition-all duration-300 text-white py-4 px-6 rounded-full flex items-center justify-between group border border-[#FF8A7F]/30 shadow-2xl" id="get-started" onclick="navigateTo('page-pnr')">
-            <span class="font-headline text-base font-bold pl-6 tracking-wide">Get Started</span>
+          <button class="pulse-glow w-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 animate-gradient hover:brightness-110 active:scale-95 transition-all duration-300 text-white py-4 px-6 rounded-full flex items-center justify-between group border border-emerald-300/30 shadow-2xl" id="get-started" onclick="navigateTo('page-pnr')">
+            <span class="font-headline text-base font-bold pl-6 tracking-wide text-white">Get Started</span>
             <div class="bg-white/20 p-2.5 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform">
               <span class="material-symbols-outlined text-white text-lg">arrow_forward</span>
             </div>

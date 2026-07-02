@@ -1561,7 +1561,6 @@ function addToCart(productId) {
   if (existing) existing.qty++; else appState.cart.push({ ...product, qty: 1 });
   saveState(); 
   updateCartFAB();
-  showToast(`✓ ${product.name.split(' ').slice(0, 3).join(' ')} added!`);
   renderProducts(PRODUCTS);
 }
 
@@ -2175,7 +2174,7 @@ function initAccountPage() {
     if (logged) logged.classList.add('hidden');
     // Mount Clerk's embedded sign-in form
     const mountEl = document.getElementById('clerk-sign-in-mount');
-    if (mountEl && clerkInstance && clerkInstance.loaded) {
+    if (mountEl && clerkInstance && clerkInitDone) {
       // Remove any loading state
       const loadingEl = mountEl.querySelector('.clerk-loading-state');
       if (loadingEl) loadingEl.remove();
@@ -2241,7 +2240,7 @@ function closeGoogleLoginModal(force = false) {
 
 function googleSignIn() {
   const clerk = clerkInstance || window.Clerk;
-  if (clerk && clerk.loaded) {
+  if (clerk && clerkInitDone) {
     try {
       clerk.openSignIn({
         afterSignInUrl: window.location.href,
@@ -2740,7 +2739,7 @@ const CLERK_PUBLISHABLE_KEY = 'pk_test_c21vb3RoLWphY2thbC0xOC5jbGVyay5hY2NvdW50c
 
 // Initialize Clerk: wait for the script, call .load() to boot SDK, then set up listeners
 async function initClerk() {
-  if (clerkInstance && clerkInstance.loaded) return;
+  if (clerkInstance && clerkInitDone) return;
 
   let clerk = window.Clerk;
   
@@ -2772,7 +2771,7 @@ async function initClerk() {
   }
 
   try {
-    if (!clerk.loaded) {
+    if (!clerkInitDone) {
       console.log('[Clerk] Calling clerk.load()...');
       await clerk.load({
         publishableKey: CLERK_PUBLISHABLE_KEY,
