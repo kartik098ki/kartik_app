@@ -24,7 +24,8 @@ let appState = {
   modalQty: 1,
   currentFilter: 'all',
   searchQuery: '',
-  appliedCoupon: null
+  appliedCoupon: null,
+  vegOnly: false
 };
 
 // Global Clerk Instance (initialized on load)
@@ -1270,7 +1271,8 @@ function renderProducts(products) {
   const filtered = products.filter(p => {
     const matchesCat = appState.currentFilter === 'all' || p.category === appState.currentFilter;
     const matchesQuery = !appState.searchQuery || p.name.toLowerCase().includes(appState.searchQuery) || p.category.toLowerCase().includes(appState.searchQuery);
-    return matchesCat && matchesQuery;
+    const matchesVeg = !appState.vegOnly || p.tags.includes('Veg');
+    return matchesCat && matchesQuery && matchesVeg;
   });
 
   if (!filtered.length) {
@@ -1282,24 +1284,16 @@ function renderProducts(products) {
     const inCart = appState.cart.find(c => c.id === p.id);
     const qty = inCart ? inCart.qty : 0;
     const weightText = p.weight ? p.weight : 'Standard Size';
-    const ratingVal = p.rating ? p.rating.toFixed(1) : '4.5';
-    
     const buttonHTML = qty > 0
-      ? `<div class="flex items-center bg-primary rounded-full text-white overflow-hidden shadow-md border border-primary/20 shrink-0">
-           <button class="w-8 h-8 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-xs" onclick="event.stopPropagation();changeProductQty(${p.id},-1)">−</button>
-           <span class="px-2 font-mono text-xs font-bold">${qty}</span>
-           <button class="w-8 h-8 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-xs" onclick="event.stopPropagation();changeProductQty(${p.id},1)">+</button>
+      ? `<div class="flex items-center bg-primary rounded-full text-white overflow-hidden shadow-md border border-primary/20 shrink-0 h-7">
+           <button class="w-6 h-6 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-[10px]" onclick="event.stopPropagation();changeProductQty(${p.id},-1)">−</button>
+           <span class="px-1.5 font-mono text-[10px] font-bold min-w-[14px] text-center">${qty}</span>
+           <button class="w-6 h-6 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-[10px]" onclick="event.stopPropagation();changeProductQty(${p.id},1)">+</button>
          </div>`
-      : `<button class="border border-primary bg-primary/5 hover:bg-primary text-primary hover:text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase transition-all shadow-sm min-w-[72px] text-center" onclick="event.stopPropagation();addToCart(${p.id})">ADD</button>`;
+      : `<button class="border border-primary bg-primary/5 hover:bg-primary text-primary hover:text-white px-3 py-1 rounded-full text-[9px] font-black uppercase transition-all shadow-sm shrink-0 min-w-[56px] text-center" onclick="event.stopPropagation();addToCart(${p.id})">ADD</button>`;
 
     return `
-      <div class="bg-white rounded-3xl p-4.5 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="openProductModal(${p.id})">
-        <!-- Rating Badge -->
-        <div class="absolute top-3.5 left-3.5 bg-white/95 backdrop-blur-md text-[#004D3C] px-2 py-0.5 rounded-full text-[9px] font-extrabold flex items-center gap-0.5 border border-black/[0.03] shadow-sm z-10">
-          <span class="material-symbols-outlined text-[10px] text-secondary fill-1">star</span>
-          <span>${ratingVal}</span>
-        </div>
-        
+      <div class="bg-white rounded-3xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="openProductModal(${p.id})">
         <div class="w-full aspect-square bg-[#F4F6F5]/70 rounded-2xl p-4 mb-3 flex items-center justify-center relative overflow-hidden shrink-0">
           <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
         </div>
@@ -1341,11 +1335,16 @@ function filterCategory(cat, el) {
   if (productsEl) productsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+function toggleVegFilter(checked) {
+  appState.vegOnly = checked;
+  renderProducts(PRODUCTS);
+}
+
 function renderCategoryProducts(cat) {
   const grid = document.getElementById('category-products-grid');
   if (!grid) return;
   
-  const filtered = PRODUCTS.filter(p => p.category === cat);
+  const filtered = PRODUCTS.filter(p => p.category === cat && (!appState.vegOnly || p.tags.includes('Veg')));
   
   if (!filtered.length) {
     grid.innerHTML = `<div class="col-span-2 text-center py-16 text-gray-400 text-xs font-semibold">No items available.</div>`;
@@ -1356,24 +1355,16 @@ function renderCategoryProducts(cat) {
     const inCart = appState.cart.find(c => c.id === p.id);
     const qty = inCart ? inCart.qty : 0;
     const weightText = p.weight ? p.weight : 'Standard Size';
-    const ratingVal = p.rating ? p.rating.toFixed(1) : '4.5';
-    
     const buttonHTML = qty > 0
-      ? `<div class="flex items-center bg-primary rounded-full text-white overflow-hidden shadow-md border border-primary/20 shrink-0">
-           <button class="w-8 h-8 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-xs" onclick="event.stopPropagation();changeCategoryProductQty(${p.id},-1,'${cat}')">−</button>
-           <span class="px-2 font-mono text-xs font-bold">${qty}</span>
-           <button class="w-8 h-8 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-xs" onclick="event.stopPropagation();changeCategoryProductQty(${p.id},1,'${cat}')">+</button>
+      ? `<div class="flex items-center bg-primary rounded-full text-white overflow-hidden shadow-md border border-primary/20 shrink-0 h-7">
+           <button class="w-6 h-6 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-[10px]" onclick="event.stopPropagation();changeCategoryProductQty(${p.id},-1,'${cat}')">−</button>
+           <span class="px-1.5 font-mono text-[10px] font-bold min-w-[14px] text-center">${qty}</span>
+           <button class="w-6 h-6 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-[10px]" onclick="event.stopPropagation();changeCategoryProductQty(${p.id},1,'${cat}')">+</button>
          </div>`
-      : `<button class="border border-primary bg-primary/5 hover:bg-primary text-primary hover:text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase transition-all shadow-sm min-w-[72px] text-center" onclick="event.stopPropagation();addCategoryProductToCart(${p.id},'${cat}')">ADD</button>`;
+      : `<button class="border border-primary bg-primary/5 hover:bg-primary text-primary hover:text-white px-3 py-1 rounded-full text-[9px] font-black uppercase transition-all shadow-sm shrink-0 min-w-[56px] text-center" onclick="event.stopPropagation();addCategoryProductToCart(${p.id},'${cat}')">ADD</button>`;
 
     return `
-      <div class="bg-white rounded-3xl p-4.5 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="openProductModal(${p.id})">
-        <!-- Rating Badge -->
-        <div class="absolute top-3.5 left-3.5 bg-white/95 backdrop-blur-md text-[#004D3C] px-2 py-0.5 rounded-full text-[9px] font-extrabold flex items-center gap-0.5 border border-black/[0.03] shadow-sm z-10">
-          <span class="material-symbols-outlined text-[10px] text-secondary fill-1">star</span>
-          <span>${ratingVal}</span>
-        </div>
-        
+      <div class="bg-white rounded-3xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="openProductModal(${p.id})">
         <div class="w-full aspect-square bg-[#F4F6F5]/70 rounded-2xl p-4 mb-3 flex items-center justify-center relative overflow-hidden shrink-0">
           <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
         </div>
@@ -2068,6 +2059,89 @@ function initTrackOrderPage() {
       </div>
     `;
   }
+  
+  const feedbackCard = document.getElementById('track-feedback-card');
+  if (feedbackCard) {
+    if (order.status === 'delivered') {
+      feedbackCard.classList.remove('hidden');
+      resetFeedbackForm();
+    } else {
+      feedbackCard.classList.add('hidden');
+    }
+  }
+}
+
+let currentRating = 0;
+function rateOrder(stars) {
+  currentRating = stars;
+  const starElements = document.querySelectorAll('#feedback-stars span');
+  starElements.forEach((star, idx) => {
+    if (idx < stars) {
+      star.textContent = 'star';
+      star.className = 'material-symbols-outlined text-secondary text-3xl cursor-pointer hover:scale-110 active:scale-95 transition-all';
+    } else {
+      star.textContent = 'star';
+      star.className = 'material-symbols-outlined text-gray-300 text-3xl cursor-pointer hover:scale-110 active:scale-95 transition-all';
+    }
+  });
+}
+
+function toggleFeedbackChip(btn) {
+  btn.classList.toggle('bg-primary');
+  btn.classList.toggle('text-white');
+  btn.classList.toggle('border-primary');
+  btn.classList.toggle('bg-white');
+  btn.classList.toggle('text-gray-500');
+  btn.classList.toggle('border-outline-variant/60');
+}
+
+function resetFeedbackForm() {
+  currentRating = 0;
+  const starElements = document.querySelectorAll('#feedback-stars span');
+  starElements.forEach(star => {
+    star.textContent = 'star';
+    star.className = 'material-symbols-outlined text-gray-300 text-3xl cursor-pointer hover:scale-110 active:scale-95 transition-all';
+  });
+  
+  const chips = document.querySelectorAll('.feedback-chip');
+  chips.forEach(btn => {
+    btn.className = 'feedback-chip border border-outline-variant/60 rounded-full px-3 py-1.5 text-[9px] font-bold text-gray-500 bg-white active:scale-95 transition-all';
+  });
+  
+  const commentInput = document.getElementById('feedback-comments');
+  if (commentInput) commentInput.value = '';
+}
+
+function submitFeedback() {
+  if (currentRating === 0) {
+    showToast('Please select a star rating first', 'warning');
+    return;
+  }
+  
+  const activeChips = [];
+  document.querySelectorAll('.feedback-chip.bg-primary').forEach(c => {
+    activeChips.push(c.textContent.trim());
+  });
+  const comments = document.getElementById('feedback-comments')?.value.trim() || '';
+  
+  showLoading('Submitting feedback...');
+  setTimeout(() => {
+    hideLoading();
+    showToast('Thank you for your feedback!', 'success');
+    
+    const feedbackCard = document.getElementById('track-feedback-card');
+    if (feedbackCard) {
+      feedbackCard.innerHTML = `
+        <div class="text-center py-4 space-y-2">
+          <div class="w-12 h-12 bg-emerald-50 text-primary rounded-full flex items-center justify-center mx-auto shadow-sm">
+            <span class="material-symbols-outlined text-2xl">verified</span>
+          </div>
+          <h4 class="text-xs font-headline font-bold text-on-surface">Feedback Submitted!</h4>
+          <p class="text-[10px] text-gray-500">We appreciate your support on RailQuick.</p>
+        </div>
+      `;
+    }
+  }, 1200);
 }
 
 function trackOrder(orderId) {
@@ -2217,6 +2291,11 @@ function syncClerkUser() {
       clerkId: user.id,
       loginAt: new Date().toISOString()
     };
+    
+    // Auto redirect to page-shop if they are currently stuck on page-splash
+    if (appState.currentPage === 'page-splash') {
+      navigateTo('page-shop');
+    }
   } else {
     appState.user = null;
   }
@@ -2570,11 +2649,14 @@ document.addEventListener('DOMContentLoaded', () => {
   loadState();
   setDefaultDates();
   
-  document.getElementById('page-splash').classList.add('active');
-  appState.currentPage = 'page-splash';
-  
-  // Initialize bottom nav
-  updateBottomNav('page-splash');
+  if (appState.user) {
+    // Already signed in! Skip splash directly to shop page.
+    navigateTo('page-shop');
+  } else {
+    document.getElementById('page-splash').classList.add('active');
+    appState.currentPage = 'page-splash';
+    updateBottomNav('page-splash');
+  }
   
   // Reset PNR and ticket data on launch so past search data is not shown
   appState.pnrData = null;
