@@ -403,10 +403,26 @@
 
 /* ===== BOTTOM NAVIGATION BAR ===== */
 .bottom-nav {
-  display: none !important;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 412px;
+  background: rgba(255, 255, 255, 0.97);
+  border-top: 1px solid rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 8px 4px 14px;
+  z-index: 50;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .bottom-nav.hidden-nav {
-  transform: translateX(-50%) translateY(100%);
+  transform: translateX(-50%) translateY(110%);
 }
 .nav-item {
   display: flex;
@@ -621,11 +637,11 @@
 .page { padding-bottom: 80px !important; }
 .page#page-splash { padding-bottom: 0 !important; overflow: hidden !important; background: linear-gradient(135deg, #002D24 0%, #004D3C 50%, #00201A 100%) !important; }
 
-/* Cart FAB adjustment for bottom nav */
-#cart-fab { bottom: env(safe-area-inset-bottom, 16px) !important; }
+/* Cart FAB sits above bottom nav */
+#cart-fab { bottom: 82px !important; transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important; }
 
-/* Improved scrollbar hide */
-* { -webkit-tap-highlight-color: transparent; }
+/* Prevent iOS input zoom */
+input, textarea, select { font-size: 16px !important; }
 
 /* Enhanced modal animations */
 .modal-overlay { transition: opacity 0.3s ease; }
@@ -635,6 +651,47 @@
 }
 .modal-overlay:not(.hidden) .modal-card {
   transform: translateY(0);
+}
+
+/* ===== PREMIUM MICRO INTERACTIONS ===== */
+@keyframes addedPop {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.9); }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+.added-pop {
+  animation: addedPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Bottom nav transition */
+.bottom-nav {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Search input focus ring */
+#overlay-search-input:focus {
+  outline: none;
+}
+
+/* Product grid stagger animation */
+.products-stagger > div:nth-child(1) { animation-delay: 0ms; }
+.products-stagger > div:nth-child(2) { animation-delay: 60ms; }
+.products-stagger > div:nth-child(3) { animation-delay: 120ms; }
+.products-stagger > div:nth-child(4) { animation-delay: 180ms; }
+.products-stagger > div:nth-child(5) { animation-delay: 240ms; }
+.products-stagger > div:nth-child(6) { animation-delay: 300ms; }
+
+/* Cart FAB hover state */
+#cart-fab:hover {
+  transform: translateX(-50%) translateY(-2px) !important;
+}
+
+/* Input style improvements */
+input[type='text'], input[type='number'], input[type='tel'], input[type='date'] {
+  -webkit-appearance: none;
+  appearance: none;
+  font-size: 16px !important; /* Prevents iOS zoom */
 }
   </style>
 </head>
@@ -1973,11 +2030,11 @@
   <!-- ==================== DEDICATED SEARCH OVERLAY PAGE ==================== -->
   <div id="page-search" class="page bg-background flex flex-col" style="overflow: hidden !important; padding-bottom: 0 !important;">
     <!-- Header Input Section -->
-    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-4 py-3 flex items-center gap-3 z-50 shadow-sm shrink-0">
+    <div class="sticky top-0 bg-white border-b border-outline-variant/30 px-4 pt-4 pb-3 flex items-center gap-3 z-50 shrink-0" style="box-shadow: 0 1px 0 rgba(0,0,0,0.04);">
       <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="closeSearchOverlay()">
         <span class="material-symbols-outlined text-xl">arrow_back</span>
       </button>
-      <div class="flex-1 bg-[#F4F6F5]/80 rounded-xl px-3 flex items-center h-11 border border-transparent focus-within:border-primary/30 transition-all">
+      <div class="flex-1 bg-gray-100 rounded-2xl px-3 flex items-center h-11 border border-transparent focus-within:border-primary/20 focus-within:bg-white transition-all">
         <span class="material-symbols-outlined text-slate-400 text-lg mr-2">search</span>
         <input type="text" id="overlay-search-input" class="w-full bg-transparent border-none focus:ring-0 text-xs font-semibold placeholder-gray-400 animate-fade-in-up" placeholder="Search snacks, drinks, hygiene..." oninput="runOverlaySearch(this.value)" onkeydown="if(event.key==='Enter') { saveRecentSearch(this.value); this.blur(); }" />
         <button onclick="clearOverlaySearch()" class="text-slate-400 hover:text-slate-600 hidden" id="search-clear-btn">✕</button>
@@ -2010,15 +2067,43 @@
         </div>
 
         <div>
-          <h4 class="text-[10px] font-black text-secondary uppercase tracking-widest mb-3">Trending Categories</h4>
-          <div class="grid grid-cols-2 gap-3">
-            <div onclick="prefillCategorySearch('snacks')" class="bg-gradient-to-br from-amber-50 to-orange-50/50 p-4 rounded-2xl border border-amber-100 flex items-center justify-between cursor-pointer active:scale-95 transition-transform">
-              <span class="text-xs font-black text-amber-900 font-headline">Snacks</span>
-              <span class="material-symbols-outlined text-amber-500 text-lg">cookie</span>
+          <h4 class="text-[10px] font-black text-secondary uppercase tracking-widest mb-3">Shop By Category</h4>
+          <div class="grid grid-cols-2 gap-2.5">
+            <div onclick="prefillCategorySearch('snacks')" class="bg-gradient-to-br from-amber-50 to-orange-50 p-3.5 rounded-2xl border border-amber-100 flex items-center justify-between cursor-pointer active:scale-95 transition-all hover:shadow-sm">
+              <div>
+                <div class="text-[10px] font-black text-amber-900 font-headline">Snacks &amp; Chips</div>
+                <div class="text-[8px] text-amber-700/60 mt-0.5">25+ items</div>
+              </div>
+              <div class="w-9 h-9 bg-amber-100 rounded-xl flex items-center justify-center">
+                <span class="material-symbols-outlined text-amber-600 text-lg">cookie</span>
+              </div>
             </div>
-            <div onclick="prefillCategorySearch('beverages')" class="bg-gradient-to-br from-sky-50 to-blue-50/50 p-4 rounded-2xl border border-sky-100 flex items-center justify-between cursor-pointer active:scale-95 transition-transform">
-              <span class="text-xs font-black text-sky-900 font-headline">Drinks</span>
-              <span class="material-symbols-outlined text-sky-500 text-lg">local_cafe</span>
+            <div onclick="prefillCategorySearch('beverages')" class="bg-gradient-to-br from-sky-50 to-blue-50 p-3.5 rounded-2xl border border-sky-100 flex items-center justify-between cursor-pointer active:scale-95 transition-all hover:shadow-sm">
+              <div>
+                <div class="text-[10px] font-black text-sky-900 font-headline">Drinks &amp; Tea</div>
+                <div class="text-[8px] text-sky-700/60 mt-0.5">15+ items</div>
+              </div>
+              <div class="w-9 h-9 bg-sky-100 rounded-xl flex items-center justify-center">
+                <span class="material-symbols-outlined text-sky-600 text-lg">local_cafe</span>
+              </div>
+            </div>
+            <div onclick="prefillCategorySearch('hygiene')" class="bg-gradient-to-br from-emerald-50 to-green-50 p-3.5 rounded-2xl border border-emerald-100 flex items-center justify-between cursor-pointer active:scale-95 transition-all hover:shadow-sm">
+              <div>
+                <div class="text-[10px] font-black text-emerald-900 font-headline">Hygiene</div>
+                <div class="text-[8px] text-emerald-700/60 mt-0.5">12+ items</div>
+              </div>
+              <div class="w-9 h-9 bg-emerald-100 rounded-xl flex items-center justify-center">
+                <span class="material-symbols-outlined text-emerald-600 text-lg">clean_hands</span>
+              </div>
+            </div>
+            <div onclick="prefillCategorySearch('tech')" class="bg-gradient-to-br from-purple-50 to-indigo-50 p-3.5 rounded-2xl border border-purple-100 flex items-center justify-between cursor-pointer active:scale-95 transition-all hover:shadow-sm">
+              <div>
+                <div class="text-[10px] font-black text-purple-900 font-headline">Tech &amp; Gadgets</div>
+                <div class="text-[8px] text-purple-700/60 mt-0.5">8+ items</div>
+              </div>
+              <div class="w-9 h-9 bg-purple-100 rounded-xl flex items-center justify-center">
+                <span class="material-symbols-outlined text-purple-600 text-lg">devices</span>
+              </div>
             </div>
           </div>
         </div>
@@ -2027,7 +2112,7 @@
       <!-- Results Grid -->
       <div id="search-results-view" class="hidden">
         <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3" id="search-results-title">Search Results</div>
-        <div class="grid grid-cols-2 gap-3 pb-24" id="search-results-grid">
+        <div class="grid grid-cols-2 gap-3 pb-32" id="search-results-grid">
           <!-- Injected items -->
         </div>
       </div>

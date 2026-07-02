@@ -1199,6 +1199,12 @@ function renderTrainSchedule(d) {
 
 // ===== SHOP PAGE =====
 function initShopPage() {
+  // Update greeting based on time of day
+  const hour = new Date().getHours();
+  const greeting = hour < 5 ? 'Good Night' : hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
+  const greetEl = document.getElementById('shop-delivering-label');
+  if (greetEl && !appState.pnrData) greetEl.textContent = greeting;
+
   showProductSkeletons();
   setTimeout(() => {
     renderProducts(PRODUCTS);
@@ -1286,24 +1292,32 @@ function renderProducts(products) {
     const inCart = appState.cart.find(c => c.id === p.id);
     const qty = inCart ? inCart.qty : 0;
     const weightText = p.weight ? p.weight : 'Standard Size';
+    const stars = p.rating ? '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 >= 0.5 ? '½' : '') : '';
+    const reviewsText = p.reviews ? `(${p.reviews > 999 ? (p.reviews/1000).toFixed(1)+'k' : p.reviews})` : '';
     const buttonHTML = qty > 0
-      ? `<div class="flex items-center bg-primary rounded-full text-white overflow-hidden shadow-md border border-primary/20 shrink-0 h-7">
-           <button class="w-6 h-6 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-[10px]" onclick="event.stopPropagation();changeProductQty(${p.id},-1)">−</button>
-           <span class="px-1.5 font-mono text-[10px] font-bold min-w-[14px] text-center">${qty}</span>
-           <button class="w-6 h-6 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-[10px]" onclick="event.stopPropagation();changeProductQty(${p.id},1)">+</button>
+      ? `<div class="flex items-center bg-primary rounded-xl text-white overflow-hidden shadow-md border border-primary/20 shrink-0 h-8">
+           <button class="w-7 h-8 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-sm" onclick="event.stopPropagation();changeProductQty(${p.id},-1)">−</button>
+           <span class="px-1.5 font-mono text-xs font-bold min-w-[18px] text-center">${qty}</span>
+           <button class="w-7 h-8 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-sm" onclick="event.stopPropagation();changeProductQty(${p.id},1)">+</button>
          </div>`
-      : `<button class="border border-primary bg-primary/5 hover:bg-primary text-primary hover:text-white px-3 py-1 rounded-full text-[9px] font-black uppercase transition-all shadow-sm shrink-0 min-w-[56px] text-center" onclick="event.stopPropagation();addToCart(${p.id})">ADD</button>`;
+      : `<button class="bg-primary text-white px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all shadow-sm shadow-primary/20 shrink-0 active:scale-95" onclick="event.stopPropagation();addToCart(${p.id})">ADD</button>`;
 
     return `
-      <div class="bg-white rounded-3xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="addToCart(${p.id})">
-        <div class="w-full aspect-square bg-[#F4F6F5]/70 rounded-2xl p-4 mb-3 flex items-center justify-center relative overflow-hidden shrink-0">
+      <div class="bg-white rounded-3xl p-3.5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col group cursor-pointer hover:border-primary/20 active:scale-[0.98] transition-all relative overflow-hidden" onclick="openProductModal(${p.id})">
+        <div class="w-full aspect-square bg-gray-50 rounded-2xl p-3 mb-2.5 flex items-center justify-center relative overflow-hidden shrink-0">
           <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
         </div>
-        <h4 class="text-xs font-bold text-on-surface line-clamp-2 mb-1 min-h-[32px]">${p.name}</h4>
-        <p class="text-[9px] font-bold text-gray-400 mb-3">${weightText}</p>
-        <div class="flex justify-between items-center mt-auto pt-1 gap-2">
-          <span class="text-sm font-black text-primary">₹${p.price}</span>
-          ${buttonHTML}
+        <div class="flex flex-col flex-grow">
+          <h4 class="text-[11px] font-bold text-on-surface line-clamp-2 mb-1 leading-tight min-h-[28px]">${p.name}</h4>
+          <p class="text-[9px] font-semibold text-gray-400 mb-1.5">${weightText}</p>
+          ${p.rating ? `<div class="flex items-center gap-1 mb-2">
+            <span class="text-[9px] text-amber-500 font-bold tracking-tight">${stars}</span>
+            <span class="text-[8px] text-gray-400 font-medium">${reviewsText}</span>
+          </div>` : ''}
+          <div class="flex justify-between items-center mt-auto gap-2">
+            <span class="text-sm font-black text-primary">₹${p.price}</span>
+            ${buttonHTML}
+          </div>
         </div>
       </div>`;
   }).join('');
@@ -1352,6 +1366,8 @@ function renderCategoryProducts(cat) {
     const inCart = appState.cart.find(c => c.id === p.id);
     const qty = inCart ? inCart.qty : 0;
     const weightText = p.weight ? p.weight : 'Standard Size';
+    const stars = p.rating ? '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 >= 0.5 ? '½' : '') : '';
+    const reviewsText = p.reviews ? `(${p.reviews > 999 ? (p.reviews/1000).toFixed(1)+'k' : p.reviews})` : '';
     const buttonHTML = qty > 0
       ? `<div class="flex items-center bg-primary rounded-full text-white overflow-hidden shadow-md border border-primary/20 shrink-0 h-7">
            <button class="w-6 h-6 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-[10px]" onclick="event.stopPropagation();changeCategoryProductQty(${p.id},-1,'${cat}')">−</button>
@@ -1366,7 +1382,11 @@ function renderCategoryProducts(cat) {
           <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
         </div>
         <h4 class="text-xs font-bold text-on-surface line-clamp-2 mb-1 min-h-[32px]">${p.name}</h4>
-        <p class="text-[9px] font-bold text-gray-400 mb-3">${weightText}</p>
+        <p class="text-[9px] font-bold text-gray-400 mb-1">${weightText}</p>
+        ${p.rating ? `<div class="flex items-center gap-1 mb-2">
+            <span class="text-[9px] text-amber-500 font-bold tracking-tight">${stars}</span>
+            <span class="text-[8px] text-gray-400 font-medium">${reviewsText}</span>
+        </div>` : ''}
         <div class="flex justify-between items-center mt-auto pt-1 gap-2">
           <span class="text-sm font-black text-primary">₹${p.price}</span>
           ${buttonHTML}
@@ -1572,6 +1592,9 @@ function addToCart(productId) {
   saveState(); 
   updateCartFAB();
   renderProducts(PRODUCTS);
+  
+  // Haptic feedback attempt (mobile)
+  if (navigator.vibrate) navigator.vibrate(30);
 }
 
 function changeProductQty(id, delta) {
@@ -2656,7 +2679,9 @@ function updateBottomNav(pageId) {
   if (!nav) return;
   
   // Show/hide nav based on page
-  const showNavPages = ['page-shop', 'page-pnr', 'page-orders', 'page-account', 'page-cart', 'page-offers', 'page-support', 'page-games', 'page-category-view'];
+  const showNavPages = ['page-shop', 'page-pnr', 'page-orders', 'page-account', 'page-cart', 'page-offers', 'page-support', 'page-games', 'page-category-view', 'page-search'];
+  nav.style.display = '';
+  nav.style.transform = '';
   if (showNavPages.includes(pageId)) {
     nav.classList.remove('hidden-nav');
   } else {
@@ -3415,24 +3440,32 @@ function runOverlaySearch(q) {
       const inCart = appState.cart.find(c => c.id === p.id);
       const qty = inCart ? inCart.qty : 0;
       const weightText = p.weight ? p.weight : 'Standard Size';
+      const stars = p.rating ? '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 >= 0.5 ? '½' : '') : '';
+      const reviewsText = p.reviews ? `(${p.reviews > 999 ? (p.reviews/1000).toFixed(1)+'k' : p.reviews})` : '';
       const buttonHTML = qty > 0
-        ? `<div class="flex items-center bg-primary rounded-full text-white overflow-hidden shadow-md border border-primary/20 shrink-0 h-7">
-             <button class="w-6 h-6 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-[10px]" onclick="event.stopPropagation();changeSearchProductQty(${p.id},-1)">−</button>
-             <span class="px-1.5 font-mono text-[10px] font-bold min-w-[14px] text-center">${qty}</span>
-             <button class="w-6 h-6 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-[10px]" onclick="event.stopPropagation();changeSearchProductQty(${p.id},1)">+</button>
+        ? `<div class="flex items-center bg-primary rounded-xl text-white overflow-hidden shadow-md border border-primary/20 shrink-0 h-8">
+             <button class="w-7 h-8 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-sm" onclick="event.stopPropagation();changeSearchProductQty(${p.id},-1)">−</button>
+             <span class="px-1.5 font-mono text-xs font-bold min-w-[18px] text-center">${qty}</span>
+             <button class="w-7 h-8 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-sm" onclick="event.stopPropagation();changeSearchProductQty(${p.id},1)">+</button>
            </div>`
-        : `<button class="border border-primary bg-primary/5 hover:bg-primary text-primary hover:text-white px-3 py-1 rounded-full text-[9px] font-black uppercase transition-all shadow-sm shrink-0 min-w-[56px] text-center" onclick="event.stopPropagation();addSearchProductToCart(${p.id})">ADD</button>`;
+        : `<button class="bg-primary text-white px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all shadow-sm shadow-primary/20 shrink-0 active:scale-95" onclick="event.stopPropagation();addSearchProductToCart(${p.id})">ADD</button>`;
 
       return `
-        <div class="bg-white rounded-3xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="openProductModal(${p.id})">
-          <div class="w-full aspect-square bg-[#F4F6F5]/70 rounded-2xl p-4 mb-3 flex items-center justify-center relative overflow-hidden shrink-0">
+        <div class="bg-white rounded-3xl p-3.5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col group cursor-pointer hover:border-primary/20 active:scale-[0.98] transition-all relative overflow-hidden" onclick="openProductModal(${p.id})">
+          <div class="w-full aspect-square bg-gray-50 rounded-2xl p-3 mb-2.5 flex items-center justify-center relative overflow-hidden shrink-0">
             <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
           </div>
-          <h4 class="text-xs font-bold text-on-surface line-clamp-2 mb-1 min-h-[32px]">${p.name}</h4>
-          <p class="text-[9px] font-bold text-gray-400 mb-3">${weightText}</p>
-          <div class="flex justify-between items-center mt-auto pt-1 gap-2">
-            <span class="text-sm font-black text-primary">₹${p.price}</span>
-            ${buttonHTML}
+          <div class="flex flex-col flex-grow">
+            <h4 class="text-[11px] font-bold text-on-surface line-clamp-2 mb-1 leading-tight min-h-[28px]">${p.name}</h4>
+            <p class="text-[9px] font-semibold text-gray-400 mb-1.5">${weightText}</p>
+            ${p.rating ? `<div class="flex items-center gap-1 mb-2">
+              <span class="text-[9px] text-amber-500 font-bold tracking-tight">${stars}</span>
+              <span class="text-[8px] text-gray-400 font-medium">${reviewsText}</span>
+            </div>` : ''}
+            <div class="flex justify-between items-center mt-auto gap-2">
+              <span class="text-sm font-black text-primary">₹${p.price}</span>
+              ${buttonHTML}
+            </div>
           </div>
         </div>`;
     }).join('');
