@@ -1973,10 +1973,36 @@ function initOrdersPage() {
             <div class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Amount Paid</div>
             <div class="text-base font-black text-secondary">₹${order.total}</div>
           </div>
-          <button class="bg-primary text-white text-[10px] font-bold uppercase tracking-wider px-4 py-2 rounded-xl hover:bg-primary-light transition-all" onclick="trackOrder('${order.id}')">Track Order</button>
+          <div class="flex gap-2">
+            <button class="bg-[#F4F6F5] border border-outline-variant text-[10px] font-bold text-on-surface uppercase tracking-wider px-3 py-2 rounded-xl hover:bg-gray-100 transition-all active:scale-95" onclick="reorderItems('${order.id}')">Reorder</button>
+            <button class="bg-primary text-white text-[10px] font-bold uppercase tracking-wider px-4 py-2 rounded-xl hover:bg-primary-light transition-all active:scale-95" onclick="trackOrder('${order.id}')">Track</button>
+          </div>
         </div>
       </div>`;
   }).join('');
+}
+
+function reorderItems(orderId) {
+  const order = appState.orders.find(o => o.id === orderId);
+  if (order) {
+    appState.cart = [];
+    order.items.forEach(i => {
+      const prod = PRODUCTS.find(p => p.name === i.name);
+      if (prod) {
+        appState.cart.push({
+          id: prod.id,
+          name: prod.name,
+          price: prod.price,
+          img: prod.img,
+          qty: i.qty
+        });
+      }
+    });
+    saveState();
+    updateCartFAB();
+    navigateTo('page-cart');
+    showToast('✓ Cart refilled with order items!', 'success');
+  }
 }
 
 // ===== TRACK ORDER PAGE =====
@@ -2162,6 +2188,20 @@ function initAccountPage() {
     if (logged) logged.classList.remove('hidden');
     document.getElementById('profile-name').textContent = appState.user.name || 'User';
     document.getElementById('profile-email').textContent = appState.user.email || '';
+    document.getElementById('profile-phone').textContent = appState.user.phone ? 'Phone: ' + appState.user.phone : 'Phone: Not Linked';
+    
+    const completionCard = document.getElementById('profile-completion-card');
+    if (completionCard) {
+      if (!appState.user.phone) {
+        completionCard.classList.remove('hidden');
+      } else {
+        completionCard.classList.add('hidden');
+      }
+    }
+    
+    // Update Home Profile picture
+    updateHomeProfileAvatar();
+
     const avatarEl = document.getElementById('profile-avatar');
     if (avatarEl) {
       if (appState.user.avatarUrl) {
@@ -2495,6 +2535,16 @@ function sendSupportMessage(text) {
   }, 1800);
 }
 
+function sendCustomSupportMessage() {
+  const input = document.getElementById('chat-user-input');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  
+  sendSupportMessage(text);
+  input.value = '';
+}
+
 // Lucky Wheel Game
 let isWheelSpinning = false;
 let wonCoupon = '';
@@ -2711,8 +2761,17 @@ function setupClerkListeners(clerk) {
       closeGoogleLoginModal();
       showToast(`Welcome, ${appState.user.name}!`);
       initAccountPage();
-      if (appState.cart.length > 0) {
+      
+      // If phone number is missing, auto-open profile page to mandate verification
+      if (!appState.user.phone) {
+        setTimeout(() => {
+          navigateTo('page-account');
+          showToast('Please add your mobile number to complete profile', 'warning');
+        }, 800);
+      } else if (appState.cart.length > 0) {
         setTimeout(() => { navigateTo('page-checkout'); initCheckoutPage(); }, 800);
+      } else {
+        setTimeout(() => navigateTo('page-shop'), 800);
       }
     } else if (wasSignedIn && !isNowSignedIn) {
       showToast('Signed out', 'info');
@@ -3067,24 +3126,50 @@ function runTimetableFinder() {
     resultsDiv.classList.remove('hidden');
 
     const matchedStops = [
-      { station: 'New Delhi (NDLS)', arr: 'Source', dep: '06:00 AM', halt: '—' },
-      { station: 'Kanpur Central (CNB)', arr: '10:40 AM', dep: '10:45 AM', halt: '5 mins' },
-      { station: 'Prayagraj Jn (PRYJ)', arr: '01:10 PM', dep: '01:20 PM', halt: '10 mins' },
-      { station: 'Patna Junction (PNBE)', arr: '03:30 PM', dep: 'Terminal', halt: '—' }
+      { station: 'New Delhi (NDLS)', arr: 'Source', dep: '06:00 AM', halt: '—', status: 'passed' },
+      { station: 'Kanpur Central (CNB)', arr: '10:40 AM', dep: '10:45 AM', halt: '5 mins', status: 'active' },
+      { station: 'Prayagraj Jn (PRYJ)', arr: '01:10 PM', dep: '01:20 PM', halt: '10 mins', status: 'upcoming' },
+      { station: 'Patna Junction (PNBE)', arr: '03:30 PM', dep: 'Terminal', halt: '—', status: 'upcoming' }
     ];
 
     let stopsHTML = `
-      <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2 border-b pb-1">Route & stoppages details</div>
-      <div class="relative pl-6 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[2px] before:bg-emerald-500/20 text-xs space-y-4">
+      <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3 border-b pb-1">Route &amp; Stoppages Timeline</div>
+      <div class="relative pl-6 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[2px] before:bg-gray-100 text-xs space-y-5">
     `;
 
     matchedStops.forEach(s => {
+      let markerHTML = '';
+      let textClass = 'text-slate-700';
+      let activeLabel = '';
+
+      if (s.status === 'passed') {
+        markerHTML = `
+          <span class="absolute left-[-22px] top-1.5 w-3.5 h-3.5 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center">
+            <span class="material-symbols-outlined text-[8px] text-emerald-700 font-black">check</span>
+          </span>
+        `;
+        textClass = 'text-slate-400 line-through';
+      } else if (s.status === 'active') {
+        markerHTML = `
+          <span class="absolute left-[-22px] top-1.5 w-3.5 h-3.5 rounded-full bg-emerald-600 border-2 border-white ring-2 ring-emerald-500/30 flex items-center justify-center">
+            <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+          </span>
+        `;
+        textClass = 'text-emerald-800 font-extrabold';
+        activeLabel = `<span class="ml-2 bg-emerald-100 text-emerald-800 text-[8px] font-black px-1.5 py-0.5 rounded-md uppercase tracking-wider animate-pulse">TRAIN IS HERE RIGHT NOW</span>`;
+      } else {
+        markerHTML = `
+          <span class="absolute left-[-21px] top-1.5 w-3 h-3 rounded-full bg-white border border-slate-300"></span>
+        `;
+        textClass = 'text-slate-700 font-bold';
+      }
+
       stopsHTML += `
         <div class="relative">
-          <span class="absolute left-[-22px] top-1 w-2.5 h-2.5 rounded-full bg-emerald-600 border border-white"></span>
+          ${markerHTML}
           <div>
-            <div class="font-extrabold text-on-surface">${s.station}</div>
-            <div class="text-[9px] text-gray-500 font-medium flex gap-2 mt-0.5">
+            <div class="${textClass} flex items-center flex-wrap">${s.station} ${activeLabel}</div>
+            <div class="text-[9px] text-slate-400 font-medium flex gap-2 mt-0.5">
               <span>Arrive: ${s.arr}</span>
               <span>•</span>
               <span>Depart: ${s.dep}</span>
@@ -3142,4 +3227,196 @@ function setStationAlarm() {
     // Popup alarm alert
     alert(`🚨 RailQuick Station Reminder:\nYour train is approaching ${station} in 15 minutes! Please be ready at your seat for delivery.`);
   }, 10000);
+}
+
+// ===== SEARCH OVERLAY HANDLERS =====
+
+function openSearchOverlay() {
+  const overlay = document.getElementById('page-search');
+  if (overlay) {
+    overlay.classList.remove('hidden');
+    // Hide bottom navigation bar when search is open
+    const nav = document.querySelector('.bottom-nav');
+    if (nav) nav.classList.add('hidden');
+    
+    // Auto-focus input
+    const input = document.getElementById('overlay-search-input');
+    if (input) {
+      input.value = '';
+      setTimeout(() => input.focus(), 150);
+    }
+    
+    clearOverlaySearch();
+  }
+}
+
+function closeSearchOverlay() {
+  const overlay = document.getElementById('page-search');
+  if (overlay) {
+    overlay.classList.add('hidden');
+    // Show bottom navigation bar again
+    const nav = document.querySelector('.bottom-nav');
+    if (nav) nav.classList.remove('hidden');
+  }
+}
+
+function clearOverlaySearch() {
+  const input = document.getElementById('overlay-search-input');
+  if (input) input.value = '';
+  
+  const clearBtn = document.getElementById('search-clear-btn');
+  if (clearBtn) clearBtn.classList.add('hidden');
+  
+  const defaultView = document.getElementById('search-default-view');
+  if (defaultView) defaultView.classList.remove('hidden');
+  
+  const resultsView = document.getElementById('search-results-view');
+  if (resultsView) resultsView.classList.add('hidden');
+}
+
+function prefillSearch(text) {
+  const input = document.getElementById('overlay-search-input');
+  if (input) {
+    input.value = text;
+    runOverlaySearch(text);
+  }
+}
+
+function prefillCategorySearch(cat) {
+  closeSearchOverlay();
+  const allPills = document.querySelectorAll('.category-pill');
+  let matchedPill = null;
+  allPills.forEach(pill => {
+    if (pill.getAttribute('onclick') && pill.getAttribute('onclick').includes(cat)) {
+      matchedPill = pill;
+    }
+  });
+  filterCategory(cat, matchedPill);
+  const prodSec = document.getElementById('products-section');
+  if (prodSec) prodSec.scrollIntoView({ behavior: 'smooth' });
+}
+
+function runOverlaySearch(q) {
+  const query = q.trim().toLowerCase();
+  const clearBtn = document.getElementById('search-clear-btn');
+  const defaultView = document.getElementById('search-default-view');
+  const resultsView = document.getElementById('search-results-view');
+  const grid = document.getElementById('search-results-grid');
+  
+  if (clearBtn) {
+    if (query) clearBtn.classList.remove('hidden');
+    else clearBtn.classList.add('hidden');
+  }
+  
+  if (!query) {
+    if (defaultView) defaultView.classList.remove('hidden');
+    if (resultsView) resultsView.classList.add('hidden');
+    return;
+  }
+  
+  if (defaultView) defaultView.classList.add('hidden');
+  if (resultsView) resultsView.classList.remove('hidden');
+  
+  const filtered = PRODUCTS.filter(p => 
+    p.name.toLowerCase().includes(query) || 
+    p.category.toLowerCase().includes(query) ||
+    (p.desc && p.desc.toLowerCase().includes(query))
+  );
+  
+  const title = document.getElementById('search-results-title');
+  if (title) title.textContent = `Found ${filtered.length} matching items`;
+  
+  if (!filtered.length) {
+    if (grid) {
+      grid.innerHTML = `
+        <div class="col-span-2 text-center py-16 text-gray-400 text-xs font-semibold">
+          No matches for "${q}". Try "Samosa", "Water" or "Chai".
+        </div>
+      `;
+    }
+    return;
+  }
+  
+  if (grid) {
+    grid.innerHTML = filtered.map(p => {
+      const inCart = appState.cart.find(c => c.id === p.id);
+      const qty = inCart ? inCart.qty : 0;
+      const weightText = p.weight ? p.weight : 'Standard Size';
+      const buttonHTML = qty > 0
+        ? `<div class="flex items-center bg-primary rounded-full text-white overflow-hidden shadow-md border border-primary/20 shrink-0 h-7">
+             <button class="w-6 h-6 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-[10px]" onclick="event.stopPropagation();changeSearchProductQty(${p.id},-1)">−</button>
+             <span class="px-1.5 font-mono text-[10px] font-bold min-w-[14px] text-center">${qty}</span>
+             <button class="w-6 h-6 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-[10px]" onclick="event.stopPropagation();changeSearchProductQty(${p.id},1)">+</button>
+           </div>`
+        : `<button class="border border-primary bg-primary/5 hover:bg-primary text-primary hover:text-white px-3 py-1 rounded-full text-[9px] font-black uppercase transition-all shadow-sm shrink-0 min-w-[56px] text-center" onclick="event.stopPropagation();addSearchProductToCart(${p.id})">ADD</button>`;
+
+      return `
+        <div class="bg-white rounded-3xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="addSearchProductToCart(${p.id})">
+          <div class="w-full aspect-square bg-[#F4F6F5]/70 rounded-2xl p-4 mb-3 flex items-center justify-center relative overflow-hidden shrink-0">
+            <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
+          </div>
+          <h4 class="text-xs font-bold text-on-surface line-clamp-2 mb-1 min-h-[32px]">${p.name}</h4>
+          <p class="text-[9px] font-bold text-gray-400 mb-3">${weightText}</p>
+          <div class="flex justify-between items-center mt-auto pt-1 gap-2">
+            <span class="text-sm font-black text-primary">₹${p.price}</span>
+            ${buttonHTML}
+          </div>
+        </div>`;
+    }).join('');
+  }
+}
+
+// Wrapper to sync quantities inside search results list
+function addSearchProductToCart(id) {
+  addToCart(id);
+  const qInput = document.getElementById('overlay-search-input');
+  const q = qInput ? qInput.value : '';
+  runOverlaySearch(q);
+}
+
+function changeSearchProductQty(id, change) {
+  changeProductQty(id, change);
+  const qInput = document.getElementById('overlay-search-input');
+  const q = qInput ? qInput.value : '';
+  runOverlaySearch(q);
+}
+
+function updateHomeProfileAvatar() {
+  const container = document.getElementById('shop-profile-avatar-container');
+  if (!container) return;
+  
+  if (appState.user) {
+    if (appState.user.avatarUrl) {
+      container.innerHTML = `<img src="${appState.user.avatarUrl}" class="w-full h-full object-cover rounded-full" onerror="this.onerror=null; this.innerHTML='<div class=\\'w-full h-full rounded-full bg-primary flex items-center justify-center text-white text-xs font-black\\'>${appState.user.avatar || 'U'}</div>';">`;
+    } else {
+      container.innerHTML = `
+        <div class="w-full h-full rounded-full bg-primary flex items-center justify-center text-white text-xs font-black">
+          ${appState.user.avatar || 'U'}
+        </div>
+      `;
+    }
+  } else {
+    container.innerHTML = `<span class="material-symbols-outlined text-white/80 text-[24px]">person</span>`;
+  }
+}
+
+function saveCompulsoryPhone() {
+  const input = document.getElementById('completion-phone-input');
+  if (!input) return;
+  
+  const phoneVal = input.value.trim();
+  const phoneRegex = /^[6-9]\d{9}$/; // 10-digit Indian phone numbers
+  if (!phoneRegex.test(phoneVal)) {
+    showToast('Please enter a valid 10-digit mobile number', 'error');
+    return;
+  }
+  
+  if (appState.user) {
+    appState.user.phone = phoneVal;
+    saveState();
+    initAccountPage();
+    showToast('✓ Mobile number verified & linked!', 'success');
+  } else {
+    showToast('Please sign in first', 'error');
+  }
 }

@@ -298,11 +298,11 @@
     .category-pill.active .cat-icon-wrapper {
       background: #004D3C !important;
       border-color: #004D3C !important;
-      box-shadow: 0 8px 20px rgba(0, 77, 60, 0.25) !important;
+      box-shadow: 0 8px 24px rgba(0, 77, 60, 0.15) !important;
       transform: translateY(-2px);
     }
     .category-pill.active .cat-icon-wrapper .material-symbols-outlined {
-      color: #D4AF37 !important; /* Gold icons inside active emerald pills look extremely premium! */
+      color: #FFFFFF !important;
     }
     .category-pill.active .cat-label {
       color: #004D3C !important;
@@ -918,12 +918,12 @@
     </section>
 
     <!-- Search Section (Floating Overlap) -->
-    <section class="px-margin-mobile relative z-20 -mt-7">
-      <div class="bg-surface rounded-2xl shadow-premium p-1 border flex items-center h-14 border-secondary/20 focus-within:border-primary/50 transition-colors">
+    <section class="px-margin-mobile relative z-20 -mt-7" onclick="openSearchOverlay()">
+      <div class="bg-surface rounded-2xl shadow-premium p-1 border flex items-center h-14 border-secondary/20 hover:border-primary/40 cursor-pointer transition-colors">
         <div class="w-12 flex items-center justify-center text-primary-light">
           <span class="material-symbols-outlined text-[24px]">search</span>
         </div>
-        <input class="flex-grow bg-transparent border-none focus:ring-0 text-sm font-medium tracking-wide placeholder-on-surface-variant/40" placeholder="Search snacks, drinks, hygiene..." type="text" id="product-search" oninput="filterProducts(this.value)" />
+        <span class="flex-grow text-sm font-medium tracking-wide text-on-surface-variant/40 select-none">Search snacks, drinks, hygiene...</span>
       </div>
     </section>
 
@@ -956,40 +956,40 @@
       <div class="grid grid-cols-5 gap-1.5 select-none px-margin-mobile">
         <!-- All Pill -->
         <button class="category-pill active" onclick="filterCategory('all', this)">
-          <div class="cat-icon-wrapper bg-emerald-50 border border-emerald-100/50">
-            <span class="material-symbols-outlined text-primary text-[28px]">apps</span>
+          <div class="cat-icon-wrapper bg-gradient-to-tr from-emerald-500/10 to-teal-500/10 border border-emerald-100/50">
+            <span class="material-symbols-outlined text-emerald-800 text-[26px]">apps</span>
           </div>
           <span class="cat-label">All</span>
         </button>
 
         <!-- Snacks Pill -->
         <button class="category-pill" onclick="filterCategory('snacks', this)">
-          <div class="cat-icon-wrapper bg-amber-50 border border-amber-100/50">
-            <span class="material-symbols-outlined text-amber-500 text-[28px]">cookie</span>
+          <div class="cat-icon-wrapper bg-gradient-to-tr from-amber-500/10 to-orange-500/10 border border-amber-100/50">
+            <span class="material-symbols-outlined text-amber-700 text-[26px]">cookie</span>
           </div>
           <span class="cat-label">Snacks</span>
         </button>
 
         <!-- Drinks Pill -->
         <button class="category-pill" onclick="filterCategory('beverages', this)">
-          <div class="cat-icon-wrapper bg-sky-50 border border-sky-100/50">
-            <span class="material-symbols-outlined text-sky-500 text-[28px]">local_cafe</span>
+          <div class="cat-icon-wrapper bg-gradient-to-tr from-sky-500/10 to-blue-500/10 border border-sky-100/50">
+            <span class="material-symbols-outlined text-sky-700 text-[26px]">local_cafe</span>
           </div>
           <span class="cat-label">Drinks</span>
         </button>
 
         <!-- Hygiene Pill -->
         <button class="category-pill" onclick="filterCategory('hygiene', this)">
-          <div class="cat-icon-wrapper bg-emerald-50 border border-emerald-100/50">
-            <span class="material-symbols-outlined text-emerald-600 text-[28px]">clean_hands</span>
+          <div class="cat-icon-wrapper bg-gradient-to-tr from-emerald-500/10 to-green-500/10 border border-emerald-100/50">
+            <span class="material-symbols-outlined text-emerald-700 text-[26px]">clean_hands</span>
           </div>
           <span class="cat-label">Hygiene</span>
         </button>
 
         <!-- Tech Pill -->
         <button class="category-pill" onclick="filterCategory('tech', this)">
-          <div class="cat-icon-wrapper bg-purple-50 border border-purple-100/50">
-            <span class="material-symbols-outlined text-violet-600 text-[28px]">devices</span>
+          <div class="cat-icon-wrapper bg-gradient-to-tr from-purple-500/10 to-indigo-500/10 border border-purple-100/50">
+            <span class="material-symbols-outlined text-purple-700 text-[26px]">devices</span>
           </div>
           <span class="cat-label">Tech</span>
         </button>
@@ -1418,10 +1418,26 @@
         <div class="flex-1 relative">
           <div class="text-sm font-bold text-white" id="profile-name">User</div>
           <div class="text-[10px] text-white/70 mt-0.5" id="profile-email">user@gmail.com</div>
+          <div class="text-[10px] text-white/70 mt-0.5" id="profile-phone">Phone: —</div>
           <div class="text-[9px] font-bold text-secondary mt-1.5 flex items-center gap-1">
             <span class="material-symbols-outlined text-[10px] fill-1">verified</span>
             VERIFIED MEMBER
           </div>
+        </div>
+      </div>
+
+      <!-- Profile Completion / Mobile Number Compulsory Card -->
+      <div id="profile-completion-card" class="bg-amber-50 border border-amber-200 rounded-3xl p-5 space-y-3 hidden">
+        <div class="flex items-start gap-2.5">
+          <span class="material-symbols-outlined text-amber-700 text-xl animate-pulse">warning</span>
+          <div>
+            <h4 class="text-xs font-headline font-black text-amber-900">Complete Your Delivery Profile</h4>
+            <p class="text-[10px] text-amber-700 leading-normal mt-0.5">A valid mobile number is compulsory to receive order delivery SMS updates and OTPs at the station.</p>
+          </div>
+        </div>
+        <div class="flex gap-2 mt-1">
+          <input type="tel" id="completion-phone-input" class="flex-1 bg-white border border-amber-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-500 font-mono" placeholder="Enter 10-digit mobile" maxlength="10" />
+          <button onclick="saveCompulsoryPhone()" class="bg-amber-600 hover:bg-amber-700 text-white text-[10px] font-black uppercase px-4 py-2 rounded-xl transition-all">Save</button>
         </div>
       </div>
 
@@ -1746,13 +1762,21 @@
     </div>
     
     <!-- Quick reply buttons -->
-    <div class="p-4 bg-white border-t border-outline-variant/40 space-y-2 shrink-0">
-      <div class="text-[9px] font-black text-gray-400 uppercase tracking-wider mb-1.5 px-1">Suggested Questions</div>
+    <div class="p-4 bg-white border-t border-outline-variant/40 space-y-2 shrink-0 pb-1">
+      <div class="text-[9px] font-black text-gray-400 uppercase tracking-wider mb-1 px-1">Suggested Questions</div>
       <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none" id="support-quick-replies">
         <button class="bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-3.5 py-2 rounded-xl shrink-0 active:scale-95 transition-all" onclick="sendSupportMessage('What if my train is delayed?')">Delayed Train?</button>
         <button class="bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-3.5 py-2 rounded-xl shrink-0 active:scale-95 transition-all" onclick="sendSupportMessage('How is food delivered to my seat?')">How is it delivered?</button>
         <button class="bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-3.5 py-2 rounded-xl shrink-0 active:scale-95 transition-all" onclick="sendSupportMessage('Can I cancel my order?')">Can I cancel?</button>
       </div>
+    </div>
+    
+    <!-- Chat Input Area -->
+    <div class="p-3 bg-white border-t border-outline-variant/60 flex gap-2 items-center shrink-0">
+      <input type="text" id="chat-user-input" class="flex-grow bg-[#F4F6F5]/80 border border-outline-variant/40 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:border-primary/50" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendCustomSupportMessage()" />
+      <button onclick="sendCustomSupportMessage()" class="w-10 h-10 rounded-2xl bg-primary text-white flex items-center justify-center hover:bg-primary-light active:scale-90 transition-transform shadow-md shrink-0">
+        <span class="material-symbols-outlined text-base">send</span>
+      </button>
     </div>
   </div>
 
@@ -1778,22 +1802,23 @@
         <div class="absolute top-[-10px] z-20 text-3xl animate-bounce text-primary drop-shadow">▼</div>
         
         <!-- The Wheel canvas -->
-        <div id="lucky-wheel" class="w-full h-full rounded-full border-[8px] border-secondary bg-white relative shadow-2xl flex items-center justify-center transition-transform duration-[4000ms] ease-out">
+        <div id="lucky-wheel" class="w-full h-full rounded-full border-[6px] border-[#004D3C]/30 relative shadow-2xl flex items-center justify-center transition-transform duration-[4000ms] ease-out" style="background: conic-gradient(#E8F5E9 0deg 60deg, #F5F5F5 60deg 120deg, #FFF8E1 120deg 180deg, #E0F2F1 180deg 240deg, #F5F5F5 240deg 300deg, #EDE7F6 300deg 360deg);">
           <!-- Segment lines and text -->
-          <div class="absolute inset-0 rounded-full overflow-hidden flex items-center justify-center font-bold text-[10px]">
+          <div class="absolute inset-0 rounded-full overflow-hidden flex items-center justify-center font-bold text-[9px]">
             <!-- Segment 1: RAIL50 -->
-            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-6 text-secondary rotate-0"><span class="bg-primary/20 px-2 py-0.5 rounded-full">RAIL50</span></div>
+            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-8 text-[#004D3C] rotate-[30deg]"><span>RAIL50</span></div>
             <!-- Segment 2: Try Again -->
-            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-6 text-gray-400 rotate-60"><span>TRY AGAIN</span></div>
+            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-8 text-gray-400 rotate-[90deg]"><span>TRY AGAIN</span></div>
             <!-- Segment 3: CHAI20 -->
-            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-6 text-secondary rotate-120"><span class="bg-secondary/20 px-2 py-0.5 rounded-full">CHAI20</span></div>
+            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-8 text-amber-700 rotate-[150deg]"><span>CHAI20</span></div>
             <!-- Segment 4: Free Del -->
-            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-6 text-emerald-600 rotate-180"><span class="bg-emerald-50 px-2 py-0.5 rounded-full">FREEDEL</span></div>
+            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-8 text-teal-700 rotate-[210deg]"><span>FREEDEL</span></div>
             <!-- Segment 5: Try Again -->
-            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-6 text-gray-400 rotate-240"><span>TRY AGAIN</span></div>
+            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-8 text-gray-400 rotate-[270deg]"><span>TRY AGAIN</span></div>
             <!-- Segment 6: Surprise -->
-            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-6 text-primary rotate-300"><span class="bg-primary/10 px-2 py-0.5 rounded-full">RAIL100</span></div>
+            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-8 text-purple-700 rotate-[330deg]"><span>RAIL100</span></div>
           </div>
+          
           <!-- Inner circle hub -->
           <div class="w-14 h-14 rounded-full bg-secondary border-4 border-white z-10 flex items-center justify-center text-white font-serif-display font-black text-xs shadow-md">WIN</div>
         </div>
@@ -1893,6 +1918,61 @@
       <span class="nav-label">Account</span>
     </div>
   </nav>
+
+  <!-- ==================== DEDICATED SEARCH OVERLAY PAGE ==================== -->
+  <div id="page-search" class="page bg-background hidden">
+    <!-- Header Input Section -->
+    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-4 py-3 flex items-center gap-3 z-50 shadow-sm">
+      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="closeSearchOverlay()">
+        <span class="material-symbols-outlined text-xl">arrow_back</span>
+      </button>
+      <div class="flex-1 bg-[#F4F6F5]/80 rounded-xl px-3 flex items-center h-11 border border-transparent focus-within:border-primary/30 transition-all">
+        <span class="material-symbols-outlined text-slate-400 text-lg mr-2">search</span>
+        <input type="text" id="overlay-search-input" class="w-full bg-transparent border-none focus:ring-0 text-xs font-semibold placeholder-gray-400" placeholder="Search snacks, drinks, hygiene..." oninput="runOverlaySearch(this.value)" />
+        <button onclick="clearOverlaySearch()" class="text-slate-400 hover:text-slate-600 hidden" id="search-clear-btn">✕</button>
+      </div>
+    </div>
+
+    <!-- Search Contents -->
+    <div class="p-5 space-y-6 overflow-y-auto h-[calc(100%-60px)]">
+      <!-- Popular Searches (Default view when empty) -->
+      <div id="search-default-view" class="space-y-4">
+        <div>
+          <h4 class="text-[10px] font-black text-secondary uppercase tracking-widest mb-3">Popular Searches</h4>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="prefillSearch('Samosa')" class="bg-white border border-outline-variant/60 rounded-full px-3.5 py-2 text-[10px] font-bold text-on-surface hover:border-primary/40 active:scale-95 transition-all">Samosa</button>
+            <button onclick="prefillSearch('Chai')" class="bg-white border border-outline-variant/60 rounded-full px-3.5 py-2 text-[10px] font-bold text-on-surface hover:border-primary/40 active:scale-95 transition-all">Chai</button>
+            <button onclick="prefillSearch('Water')" class="bg-white border border-outline-variant/60 rounded-full px-3.5 py-2 text-[10px] font-bold text-on-surface hover:border-primary/40 active:scale-95 transition-all">Water</button>
+            <button onclick="prefillSearch('Pepsi')" class="bg-white border border-outline-variant/60 rounded-full px-3.5 py-2 text-[10px] font-bold text-on-surface hover:border-primary/40 active:scale-95 transition-all">Pepsi</button>
+            <button onclick="prefillSearch('Maggie')" class="bg-white border border-outline-variant/60 rounded-full px-3.5 py-2 text-[10px] font-bold text-on-surface hover:border-primary/40 active:scale-95 transition-all">Maggie</button>
+            <button onclick="prefillSearch('Charger')" class="bg-white border border-outline-variant/60 rounded-full px-3.5 py-2 text-[10px] font-bold text-on-surface hover:border-primary/40 active:scale-95 transition-all">Charger</button>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-[10px] font-black text-secondary uppercase tracking-widest mb-3">Trending Categories</h4>
+          <div class="grid grid-cols-2 gap-3">
+            <div onclick="prefillCategorySearch('snacks')" class="bg-gradient-to-br from-amber-50 to-orange-50/50 p-4 rounded-2xl border border-amber-100 flex items-center justify-between cursor-pointer active:scale-95 transition-transform">
+              <span class="text-xs font-black text-amber-900 font-headline">Snacks</span>
+              <span class="material-symbols-outlined text-amber-500 text-lg">cookie</span>
+            </div>
+            <div onclick="prefillCategorySearch('beverages')" class="bg-gradient-to-br from-sky-50 to-blue-50/50 p-4 rounded-2xl border border-sky-100 flex items-center justify-between cursor-pointer active:scale-95 transition-transform">
+              <span class="text-xs font-black text-sky-900 font-headline">Drinks</span>
+              <span class="material-symbols-outlined text-sky-500 text-lg">local_cafe</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Grid -->
+      <div id="search-results-view" class="hidden">
+        <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3" id="search-results-title">Search Results</div>
+        <div class="grid grid-cols-2 gap-3" id="search-results-grid">
+          <!-- Injected items -->
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast Notification System -->
   <div id="toast" class="toast fixed bottom-[72px] left-1/2 -translate-x-1/2 bg-on-surface text-white px-5 py-3 rounded-2xl flex items-center gap-3 z-[100] shadow-floating hidden" style="max-width: 380px;">
