@@ -658,27 +658,35 @@
     <div class="particle particle-5"></div>
     <div class="particle particle-6"></div>
     <!-- Main Content Area -->
-    <div class="relative z-20 flex flex-col h-full px-6 pt-5 pb-5 items-center justify-between text-center">
+    <div class="relative z-20 flex flex-col h-full px-6 pt-12 pb-6 items-center text-center">
       <!-- Top Section -->
-      <div class="flex flex-col items-center gap-1 animate-fade-in-up w-full drop-shadow-2xl mt-12">
+      <div class="flex flex-col items-center gap-1 animate-fade-in-up w-full drop-shadow-2xl">
         <h1 class="text-5xl font-black text-white tracking-tighter leading-none mb-3">RailQuick</h1>
         <p class="font-body text-[11px] text-white/90 font-medium text-center leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
           India's Premium Train Essentials Delivery.<br/>Fresh & sealed items directly to your seat.
         </p>
       </div>
       
+      <!-- Centered Premium Pulsing Icon -->
+      <div class="flex-grow flex items-center justify-center py-6 animate-fade-in-up" style="animation-delay: 0.1s;">
+        <div class="w-24 h-24 rounded-[2.25rem] bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center shadow-2xl relative">
+          <span class="material-symbols-outlined text-white text-[48px]">train</span>
+          <div class="absolute inset-0 rounded-[2.25rem] border border-emerald-400/30 animate-ping opacity-30"></div>
+        </div>
+      </div>
+      
       <!-- Bottom Section -->
-      <div class="w-full max-w-sm flex flex-col items-center gap-2 animate-fade-in-up" style="animation-delay: 0.2s;">
+      <div class="w-full max-w-sm flex flex-col items-center gap-3 animate-fade-in-up mt-auto" style="animation-delay: 0.2s;">
         <!-- Launching Indicator -->
-        <div class="flex flex-col items-center w-full">
-          <span class="font-label-sm text-[8px] text-secondary font-bold tracking-[0.2em] uppercase drop-shadow-md">Launching in</span>
-          <h2 class="font-headline text-3xl text-white tracking-tighter leading-none mt-0.5 drop-shadow-lg font-black">DELHI</h2>
-          <p class="font-body text-[9px] text-white/80 font-medium mt-0.5 text-center drop-shadow-md">Express service for every passenger.</p>
+        <div class="flex flex-col items-center w-full mb-1">
+          <span class="font-label-sm text-[8px] text-secondary font-black tracking-[0.2em] uppercase drop-shadow-md">Launching in</span>
+          <h2 class="font-headline text-3xl text-white tracking-tighter leading-none mt-1 drop-shadow-lg font-black">DELHI</h2>
+          <p class="font-body text-[9px] text-white/80 font-medium mt-1 text-center drop-shadow-md">Express service for every passenger.</p>
         </div>
         
         <!-- Call to Action -->
         <div class="w-full">
-          <button class="pulse-glow w-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 animate-gradient hover:brightness-110 active:scale-95 transition-all duration-300 text-white py-4 px-6 rounded-full flex items-center justify-between group border border-emerald-300/30 shadow-2xl" id="get-started" onclick="navigateTo('page-pnr')">
+          <button class="pulse-glow w-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 animate-gradient hover:brightness-110 active:scale-[0.98] transition-all duration-300 text-white py-4 px-6 rounded-full flex items-center justify-between group border border-emerald-300/30 shadow-2xl" id="get-started" onclick="navigateTo('page-pnr')">
             <span class="font-headline text-base font-bold pl-6 tracking-wide text-white">Get Started</span>
             <div class="bg-white/20 p-2.5 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform">
               <span class="material-symbols-outlined text-white text-lg">arrow_forward</span>
@@ -687,7 +695,7 @@
         </div>
         
         <!-- Elite Detail Footer -->
-        <div class="mt-1 opacity-70 hover:opacity-100 transition-opacity">
+        <div class="mt-1.5 opacity-60">
           <p class="font-label-sm text-[8px] text-white/60 tracking-widest uppercase drop-shadow-md">Powered by RailQuick Logistics</p>
         </div>
       </div>
@@ -794,27 +802,27 @@
           Travel Utility Services
         </h3>
         <div class="grid grid-cols-3 gap-3">
-          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="showToast('Platform Finder: Search train to view scheduled platforms', 'info')">
+          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="openUtilModal('platform')">
             <span class="material-symbols-outlined text-primary text-xl mb-1">directions_railway</span>
             <span class="text-[9px] font-bold text-on-surface tracking-tight">Platform Finder</span>
           </div>
-          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="showToast('Seat Map Locator: Choose your coach class to see the layout map', 'info')">
+          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="openUtilModal('seatmap')">
             <span class="material-symbols-outlined text-primary text-xl mb-1">airline_seat_recline_extra</span>
             <span class="text-[9px] font-bold text-on-surface tracking-tight">Seat Map</span>
           </div>
-          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="showToast('Refund Estimator: Calculate standard cancellation charges', 'info')">
+          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="openUtilModal('refund')">
             <span class="material-symbols-outlined text-primary text-xl mb-1">currency_rupee</span>
             <span class="text-[9px] font-bold text-on-surface tracking-tight">Refund Calc</span>
           </div>
-          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="showToast('Train Schedule: Look up timetables and station stoppages', 'info')">
+          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="openUtilModal('timetable')">
             <span class="material-symbols-outlined text-primary text-xl mb-1">schedule</span>
             <span class="text-[9px] font-bold text-on-surface tracking-tight">Timetable</span>
           </div>
-          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="showToast('Helpline: Calling Railway Helpline 139...', 'info')">
+          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="openUtilModal('helpline')">
             <span class="material-symbols-outlined text-primary text-xl mb-1">call</span>
             <span class="text-[9px] font-bold text-on-surface tracking-tight">Helpline 139</span>
           </div>
-          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="showToast('Station Alarm: Trigger GPS wake up alert before target station', 'info')">
+          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="openUtilModal('alarm')">
             <span class="material-symbols-outlined text-primary text-xl mb-1">alarm</span>
             <span class="text-[9px] font-bold text-on-surface tracking-tight">Wake Alarm</span>
           </div>
@@ -1556,6 +1564,77 @@
         </div>
       </div>
       
+      <!-- Live Train GPS Tracker Map -->
+      <div class="bg-white border border-outline-variant/60 rounded-3xl p-5 shadow-sm space-y-4">
+        <div class="flex justify-between items-center">
+          <h4 class="text-xs font-black text-secondary uppercase tracking-wider flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm animate-pulse text-emerald-600">gps_fixed</span>
+            Live Train GPS Position
+          </h4>
+          <span class="bg-emerald-50 text-emerald-700 text-[8px] font-black px-2 py-0.5 rounded-md uppercase border border-emerald-100 flex items-center gap-1">
+            <span class="w-1 h-1 rounded-full bg-emerald-600 animate-ping"></span>
+            Running on time
+          </span>
+        </div>
+
+        <!-- Train tracking track map layout -->
+        <div class="relative py-4 px-2 bg-[#F8F9FA] rounded-2xl border border-outline-variant/30">
+          <div class="absolute left-6 top-6 bottom-6 w-[2px] bg-emerald-700/30 border-dashed border-l border-emerald-700/50"></div>
+          
+          <div class="space-y-6 relative z-10 text-xs">
+            <!-- Station 1: New Delhi (Departed) -->
+            <div class="flex items-center gap-4 pl-4 relative">
+              <span class="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-emerald-600 border-2 border-white ring-2 ring-emerald-500/10 flex items-center justify-center">
+                <span class="material-symbols-outlined text-[8px] text-white font-bold">check</span>
+              </span>
+              <div class="flex-grow">
+                <div class="font-extrabold text-slate-500">New Delhi (NDLS)</div>
+                <div class="text-[9px] text-slate-400">Departed • 06:00 AM</div>
+              </div>
+            </div>
+
+            <!-- Train Live Position Marker (Pulsing card between stations) -->
+            <div class="flex items-center gap-4 pl-4 relative py-1 bg-emerald-50/70 border border-emerald-100/50 rounded-xl -ml-2.5 p-2">
+              <span class="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center shadow-lg relative shrink-0">
+                <span class="material-symbols-outlined text-white text-base">train</span>
+                <span class="absolute inset-0 rounded-xl border border-emerald-400 animate-ping opacity-30"></span>
+              </span>
+              <div class="flex-grow">
+                <div class="font-black text-emerald-800 text-[10px]">12002 Shatabdi Express</div>
+                <div class="text-[9px] text-emerald-600 font-bold flex items-center gap-2 mt-0.5">
+                  <span>Speed: 104 km/h</span>
+                  <span>•</span>
+                  <span>45km to Kanpur</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-mono font-black text-emerald-700 animate-pulse bg-emerald-100/50 px-2 py-1 rounded-lg">LIVE GPS</span>
+            </div>
+
+            <!-- Station 2: Kanpur Central (Upcoming) -->
+            <div class="flex items-center gap-4 pl-4 relative">
+              <span class="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white border-2 border-slate-300 ring-2 ring-slate-100 flex items-center justify-center">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+              </span>
+              <div class="flex-grow">
+                <div class="font-black text-on-surface">Kanpur Central (CNB)</div>
+                <div class="text-[9px] text-slate-500 font-bold">ETA: 10:45 AM • Platform 3</div>
+              </div>
+            </div>
+
+            <!-- Station 3: Patna Junction (Terminal) -->
+            <div class="flex items-center gap-4 pl-4 relative opacity-60">
+              <span class="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-200"></span>
+              </span>
+              <div class="flex-grow">
+                <div class="font-bold text-slate-500">Patna Junction (PNBE)</div>
+                <div class="text-[9px] text-slate-400">ETA: 03:30 PM • Platform 1</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Premium Progress Map Line -->
       <div class="bg-white border border-outline-variant/60 rounded-3xl p-5 shadow-sm space-y-5">
         <h4 class="text-xs font-black text-secondary uppercase tracking-wider">Delivery Milestones</h4>
@@ -1844,7 +1923,188 @@
     <div class="loading-text text-white text-xs font-bold mt-4 animate-pulse" id="loading-text">Loading...</div>
   </div>
 
+  <!-- ==================== PLATFORM FINDER MODAL ==================== -->
+  <div id="modal-util-platform" class="modal-overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end justify-center hidden" onclick="closeUtilModal('platform')">
+    <div class="bg-white rounded-t-[2.5rem] w-full max-w-[412px] p-6 pb-8 shadow-2xl relative border-t border-gray-100 flex flex-col space-y-4 animate-slide-up" onclick="event.stopPropagation()">
+      <button class="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center text-gray-400 absolute top-4 right-4 text-sm font-bold" onclick="closeUtilModal('platform')">✕</button>
+      <h3 class="text-base font-headline font-black text-on-surface flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">directions_railway</span>
+        Platform Finder
+      </h3>
+      <p class="text-[10px] text-gray-500">Search by train number to find scheduled platforms at major stations.</p>
+      <div class="flex gap-2">
+        <input type="text" id="platform-train-input" class="flex-1 bg-[#F4F6F5]/70 border border-outline-variant rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-primary" placeholder="Enter Train Number (e.g. 12002)" />
+        <button onclick="runPlatformFinder()" class="bg-primary text-white text-xs font-bold px-5 py-3 rounded-xl hover:bg-primary-light transition-all">Search</button>
+      </div>
+      <div id="platform-results" class="space-y-2 mt-2 hidden">
+        <!-- Results injected here -->
+      </div>
+    </div>
+  </div>
 
+  <!-- ==================== SEAT MAP MODAL ==================== -->
+  <div id="modal-util-seatmap" class="modal-overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end justify-center hidden" onclick="closeUtilModal('seatmap')">
+    <div class="bg-white rounded-t-[2.5rem] w-full max-w-[412px] p-6 pb-8 shadow-2xl relative border-t border-gray-100 flex flex-col space-y-4 animate-slide-up" onclick="event.stopPropagation()">
+      <button class="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center text-gray-400 absolute top-4 right-4 text-sm font-bold" onclick="closeUtilModal('seatmap')">✕</button>
+      <h3 class="text-base font-headline font-black text-on-surface flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">airline_seat_recline_extra</span>
+        Coach Seat Map Layout
+      </h3>
+      <div class="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+        <button onclick="selectCoachLayout('SL')" class="coach-tab-btn active bg-primary text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase shrink-0">Sleeper (SL)</button>
+        <button onclick="selectCoachLayout('3AC')" class="coach-tab-btn bg-gray-100 text-gray-500 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase shrink-0">3-Tier AC (3AC)</button>
+        <button onclick="selectCoachLayout('2AC')" class="coach-tab-btn bg-gray-100 text-gray-500 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase shrink-0">2-Tier AC (2AC)</button>
+        <button onclick="selectCoachLayout('1AC')" class="coach-tab-btn bg-gray-100 text-gray-500 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase shrink-0">1st Class (1AC)</button>
+      </div>
+      <div id="seatmap-layout-container" class="border border-dashed border-gray-200 rounded-2xl p-4 bg-[#F8F9FA] min-h-[160px] flex flex-col justify-center">
+        <!-- Render seat grid dynamically -->
+      </div>
+      <div id="selected-seat-info" class="text-center text-[10px] font-bold text-primary bg-primary/5 py-2 rounded-xl hidden">
+        Select a seat to view berth position details
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== REFUND CALCULATOR MODAL ==================== -->
+  <div id="modal-util-refund" class="modal-overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end justify-center hidden" onclick="closeUtilModal('refund')">
+    <div class="bg-white rounded-t-[2.5rem] w-full max-w-[412px] p-6 pb-8 shadow-2xl relative border-t border-gray-100 flex flex-col space-y-4 animate-slide-up" onclick="event.stopPropagation()">
+      <button class="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center text-gray-400 absolute top-4 right-4 text-sm font-bold" onclick="closeUtilModal('refund')">✕</button>
+      <h3 class="text-base font-headline font-black text-on-surface flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">currency_rupee</span>
+        Cancellation Refund Estimator
+      </h3>
+      <p class="text-[10px] text-gray-500">Estimate refunds for standard ticket cancellations based on IRCTC cancellation rules.</p>
+      
+      <div class="grid grid-cols-2 gap-3 text-xs">
+        <div class="flex flex-col gap-1">
+          <label class="font-bold text-gray-500">Ticket Class</label>
+          <select id="refund-class-select" class="bg-[#F4F6F5]/70 border border-outline-variant rounded-xl px-3 py-2.5">
+            <option value="SL">Sleeper Class (SL)</option>
+            <option value="3AC">3 Tier AC (3AC)</option>
+            <option value="2AC">2 Tier AC (2AC)</option>
+            <option value="1AC">1st Class AC (1AC)</option>
+          </select>
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-bold text-gray-500">Paid Ticket Fare</label>
+          <input type="number" id="refund-fare-input" class="bg-[#F4F6F5]/70 border border-outline-variant rounded-xl px-3 py-2.5" placeholder="₹ Amount" value="650" />
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-1 text-xs">
+        <label class="font-bold text-gray-500">Cancellation Time</label>
+        <select id="refund-time-select" class="bg-[#F4F6F5]/70 border border-outline-variant rounded-xl px-3 py-2.5 w-full">
+          <option value="48h">More than 48 hours before train departure</option>
+          <option value="12h">Between 12 to 48 hours before departure</option>
+          <option value="4h">Between 4 to 12 hours before departure</option>
+          <option value="chart">Less than 4 hours / Chart prepared</option>
+        </select>
+      </div>
+
+      <button onclick="calculateRefund()" class="w-full bg-primary text-white py-3.5 rounded-xl font-headline font-bold hover:bg-primary-light active:scale-95 transition-all uppercase tracking-wider text-xs shadow-md">Calculate Refund</button>
+
+      <div id="refund-results" class="bg-slate-50 border border-slate-100 rounded-2xl p-4 hidden">
+        <!-- Result breakdown injected here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TIMETABLE MODAL ==================== -->
+  <div id="modal-util-timetable" class="modal-overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end justify-center hidden" onclick="closeUtilModal('timetable')">
+    <div class="bg-white rounded-t-[2.5rem] w-full max-w-[412px] p-6 pb-8 shadow-2xl relative border-t border-gray-100 flex flex-col space-y-4 animate-slide-up" onclick="event.stopPropagation()">
+      <button class="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center text-gray-400 absolute top-4 right-4 text-sm font-bold" onclick="closeUtilModal('timetable')">✕</button>
+      <h3 class="text-base font-headline font-black text-on-surface flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">schedule</span>
+        Train Timetable &amp; Schedule
+      </h3>
+      <p class="text-[10px] text-gray-500">Enter a train number to view the scheduled station arrival and halt stops.</p>
+      <div class="flex gap-2">
+        <input type="text" id="timetable-train-input" class="flex-1 bg-[#F4F6F5]/70 border border-outline-variant rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-primary" placeholder="Enter Train Number (e.g. 12301)" />
+        <button onclick="runTimetableFinder()" class="bg-primary text-white text-xs font-bold px-5 py-3 rounded-xl hover:bg-primary-light transition-all">View Schedule</button>
+      </div>
+      <div id="timetable-results" class="space-y-1 mt-2 max-h-[220px] overflow-y-auto pr-1 hidden">
+        <!-- Timetable timeline stops -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== HELPLINE MODAL ==================== -->
+  <div id="modal-util-helpline" class="modal-overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end justify-center hidden" onclick="closeUtilModal('helpline')">
+    <div class="bg-white rounded-t-[2.5rem] w-full max-w-[412px] p-6 pb-8 shadow-2xl relative border-t border-gray-100 flex flex-col space-y-4 animate-slide-up" onclick="event.stopPropagation()">
+      <button class="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center text-gray-400 absolute top-4 right-4 text-sm font-bold" onclick="closeUtilModal('helpline')">✕</button>
+      <h3 class="text-base font-headline font-black text-on-surface flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">call</span>
+        Emergency &amp; General Helplines
+      </h3>
+      <p class="text-[10px] text-gray-500">One-tap dial for certified national railway helpline support desks.</p>
+      
+      <div class="space-y-3">
+        <div class="flex justify-between items-center bg-[#F4F6F5] p-3.5 rounded-2xl border border-slate-100">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center"><span class="material-symbols-outlined text-lg">emergency</span></div>
+            <div>
+              <div class="text-xs font-bold text-on-surface">Integrated Rail Helpline</div>
+              <div class="text-[9px] text-slate-500">Security, medical, catering, complaints</div>
+            </div>
+          </div>
+          <button onclick="showToast('Calling 139...', 'info')" class="bg-white border border-outline-variant px-3 py-1.5 rounded-xl font-bold text-xs text-primary shadow-sm hover:bg-slate-50">Dial 139</button>
+        </div>
+
+        <div class="flex justify-between items-center bg-[#F4F6F5] p-3.5 rounded-2xl border border-slate-100">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center"><span class="material-symbols-outlined text-lg">clean_hands</span></div>
+            <div>
+              <div class="text-xs font-bold text-on-surface">Coach Cleaning Support</div>
+              <div class="text-[9px] text-slate-500">Request sweeping/washroom sanitation</div>
+            </div>
+          </div>
+          <button onclick="showToast('Calling cleaning desk...', 'info')" class="bg-white border border-outline-variant px-3 py-1.5 rounded-xl font-bold text-xs text-primary shadow-sm hover:bg-slate-50">SMS Clean</button>
+        </div>
+
+        <div class="flex justify-between items-center bg-[#F4F6F5] p-3.5 rounded-2xl border border-slate-100">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center"><span class="material-symbols-outlined text-lg">female</span></div>
+            <div>
+              <div class="text-xs font-bold text-on-surface">Women Safety Helpline</div>
+              <div class="text-[9px] text-slate-500">Immediate GRP escort assistance</div>
+            </div>
+          </div>
+          <button onclick="showToast('Calling women helpline...', 'info')" class="bg-white border border-outline-variant px-3 py-1.5 rounded-xl font-bold text-xs text-primary shadow-sm hover:bg-slate-50">Dial 182</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== DELIVERY STATION ALARM MODAL ==================== -->
+  <div id="modal-util-alarm" class="modal-overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end justify-center hidden" onclick="closeUtilModal('alarm')">
+    <div class="bg-white rounded-t-[2.5rem] w-full max-w-[412px] p-6 pb-8 shadow-2xl relative border-t border-gray-100 flex flex-col space-y-4 animate-slide-up" onclick="event.stopPropagation()">
+      <button class="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center text-gray-400 absolute top-4 right-4 text-sm font-bold" onclick="closeUtilModal('alarm')">✕</button>
+      <h3 class="text-base font-headline font-black text-on-surface flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">notifications_active</span>
+        Meal Station Alarm Reminder
+      </h3>
+      <p class="text-[10px] text-gray-500">Alerts you 15 minutes before the train reaches your delivery station so you're ready at your seat.</p>
+      
+      <div class="flex flex-col gap-1.5 text-xs">
+        <label class="font-bold text-gray-500">Select Station Alert Target</label>
+        <select id="alarm-station-select" class="bg-[#F4F6F5]/70 border border-outline-variant rounded-xl px-4 py-3 focus:outline-none focus:border-primary w-full">
+          <option value="Kanpur Central (CNB)">Kanpur Central (CNB) - In 45 mins</option>
+          <option value="New Delhi (NDLS)">New Delhi (NDLS) - Completed</option>
+          <option value="Patna Junction (PNBE)">Patna Junction (PNBE) - In 5 hours</option>
+        </select>
+      </div>
+
+      <button onclick="setStationAlarm()" class="w-full bg-primary text-white py-3.5 rounded-xl font-headline font-bold hover:bg-primary-light active:scale-95 transition-all uppercase tracking-wider text-xs shadow-md">Schedule Alert</button>
+
+      <div id="alarm-active-status" class="bg-emerald-50 border border-emerald-100/50 rounded-2xl p-4 flex items-center gap-3 hidden">
+        <span class="material-symbols-outlined text-emerald-600 text-xl animate-bounce">alarm_on</span>
+        <div>
+          <div class="text-xs font-bold text-emerald-900">Station alert scheduled!</div>
+          <div class="text-[9px] text-emerald-600" id="alarm-status-desc">Reminding 15 mins before target arrival.</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 

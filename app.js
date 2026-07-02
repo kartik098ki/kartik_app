@@ -1471,6 +1471,13 @@ function startVoiceSearch() {
 function filterProducts(q) {
   appState.searchQuery = q.toLowerCase();
   renderProducts(PRODUCTS);
+  
+  if (q.trim().length > 0) {
+    const productsSection = document.getElementById('products-section');
+    if (productsSection) {
+      productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 }
 
 function scrollToProducts() { document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' }); }
@@ -2175,17 +2182,30 @@ function initAccountPage() {
     // Mount Clerk's embedded sign-in form
     const mountEl = document.getElementById('clerk-sign-in-mount');
     if (mountEl && clerkInstance && clerkInitDone) {
-      mountEl.innerHTML = `
-        <div class="w-full p-1 space-y-4">
-          <button onclick="triggerClerkSignIn()" class="w-full bg-[#004D3C] hover:bg-[#006A4E] text-white py-4 px-6 rounded-2xl font-headline font-bold active:scale-95 transition-all uppercase tracking-wider text-xs shadow-md flex items-center justify-center gap-2">
-            <span class="material-symbols-outlined text-lg">login</span>
-            Sign In with Clerk
-          </button>
-          <p class="text-[10px] text-gray-400 text-center leading-normal">
-            Click above to sign in securely. You will be redirected back here automatically.
-          </p>
-        </div>
-      `;
+      if (!mountEl.querySelector('.cl-rootBox') && !mountEl.querySelector('.cl-component')) {
+        mountEl.innerHTML = '';
+        try {
+          clerkInstance.mountSignIn(mountEl, {
+            appearance: {
+              elements: {
+                rootBox: 'w-full',
+                card: 'shadow-none border-0 p-0 w-full max-w-sm mx-auto bg-transparent',
+                formButtonPrimary: 'bg-[#004D3C] hover:bg-[#006A4E]',
+              }
+            }
+          });
+        } catch(e) {
+          console.warn('[Clerk] Embedded mount failed, fallback to button:', e);
+          mountEl.innerHTML = `
+            <div class="w-full p-1 space-y-4">
+              <button onclick="triggerClerkSignIn()" class="w-full bg-[#004D3C] hover:bg-[#006A4E] text-white py-4 px-6 rounded-2xl font-headline font-bold active:scale-95 transition-all uppercase tracking-wider text-xs shadow-md flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-lg">login</span>
+                Sign In with Clerk
+              </button>
+            </div>
+          `;
+        }
+      }
     } else if (mountEl && !clerkInstance) {
       // Clerk not loaded yet — show loading or retry button
       if (!mountEl.querySelector('.clerk-loading-state') && !mountEl.querySelector('button')) {
@@ -2830,4 +2850,296 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => initClerk());
 } else {
   initClerk();
+}
+
+// ===== TRAVEL UTILITY MODALS HANDLERS =====
+
+function openUtilModal(type) {
+  const modal = document.getElementById(`modal-util-${type}`);
+  if (modal) {
+    modal.classList.remove('hidden');
+    
+    // Auto-init specific layouts if needed
+    if (type === 'seatmap') {
+      selectCoachLayout('SL');
+    }
+  }
+}
+
+function closeUtilModal(type) {
+  const modal = document.getElementById(`modal-util-${type}`);
+  if (modal) modal.classList.add('hidden');
+}
+
+// 1. Platform Finder
+function runPlatformFinder() {
+  const input = document.getElementById('platform-train-input').value.trim();
+  const resultsDiv = document.getElementById('platform-results');
+  if (!input) {
+    showToast('Please enter a train number', 'warning');
+    return;
+  }
+  
+  showLoading('Fetching platform schedule...');
+  setTimeout(() => {
+    hideLoading();
+    resultsDiv.classList.remove('hidden');
+    
+    // Generate platform mappings
+    const trainsDb = {
+      '12002': { name: 'New Delhi Shatabdi Express', NDLS: 'PF 1', CNB: 'PF 3', PRYJ: 'PF 5', PNBE: 'PF 2' },
+      '12301': { name: 'Howrah Rajdhani Express', NDLS: 'PF 12', CNB: 'PF 1', PRYJ: 'PF 4', PNBE: 'PF 1' },
+      '12952': { name: 'Mumbai Rajdhani Express', NDLS: 'PF 4', CNB: 'PF 2', PRYJ: 'PF 3', PNBE: 'PF 5' }
+    };
+    
+    const matched = trainsDb[input] || {
+      name: `Express Train (${input})`, NDLS: 'PF 3', CNB: 'PF 4', PRYJ: 'PF 2', PNBE: 'PF 1'
+    };
+    
+    resultsDiv.innerHTML = `
+      <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-xs space-y-2 animate-fade-in-up">
+        <strong class="text-primary font-black text-[11px] block border-b pb-1.5">${matched.name}</strong>
+        <div class="grid grid-cols-2 gap-2 mt-1.5">
+          <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-gray-100">
+            <span class="text-gray-400 font-bold">New Delhi (NDLS)</span>
+            <span class="text-primary font-black font-mono">${matched.NDLS}</span>
+          </div>
+          <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-gray-100">
+            <span class="text-gray-400 font-bold">Kanpur (CNB)</span>
+            <span class="text-primary font-black font-mono">${matched.CNB}</span>
+          </div>
+          <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-gray-100">
+            <span class="text-gray-400 font-bold">Prayagraj (PRYJ)</span>
+            <span class="text-primary font-black font-mono">${matched.PRYJ}</span>
+          </div>
+          <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-gray-100">
+            <span class="text-gray-400 font-bold">Patna (PNBE)</span>
+            <span class="text-primary font-black font-mono">${matched.PNBE}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }, 800);
+}
+
+// 2. Seat Map Layout
+function selectCoachLayout(coachType) {
+  // Set tab active styling
+  const buttons = document.querySelectorAll('.coach-tab-btn');
+  buttons.forEach(btn => {
+    if (btn.textContent.includes(coachType)) {
+      btn.classList.add('active', 'bg-primary', 'text-white');
+      btn.classList.remove('bg-gray-100', 'text-gray-500');
+    } else {
+      btn.classList.remove('active', 'bg-primary', 'text-white');
+      btn.classList.add('bg-gray-100', 'text-gray-500');
+    }
+  });
+
+  const container = document.getElementById('seatmap-layout-container');
+  if (!container) return;
+
+  // Render a visual map of seats
+  let seats = [];
+  if (coachType === 'SL' || coachType === '3AC') {
+    seats = [
+      { num: 1, berth: 'Lower (L)', window: true },
+      { num: 2, berth: 'Middle (M)', window: false },
+      { num: 3, berth: 'Upper (U)', window: false },
+      { num: 4, berth: 'Lower (L)', window: false },
+      { num: 5, berth: 'Middle (M)', window: false },
+      { num: 6, berth: 'Upper (U)', window: true },
+      { num: 7, berth: 'Side Lower (SL)', window: true },
+      { num: 8, berth: 'Side Upper (SU)', window: true }
+    ];
+  } else if (coachType === '2AC') {
+    seats = [
+      { num: 1, berth: 'Lower (L)', window: true },
+      { num: 2, berth: 'Upper (U)', window: false },
+      { num: 3, berth: 'Lower (L)', window: false },
+      { num: 4, berth: 'Upper (U)', window: true },
+      { num: 5, berth: 'Side Lower (SL)', window: true },
+      { num: 6, berth: 'Side Upper (SU)', window: true }
+    ];
+  } else { // 1AC
+    seats = [
+      { num: 1, berth: 'Cabin A Lower (L)', window: true },
+      { num: 2, berth: 'Cabin A Upper (U)', window: false },
+      { num: 3, berth: 'Cabin B Lower (L)', window: true },
+      { num: 4, berth: 'Cabin B Upper (U)', window: false }
+    ];
+  }
+
+  let gridHTML = `
+    <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3 text-center">Compartment Layout Map</div>
+    <div class="grid grid-cols-4 gap-2.5">
+  `;
+
+  seats.forEach(s => {
+    gridHTML += `
+      <div onclick="selectSeatMapNode(${s.num}, '${s.berth}', ${s.window})" class="seat-node border border-outline-variant rounded-xl p-2.5 flex flex-col items-center justify-center bg-white cursor-pointer active:scale-95 hover:border-primary hover:bg-primary/5 transition-all text-center">
+        <span class="material-symbols-outlined text-slate-400 text-sm">event_seat</span>
+        <span class="text-[10px] font-extrabold text-on-surface mt-0.5">#${s.num}</span>
+        <span class="text-[7px] text-slate-400 font-bold uppercase mt-0.5">${s.berth.split(' ')[0]}</span>
+      </div>
+    `;
+  });
+
+  gridHTML += '</div>';
+  container.innerHTML = gridHTML;
+  document.getElementById('selected-seat-info').classList.add('hidden');
+}
+
+function selectSeatMapNode(num, berth, windowSeat) {
+  const info = document.getElementById('selected-seat-info');
+  if (info) {
+    info.classList.remove('hidden');
+    info.innerHTML = `Seat #${num}: ${berth} ${windowSeat ? '• ✓ Window Seat' : ''}`;
+  }
+}
+
+// 3. Refund Calculator
+function calculateRefund() {
+  const coachClass = document.getElementById('refund-class-select').value;
+  const fare = parseFloat(document.getElementById('refund-fare-input').value) || 0;
+  const time = document.getElementById('refund-time-select').value;
+  const resultsDiv = document.getElementById('refund-results');
+  
+  if (fare <= 0) {
+    showToast('Please enter a valid ticket price', 'warning');
+    return;
+  }
+
+  // Calculate cancel fee based on rules
+  let fee = 0;
+  let chargeRate = '';
+  
+  if (time === '48h') {
+    // Flat cancellation charge
+    const flatFees = { '1AC': 240, '2AC': 200, '3AC': 180, 'SL': 120 };
+    fee = flatFees[coachClass] || 120;
+    chargeRate = 'Flat rate (48 hrs+)';
+  } else if (time === '12h') {
+    fee = Math.max(fare * 0.25, 120);
+    chargeRate = '25% cancellation charge';
+  } else if (time === '4h') {
+    fee = Math.max(fare * 0.50, 120);
+    chargeRate = '50% cancellation charge';
+  } else {
+    fee = fare; // 100% deduction
+    chargeRate = '100% deduction (<4 hrs)';
+  }
+
+  fee = Math.min(fee, fare);
+  const refundAmount = Math.max(fare - fee, 0);
+
+  resultsDiv.classList.remove('hidden');
+  resultsDiv.innerHTML = `
+    <div class="text-xs space-y-2 animate-fade-in-up mt-2">
+      <strong class="text-primary font-black text-[11px] block border-b pb-1.5">Estimation Summary</strong>
+      <div class="flex justify-between items-center text-slate-500 font-bold">
+        <span>Cancellation Fee (${chargeRate}):</span>
+        <span class="text-red-600 font-mono">- ₹${Math.round(fee)}</span>
+      </div>
+      <div class="flex justify-between items-center font-black text-on-surface border-t pt-2 mt-1">
+        <span>Estimated Refund Amount:</span>
+        <span class="text-emerald-700 font-mono text-sm">₹${Math.round(refundAmount)}</span>
+      </div>
+      <p class="text-[8px] text-gray-400 mt-1.5 leading-normal">
+        *Cancellation fees depend on ticket status (Confirm/WL/RAC). Refund takes 3-5 days.
+      </p>
+    </div>
+  `;
+}
+
+// 4. Timetable Schedule
+function runTimetableFinder() {
+  const input = document.getElementById('timetable-train-input').value.trim();
+  const resultsDiv = document.getElementById('timetable-results');
+  if (!input) {
+    showToast('Please enter a train number', 'warning');
+    return;
+  }
+
+  showLoading('Fetching stoppages schedule...');
+  setTimeout(() => {
+    hideLoading();
+    resultsDiv.classList.remove('hidden');
+
+    const matchedStops = [
+      { station: 'New Delhi (NDLS)', arr: 'Source', dep: '06:00 AM', halt: '—' },
+      { station: 'Kanpur Central (CNB)', arr: '10:40 AM', dep: '10:45 AM', halt: '5 mins' },
+      { station: 'Prayagraj Jn (PRYJ)', arr: '01:10 PM', dep: '01:20 PM', halt: '10 mins' },
+      { station: 'Patna Junction (PNBE)', arr: '03:30 PM', dep: 'Terminal', halt: '—' }
+    ];
+
+    let stopsHTML = `
+      <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2 border-b pb-1">Route & stoppages details</div>
+      <div class="relative pl-6 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[2px] before:bg-emerald-500/20 text-xs space-y-4">
+    `;
+
+    matchedStops.forEach(s => {
+      stopsHTML += `
+        <div class="relative">
+          <span class="absolute left-[-22px] top-1 w-2.5 h-2.5 rounded-full bg-emerald-600 border border-white"></span>
+          <div>
+            <div class="font-extrabold text-on-surface">${s.station}</div>
+            <div class="text-[9px] text-gray-500 font-medium flex gap-2 mt-0.5">
+              <span>Arrive: ${s.arr}</span>
+              <span>•</span>
+              <span>Depart: ${s.dep}</span>
+              <span>•</span>
+              <span>Halt: ${s.halt}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    stopsHTML += '</div>';
+    resultsDiv.innerHTML = stopsHTML;
+  }, 800);
+}
+
+// 5. Food Station Alarm
+function setStationAlarm() {
+  const station = document.getElementById('alarm-station-select').value;
+  const statusDiv = document.getElementById('alarm-active-status');
+  
+  if (statusDiv) statusDiv.classList.remove('hidden');
+  showToast('✓ Alert alarm set successfully!');
+
+  // Trigger sound alarm chime after 10 seconds (demo trigger)
+  setTimeout(() => {
+    showToast('🚨 ALARM: Train approaching delivery station!', 'success');
+    // Sound beep using Web Audio API
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // A5 note
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.3);
+      
+      // Secondary note
+      setTimeout(() => {
+        const osc2 = audioCtx.createOscillator();
+        const gain2 = audioCtx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(audioCtx.destination);
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(1046.5, audioCtx.currentTime); // C6 note
+        gain2.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        osc2.start();
+        osc2.stop(audioCtx.currentTime + 0.5);
+      }, 300);
+    } catch(e) {}
+    
+    // Popup alarm alert
+    alert(`🚨 RailQuick Station Reminder:\nYour train is approaching ${station} in 15 minutes! Please be ready at your seat for delivery.`);
+  }, 10000);
 }
