@@ -1271,8 +1271,7 @@ function renderProducts(products) {
   const filtered = products.filter(p => {
     const matchesCat = appState.currentFilter === 'all' || p.category === appState.currentFilter;
     const matchesQuery = !appState.searchQuery || p.name.toLowerCase().includes(appState.searchQuery) || p.category.toLowerCase().includes(appState.searchQuery);
-    const matchesVeg = !appState.vegOnly || p.tags.includes('Veg');
-    return matchesCat && matchesQuery && matchesVeg;
+    return matchesCat && matchesQuery;
   });
 
   if (!filtered.length) {
@@ -1293,7 +1292,7 @@ function renderProducts(products) {
       : `<button class="border border-primary bg-primary/5 hover:bg-primary text-primary hover:text-white px-3 py-1 rounded-full text-[9px] font-black uppercase transition-all shadow-sm shrink-0 min-w-[56px] text-center" onclick="event.stopPropagation();addToCart(${p.id})">ADD</button>`;
 
     return `
-      <div class="bg-white rounded-3xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="openProductModal(${p.id})">
+      <div class="bg-white rounded-3xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="addToCart(${p.id})">
         <div class="w-full aspect-square bg-[#F4F6F5]/70 rounded-2xl p-4 mb-3 flex items-center justify-center relative overflow-hidden shrink-0">
           <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
         </div>
@@ -1335,16 +1334,11 @@ function filterCategory(cat, el) {
   if (productsEl) productsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function toggleVegFilter(checked) {
-  appState.vegOnly = checked;
-  renderProducts(PRODUCTS);
-}
-
 function renderCategoryProducts(cat) {
   const grid = document.getElementById('category-products-grid');
   if (!grid) return;
   
-  const filtered = PRODUCTS.filter(p => p.category === cat && (!appState.vegOnly || p.tags.includes('Veg')));
+  const filtered = PRODUCTS.filter(p => p.category === cat);
   
   if (!filtered.length) {
     grid.innerHTML = `<div class="col-span-2 text-center py-16 text-gray-400 text-xs font-semibold">No items available.</div>`;
@@ -1364,7 +1358,7 @@ function renderCategoryProducts(cat) {
       : `<button class="border border-primary bg-primary/5 hover:bg-primary text-primary hover:text-white px-3 py-1 rounded-full text-[9px] font-black uppercase transition-all shadow-sm shrink-0 min-w-[56px] text-center" onclick="event.stopPropagation();addCategoryProductToCart(${p.id},'${cat}')">ADD</button>`;
 
     return `
-      <div class="bg-white rounded-3xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="openProductModal(${p.id})">
+      <div class="bg-white rounded-3xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="addCategoryProductToCart(${p.id},'${cat}')">
         <div class="w-full aspect-square bg-[#F4F6F5]/70 rounded-2xl p-4 mb-3 flex items-center justify-center relative overflow-hidden shrink-0">
           <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
         </div>
@@ -2750,43 +2744,16 @@ async function initClerk() {
 
   let clerk = window.Clerk;
   
-  // Wait up to 5 seconds for the script to load (checks both script flags and window.Clerk)
+  // Wait up to 10 seconds for the Clerk script to load from the CDN
   let attempts = 0;
-  while (!clerk && !window.__clerkScriptFailed && attempts < 25) {
+  while (!clerk && attempts < 50) {
     await new Promise(r => setTimeout(r, 200));
     clerk = window.Clerk;
     attempts++;
   }
 
-  // If the initial script failed to load (network error / file scheme) or timed out, attempt local fallback
-  if (!clerk || window.__clerkScriptFailed) {
-    console.warn('[Clerk] Primary CDN script failed/timed out. Injecting local fallback script...');
-    window.__clerkScriptFailed = false; // Reset flag
-    
-    // Inject local script if not already present
-    const existingLocal = document.querySelector('script[src="/clerk.browser.js"]');
-    if (!existingLocal) {
-      const script = document.createElement('script');
-      script.async = true;
-      script.crossOrigin = 'anonymous';
-      script.setAttribute('data-clerk-publishable-key', CLERK_PUBLISHABLE_KEY);
-      script.src = '/clerk.browser.js';
-      script.onload = () => { window.__clerkScriptLoaded = true; };
-      script.onerror = () => { window.__clerkScriptFailed = true; };
-      document.head.appendChild(script);
-    }
-
-    // Wait another 5 seconds for fallback script to load
-    attempts = 0;
-    while (!window.Clerk && !window.__clerkScriptFailed && attempts < 25) {
-      await new Promise(r => setTimeout(r, 200));
-      attempts++;
-    }
-  }
-
-  clerk = window.Clerk;
   if (!clerk) {
-    console.error('[Clerk] Failed to load Clerk script (both primary and fallback failed)');
+    console.error('[Clerk] Failed to load Clerk script from CDN.');
     showClerkFallback();
     return;
   }
@@ -2818,6 +2785,7 @@ async function initClerk() {
         }
       });
     }
+    clerkInstance = clerk;
     console.log('[Clerk] Loaded successfully. User:', clerk.user?.fullName || 'Not signed in');
     setupClerkListeners(clerk);
   } catch (err) {
@@ -2870,7 +2838,7 @@ function retryClerkInit() {
   script.async = true;
   script.crossOrigin = 'anonymous';
   script.setAttribute('data-clerk-publishable-key', CLERK_PUBLISHABLE_KEY);
-  script.src = 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5.22.0/dist/clerk.browser.js';
+  script.src = 'https://smooth-jackal-18.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js';
   script.onload = () => { window.__clerkScriptLoaded = true; };
   script.onerror = () => { window.__clerkScriptFailed = true; };
   document.head.appendChild(script);

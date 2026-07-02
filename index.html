@@ -10,9 +10,7 @@
     async
     crossorigin="anonymous"
     data-clerk-publishable-key="pk_test_c21vb3RoLWphY2thbC0xOC5jbGVyay5hY2NvdW50cy5kZXYk"
-    onload="window.__clerkScriptLoaded = true;"
-    onerror="window.__clerkScriptFailed = true;"
-    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5.22.0/dist/clerk.browser.js"
+    src="https://smooth-jackal-18.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
     type="text/javascript"
   ></script>
   
@@ -621,7 +619,7 @@
 
 /* Page bottom padding for nav bar */
 .page { padding-bottom: 80px !important; }
-.page#page-splash { padding-bottom: 0 !important; overflow: hidden !important; }
+.page#page-splash { padding-bottom: 0 !important; overflow: hidden !important; background: linear-gradient(135deg, #002D24 0%, #004D3C 50%, #00201A 100%) !important; }
 
 /* Cart FAB adjustment for bottom nav */
 #cart-fab { bottom: 72px !important; }
@@ -664,8 +662,8 @@
       <!-- Top Section -->
       <div class="flex flex-col items-center gap-1 animate-fade-in-up w-full drop-shadow-2xl">
         <!-- Logo Wrapper (Image-based branding) -->
-        <div class="flex flex-col items-center gap-2 mt-2">
-          <div class="w-56 h-14 rounded-full bg-white/95 border border-secondary/30 shadow-2xl flex items-center justify-center p-2">
+        <div class="flex flex-col items-center gap-2 mt-4">
+          <div class="w-64 h-20 flex items-center justify-center">
             <img src="railquick_logo.png" alt="RailQuick Logo" class="w-full h-full object-contain">
           </div>
           <div class="text-center mt-1">
@@ -690,7 +688,7 @@
         
         <!-- Call to Action -->
         <div class="w-full">
-          <button class="pulse-glow w-full bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-700 animate-gradient hover:brightness-110 active:scale-95 transition-all duration-300 text-white py-4 px-6 rounded-full flex items-center justify-between group border border-emerald-400/30 shadow-2xl" id="get-started" onclick="navigateTo('page-pnr')">
+          <button class="pulse-glow w-full bg-gradient-to-r from-[#FF6F61] via-[#FF8A7F] to-[#FF6F61] animate-gradient hover:brightness-110 active:scale-95 transition-all duration-300 text-white py-4 px-6 rounded-full flex items-center justify-between group border border-[#FF8A7F]/30 shadow-2xl" id="get-started" onclick="navigateTo('page-pnr')">
             <span class="font-headline text-base font-bold pl-6 tracking-wide">Get Started</span>
             <div class="bg-white/20 p-2.5 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform">
               <span class="material-symbols-outlined text-white text-lg">arrow_forward</span>
@@ -931,17 +929,7 @@
       </div>
     </section>
 
-    <!-- Filter Preferences (Veg Only Switch) -->
-    <div class="px-margin-mobile flex items-center justify-end mt-3 gap-2">
-      <label class="relative inline-flex items-center cursor-pointer select-none">
-        <input type="checkbox" id="veg-only-toggle" class="sr-only peer" onchange="toggleVegFilter(this.checked)" />
-        <div class="w-7 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-emerald-600"></div>
-        <span class="ml-1.5 text-[10px] font-extrabold text-slate-500 peer-checked:text-emerald-700 flex items-center gap-0.5">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 inline-block"></span>
-          Veg Only
-        </span>
-      </label>
-    </div>
+
 
     <!-- Train Info Strip (Alternate) -->
     <div id="train-strip" class="mx-margin-mobile mt-4 bg-white border border-outline-variant/60 rounded-xl p-3 flex items-center justify-between hidden shadow-sm">
