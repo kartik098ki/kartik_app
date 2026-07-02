@@ -29,15 +29,16 @@
       theme: {
         extend: {
           colors: {
-            "primary": "#004D3C", // Deep Emerald
-            "primary-light": "#006A4E",
-            "secondary": "#D4AF37", // Gold
-            "background": "#F8F9FA",
+            "primary": "#0FA968", // Premium Soft Light Green
+            "primary-light": "#34D399",
+            "primary-soft": "#E6F7F0",
+            "secondary": "#F59E0B",
+            "background": "#FFFFFF", // White background
             "surface": "#FFFFFF",
-            "on-surface": "#1A1C1E",
-            "on-surface-variant": "#44474E",
-            "outline-variant": "#E1E2EC",
-            "emerald-midnight": "#00201A"
+            "on-surface": "#1E293B",
+            "on-surface-variant": "#64748B",
+            "outline-variant": "#E2E8F0",
+            "emerald-midnight": "#065F46"
           },
           borderRadius: {
             "squircle": "1.25rem",
@@ -62,7 +63,8 @@
             "mono": ["JetBrains Mono", "monospace"]
           },
           boxShadow: {
-            "premium": "0 10px 30px -10px rgba(0, 0, 0, 0.08)",
+            "premium": "0 10px 30px -10px rgba(0, 0, 0, 0.04)",
+            "premium-glow": "0 10px 30px -10px rgba(15, 169, 104, 0.15)",
             "glass": "inset 0 0 0 1px rgba(255, 255, 255, 0.2)",
             "inner-glow": "inset 0 0 20px rgba(255, 255, 255, 0.05)"
           }
@@ -179,7 +181,7 @@
     }
 
     .gradient-header {
-      background: radial-gradient(circle at top right, #006A4E 0%, #00201A 100%);
+      background: linear-gradient(135deg, #0FA968 0%, #087F4E 100%);
     }
 
     .no-scrollbar::-webkit-scrollbar {
@@ -209,12 +211,28 @@
       opacity: 0;
     }
 
+    @keyframes splashScaleUp {
+      from { opacity: 0; transform: scale(0.9) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-splash-logo {
+      animation: splashScaleUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+
     @keyframes glowPulse {
-      from { box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
-      to { box-shadow: 0 0 22px rgba(212, 175, 55, 0.7); }
+      from { box-shadow: 0 0 10px rgba(15, 169, 104, 0.2); }
+      to { box-shadow: 0 0 22px rgba(15, 169, 104, 0.6); }
     }
     .glow-pulse {
       animation: glowPulse 2.0s infinite alternate ease-in-out;
+    }
+    @keyframes bounceSlow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    .animate-bounce-slow {
+      animation: bounceSlow 2s infinite ease-in-out;
     }
 
     /* Custom date chips list */
@@ -238,8 +256,8 @@
       transition: all 0.2s ease;
     }
     .date-item.selected {
-      background: #004D3C;
-      border-color: #004D3C;
+      background: #0FA968;
+      border-color: #0FA968;
       color: white !important;
     }
     .date-item.selected span {
@@ -258,55 +276,65 @@
       margin-top: 2px;
     }
 
-    /* Category pills custom premium styling */
+    /* Category pills custom premium styling (Blinkit/Zepto quick-commerce style) */
     .category-pill {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0;
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      padding: 0 !important;
+      justify-content: center;
+      background: #FFFFFF !important;
+      border: 1px solid #F1F5F9 !important;
+      border-radius: 1rem !important; /* 16px */
+      padding: 10px 6px !important;
       cursor: pointer;
       flex-shrink: 0;
-      transition: transform 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02) !important;
       -webkit-tap-highlight-color: transparent;
     }
+    .category-pill:hover {
+      transform: translateY(-2px);
+      border-color: #E2E8F0 !important;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04) !important;
+    }
     .category-pill:active {
-      transform: scale(0.95);
+      transform: scale(0.95) !important;
     }
     .cat-icon-wrapper {
-      width: 56px;
-      height: 56px;
-      border-radius: 1.25rem; /* squircle */
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      background: #F8FAFC;
     }
     .category-pill .cat-label {
-      color: #64748B;
-      font-size: 10px;
-      font-weight: 700;
-      margin-top: 6px;
-      transition: color 0.3s ease;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 8px;
+      transition: color 0.25s ease;
       text-align: center;
       white-space: nowrap;
     }
+    /* Active State */
+    .category-pill.active {
+      background: #E6F7F0 !important; /* Soft Light Green Tint */
+      border-color: #0FA968 !important; /* Primary Soft Green */
+      box-shadow: 0 6px 16px rgba(15, 169, 104, 0.12) !important;
+    }
     .category-pill.active .cat-icon-wrapper {
-      background: #004D3C !important;
-      border-color: #004D3C !important;
-      box-shadow: 0 8px 24px rgba(0, 77, 60, 0.15) !important;
-      transform: translateY(-2px);
+      background: #0FA968 !important;
+      color: #FFFFFF !important;
     }
     .category-pill.active .cat-icon-wrapper .material-symbols-outlined {
       color: #FFFFFF !important;
     }
     .category-pill.active .cat-label {
-      color: #004D3C !important;
-      font-weight: 800 !important;
+      color: #0FA968 !important;
+      font-weight: 700 !important;
     }
 
     /* Route live timeline styling */
@@ -322,7 +350,7 @@
       top: 6px;
       bottom: 6px;
       width: 2px;
-      background: #E1E2EC;
+      background: transparent;
       z-index: 1;
     }
     .timeline-node {
@@ -345,11 +373,11 @@
       transition: all 0.3s;
     }
     .timeline-node.passed .node-dot {
-      background: #004D3C;
+      background: #0FA968;
     }
     .timeline-node.current .node-dot {
-      background: #D4AF37;
-      box-shadow: 0 0 10px #D4AF37;
+      background: #0FA968;
+      box-shadow: 0 0 10px rgba(15, 169, 104, 0.4);
       transform: scale(1.3);
     }
     .timeline-node.current .node-dot::after {
@@ -382,8 +410,8 @@
       margin-top: 3px;
     }
     .delay-tag.ontime {
-      background: #E8F5E9;
-      color: #004D3C;
+      background: #E6F7F0;
+      color: #0FA968;
     }
     .delay-tag.late {
       background: #FFF3CD;
@@ -445,7 +473,7 @@
   width: 32px;
   height: 3px;
   border-radius: 0 0 4px 4px;
-  background: #004D3C;
+  background: #0FA968;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .nav-item.active::before {
@@ -457,7 +485,7 @@
   transition: all 0.25s ease;
 }
 .nav-item.active .nav-icon {
-  color: #004D3C;
+  color: #0FA968;
   font-variation-settings: 'FILL' 1;
 }
 .nav-item .nav-label {
@@ -468,7 +496,7 @@
   transition: color 0.25s ease;
 }
 .nav-item.active .nav-label {
-  color: #004D3C;
+  color: #0FA968;
 }
 .nav-item:active {
   transform: scale(0.92);
@@ -635,7 +663,7 @@
 
 /* Page bottom padding for nav bar */
 .page { padding-bottom: 80px !important; }
-.page#page-splash { padding-bottom: 0 !important; overflow: hidden !important; background: linear-gradient(135deg, #002D24 0%, #004D3C 50%, #00201A 100%) !important; }
+.page#page-splash { padding-bottom: 0 !important; overflow: hidden !important; background: #FFFFFF !important; }
 
 /* Cart FAB sits above bottom nav */
 #cart-fab { bottom: 82px !important; transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important; }
@@ -700,82 +728,10 @@ input[type='text'], input[type='number'], input[type='tel'], input[type='date'] 
 <div id="app" class="app-wrapper">
 
   <!-- ==================== SPLASH / WELCOME PAGE ==================== -->
-  <div id="page-splash" class="page active" style="background: radial-gradient(circle at 50% 30%, #004D3C 0%, #002D24 60%, #00120E 100%) !important;">
-    <!-- Ambient Blur Artifacts -->
-    <div class="absolute top-[25%] left-[50%] -translate-x-1/2 w-80 h-80 rounded-full bg-emerald-400/20 blur-[100px] pointer-events-none"></div>
-    <div class="absolute bottom-[20%] right-[-10%] w-72 h-72 rounded-full bg-amber-500/10 blur-[120px] pointer-events-none"></div>
-    
-    <!-- Cinematically Masked Glass Overlay -->
-    <div class="absolute inset-0 bg-black/20 backdrop-blur-[1px] z-10 pointer-events-none"></div>
-    
-    <!-- Main Content Area -->
-    <div class="relative z-20 flex flex-col h-full px-6 pt-16 pb-8 items-center text-center">
-      <!-- Top Branding -->
-      <div class="flex flex-col items-center gap-2 animate-fade-in-up w-full drop-shadow-2xl">
-        <span class="bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[10px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-inner mb-2 select-none">
-          Premium Train Delivery
-        </span>
-        <h1 class="text-5xl font-black text-white tracking-tighter leading-none mb-2 font-headline">RailQuick</h1>
-        <p class="font-body text-xs text-white/80 max-w-[280px] leading-relaxed mx-auto">
-          Fresh essentials &amp; travel comforts delivered sealed directly to your train coach &amp; seat.
-        </p>
-      </div>
-      
-      <!-- Centered Logo Hub -->
-      <div class="flex-grow flex flex-col items-center justify-center py-6 animate-fade-in-up" style="animation-delay: 0.1s;">
-        <div class="relative w-36 h-36 flex items-center justify-center">
-          <!-- Pulse rings -->
-          <div class="absolute inset-0 rounded-[2.5rem] border border-emerald-400/20 animate-ping opacity-60"></div>
-          <div class="absolute inset-4 rounded-[2rem] border border-emerald-500/30 animate-pulse opacity-40"></div>
-          
-          <!-- Core Logo Box -->
-          <div class="relative w-24 h-24 rounded-[2.25rem] bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-2xl border border-white/20 flex items-center justify-center shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
-            <span class="material-symbols-outlined text-white text-[54px] drop-shadow-lg">train</span>
-          </div>
-        </div>
-        
-        <!-- Live Stoppage Highlights -->
-        <div class="flex gap-2 justify-center flex-wrap mt-8">
-          <div class="bg-white/5 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
-            <span class="material-symbols-outlined text-emerald-400 text-xs">local_shipping</span>
-            <span class="text-[9px] text-white/90 font-black uppercase tracking-wide">Seat Delivery</span>
-          </div>
-          <div class="bg-white/5 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
-            <span class="material-symbols-outlined text-emerald-400 text-xs">gps_fixed</span>
-            <span class="text-[9px] text-white/90 font-black uppercase tracking-wide">Live GPS</span>
-          </div>
-          <div class="bg-white/5 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
-            <span class="material-symbols-outlined text-emerald-400 text-xs">timer</span>
-            <span class="text-[9px] text-white/90 font-black uppercase tracking-wide">10 Min ETA</span>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Bottom CTA Card Area -->
-      <div class="w-full max-w-sm flex flex-col items-center gap-5 animate-fade-in-up mt-auto" style="animation-delay: 0.2s;">
-        <!-- Launching Card -->
-        <div class="w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-lg text-center relative overflow-hidden">
-          <div class="absolute right-0 top-0 bg-secondary/80 text-primary text-[8px] font-black px-2.5 py-0.5 rounded-bl-lg uppercase tracking-wider">Live</div>
-          <span class="text-[9px] font-black text-secondary uppercase tracking-[0.25em] block mb-1">Delivering At</span>
-          <h2 class="font-headline text-2xl text-white tracking-tight leading-none font-black">DELHI JUNCTION (DLI)</h2>
-          <p class="font-body text-[10px] text-white/60 mt-1.5 leading-relaxed">Fastest station platform delivery network.</p>
-        </div>
-        
-        <!-- Get Started CTA Button -->
-        <div class="w-full">
-          <button class="pulse-glow w-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 animate-gradient hover:brightness-110 active:scale-[0.98] transition-all duration-300 text-white py-4 px-6 rounded-2xl flex items-center justify-between group border border-emerald-300/30 shadow-2xl" id="get-started" onclick="completeOnboarding()">
-            <span class="font-headline text-base font-black pl-4 tracking-wide text-white">Get Started</span>
-            <div class="bg-white/20 p-2 rounded-xl flex items-center justify-center group-hover:translate-x-1 transition-transform">
-              <span class="material-symbols-outlined text-white text-lg">arrow_forward</span>
-            </div>
-          </button>
-        </div>
-        
-        <!-- Elite Footer -->
-        <div class="opacity-40">
-          <p class="font-label-sm text-[8px] text-white/60 tracking-[0.25em] uppercase font-bold">Powered by RailQuick Logistics</p>
-        </div>
-      </div>
+  <div id="page-splash" class="page active flex flex-col items-center justify-center bg-white" style="background: #FFFFFF !important;">
+    <!-- Centered Logo with Subtle Scale/Fade Animation -->
+    <div class="animate-splash-logo flex items-center justify-center">
+      <img src="railquick_logo.png" alt="RailQuick Logo" class="w-48 h-auto object-contain max-w-[80vw]" onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuBLSbWU6XFZMMUfJxOy35YEMggd4QFGwjX-k1Rufp5SN4dy4O20pJIWp-P9k56MLvz7buK7i_lwNtf4uVr2zEFu27l-FmB8bFKFnSk0i9j5fEIh7ulovHSLnSWbiFc599Xjf_nhHWYrNnSM-qJRiWdQu7281GvLpYudPln6wtbcjlnWQiLljnfesrXWM71k1bo2tExCm3wc8t9GVD1nJOhkvQ-k9ePkncRLMW295dICbhq05dKSTDWTXZF1BXtNHWpj_Z9bOuzf6ew'">
     </div>
   </div>
 
@@ -1496,7 +1452,7 @@ input[type='text'], input[type='number'], input[type='tel'], input[type='date'] 
     </div>
 
     <!-- Logged in section -->
-    <div id="account-logged-section" class="p-6 space-y-5 hidden">
+    <div id="account-logged-section" class="flex-1 overflow-y-auto p-6 pb-28 space-y-5 hidden">
       <div class="bg-gradient-to-br from-primary to-primary-light rounded-3xl p-5 flex items-center gap-4 shadow-lg relative overflow-hidden">
         <div class="absolute inset-0 bg-white/5"></div>
         <div class="relative w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm text-white font-headline font-black text-xl flex items-center justify-center shadow border border-white/20" id="profile-avatar">K</div>

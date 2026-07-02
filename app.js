@@ -983,7 +983,7 @@ function generateTimelineContainerHTML(d, statusNote, isDelayed, timelineHTML) {
       const nextTime = nextStation ? (nextStation.arrival?.scheduled || nextStation.arrival?.actual || '—') : '';
       
       summaryCardHTML = `
-        <div class="bg-primary/5 border border-primary/20 rounded-2xl p-4 mb-4 flex flex-col items-center justify-center text-center">
+        <div class="bg-primary-soft border border-primary/20 rounded-2xl p-4 mb-4 flex flex-col items-center justify-center text-center shadow-[0_4px_12px_rgba(15,169,104,0.03)]">
           <div class="flex items-center gap-1.5 mb-1.5 select-none">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -991,14 +991,14 @@ function generateTimelineContainerHTML(d, statusNote, isDelayed, timelineHTML) {
             </span>
             <span class="text-[9px] font-black text-primary uppercase tracking-[0.2em]">Current Position</span>
           </div>
-          <h4 class="text-base font-serif-display font-black text-on-surface mb-0.5">${curStation.stationName} (${curStation.stationCode})</h4>
+          <h4 class="text-base font-headline font-extrabold text-on-surface mb-0.5">${curStation.stationName} (${curStation.stationCode})</h4>
           <p class="text-xs font-bold text-gray-500 mb-4">${statusNote}</p>
           
           <!-- Mini Progress Track -->
           <div class="flex items-center justify-between w-full max-w-[280px] px-1 text-[10px] text-on-surface-variant/80 font-bold mb-1">
             <div class="w-[35%] text-left truncate text-gray-400 font-semibold">${lastStation ? lastStation.stationName.split(' ')[0] : 'Start'}</div>
             <div class="flex-grow flex items-center justify-center relative px-2">
-              <div class="w-full h-[2px] bg-outline-variant/60 relative">
+              <div class="w-full h-[2px] bg-slate-200 relative">
                 <span class="material-symbols-outlined absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-primary select-none animate-pulse">train</span>
               </div>
             </div>
@@ -1013,9 +1013,9 @@ function generateTimelineContainerHTML(d, statusNote, isDelayed, timelineHTML) {
       `;
     } else {
       summaryCardHTML = `
-        <div class="bg-primary/5 border border-primary/20 rounded-2xl p-4 mb-4 text-center">
+        <div class="bg-primary-soft border border-primary/20 rounded-2xl p-4 mb-4 text-center">
           <div class="text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-1">Live Status</div>
-          <h4 class="text-base font-serif-display font-black text-on-surface mb-0.5">${d.trainName || 'Train'}</h4>
+          <h4 class="text-base font-headline font-extrabold text-on-surface mb-0.5">${d.trainName || 'Train'}</h4>
           <p class="text-xs font-bold text-gray-500">${statusNote}</p>
         </div>
       `;
@@ -1024,12 +1024,12 @@ function generateTimelineContainerHTML(d, statusNote, isDelayed, timelineHTML) {
 
   return `
     ${summaryCardHTML}
-    <details class="group mt-2">
-      <summary class="list-none flex items-center justify-center gap-1.5 text-[11px] font-bold text-primary cursor-pointer hover:opacity-85 select-none py-2 bg-primary/5 rounded-xl border border-primary/10">
+    <details class="group mt-2 transition-all duration-300">
+      <summary class="list-none flex items-center justify-center gap-1.5 text-[11px] font-bold text-primary cursor-pointer hover:opacity-85 select-none py-2 bg-primary/5 rounded-xl border border-primary/10 transition-colors">
         <span>View Full Station Route</span>
-        <span class="material-symbols-outlined text-[16px] transition-transform group-open:rotate-180">expand_more</span>
+        <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-open:rotate-180">expand_more</span>
       </summary>
-      <div class="train-timeline mt-4 pl-7 pr-2">
+      <div class="train-timeline mt-4 pl-3 pr-1">
         ${timelineHTML}
       </div>
     </details>
@@ -1064,18 +1064,48 @@ function renderLiveTrainResult(d, trainNo) {
         delayTagHTML = `<span class="delay-tag ${isDelayed ? 'late' : 'ontime'}">${statusNote}</span>`;
       }
       
+      let currentBadgeHTML = '';
+      if (nodeClass === 'current') {
+        currentBadgeHTML = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-primary/10 text-primary border border-primary/20"><span class="w-1 h-1 rounded-full bg-primary animate-ping"></span>You are Here</span>`;
+      }
+      
       return `
-        <div class="timeline-node ${nodeClass}">
-          <div class="node-dot"></div>
-          <div class="node-content">
-            <div>
-              <div class="node-station font-bold text-xs text-on-surface">${s.stationName} (${s.stationCode})</div>
-              <div class="text-[10px] text-gray-500 mt-0.5">Platform ${s.platform || '—'}</div>
+        <div class="timeline-node ${nodeClass} flex gap-4 relative pl-7 pb-5 last:pb-0 select-none">
+          <!-- Connection line connector -->
+          ${idx < d.timeline.length - 1 ? `
+            <div class="absolute left-[11px] top-4 bottom-0 w-[2.5px] z-10 ${nodeClass === 'passed' ? 'bg-primary' : (nodeClass === 'current' ? 'bg-gradient-to-b from-primary to-slate-200' : 'bg-slate-200')}"></div>
+          ` : ''}
+          
+          <!-- Node Dot/Icon -->
+          <div class="absolute left-[11px] top-3 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center">
+            ${nodeClass === 'current' ? `
+              <div class="relative w-7 h-7 flex items-center justify-center bg-primary rounded-full shadow-md border-2 border-white ring-4 ring-primary/10 animate-bounce-slow">
+                <span class="material-symbols-outlined text-white text-[14px] select-none">directions_transit</span>
+              </div>
+            ` : (nodeClass === 'passed' ? `
+              <div class="w-3 h-3 rounded-full bg-primary border-2 border-white shadow-sm ring-2 ring-primary/15"></div>
+            ` : `
+              <div class="w-3 h-3 rounded-full bg-slate-300 border-2 border-white shadow-sm"></div>
+            `)}
+          </div>
+
+          <!-- Station Details Card -->
+          <div class="flex-grow bg-white border ${nodeClass === 'current' ? 'border-primary bg-primary/[0.02] shadow-sm shadow-primary/5' : 'border-slate-100 hover:border-slate-200'} rounded-2xl p-3.5 flex justify-between items-center transition-all duration-300">
+            <div class="space-y-1">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-xs font-bold ${nodeClass === 'current' ? 'text-primary' : 'text-slate-800'}">${s.stationName}</span>
+                <span class="text-[9px] font-mono bg-slate-100 text-slate-500 px-1 py-0.5 rounded-md font-semibold">${s.stationCode}</span>
+                ${currentBadgeHTML}
+              </div>
+              <div class="flex items-center gap-2 text-[9px] text-slate-500 font-medium">
+                <span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[11px] text-slate-400">layers</span> Platform ${s.platform || '—'}</span>
+              </div>
               ${delayTagHTML}
             </div>
-            <div class="text-right">
-              <div class="time-actual font-mono text-xs">${timeArr}</div>
-              ${timeSch && timeSch !== timeArr ? `<div class="time-sched font-mono text-[10px] text-gray-400">${timeSch}</div>` : ''}
+            <div class="text-right flex flex-col items-end gap-0.5 min-w-[70px]">
+              <span class="text-xs font-bold font-mono text-slate-800">${timeArr}</span>
+              ${timeSch && timeSch !== timeArr ? `<span class="text-[9px] font-mono text-slate-400 line-through">SCH: ${timeSch}</span>` : ''}
+              <span class="text-[8px] text-slate-400 uppercase font-black tracking-wider">Arrival</span>
             </div>
           </div>
         </div>
@@ -1088,8 +1118,8 @@ function renderLiveTrainResult(d, trainNo) {
   document.getElementById('pnr-results').innerHTML = `
     <div class="bg-white border border-outline-variant/60 rounded-[2rem] overflow-hidden shadow-premium">
       <div class="gradient-header p-5 text-white">
-        <h3 class="font-serif-display text-xl text-white font-bold">${d.trainName || 'Train ' + trainNo}</h3>
-        <p class="font-mono text-[10px] text-white/70 mt-1">Train #${d.trainNo || trainNo} · Last updated: ${d.lastUpdate || 'Just now'}</p>
+        <h3 class="font-headline text-lg text-white font-black">${d.trainName || 'Train ' + trainNo}</h3>
+        <p class="font-mono text-[9px] text-white/70 mt-1">Train #${d.trainNo || trainNo} · Last updated: ${d.lastUpdate || 'Just now'}</p>
       </div>
       
       <div class="p-5">
@@ -1294,25 +1324,32 @@ function renderProducts(products) {
     const weightText = p.weight ? p.weight : 'Standard Size';
     const stars = p.rating ? '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 >= 0.5 ? '½' : '') : '';
     const reviewsText = p.reviews ? `(${p.reviews > 999 ? (p.reviews/1000).toFixed(1)+'k' : p.reviews})` : '';
+    
+    // Width-locked custom rounded-full elements (same w-20 h-8 footprint for both states)
     const buttonHTML = qty > 0
-      ? `<div class="flex items-center bg-primary rounded-xl text-white overflow-hidden shadow-md border border-primary/20 shrink-0 h-8">
-           <button class="w-7 h-8 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-sm" onclick="event.stopPropagation();changeProductQty(${p.id},-1)">−</button>
-           <span class="px-1.5 font-mono text-xs font-bold min-w-[18px] text-center">${qty}</span>
-           <button class="w-7 h-8 flex items-center justify-center hover:bg-black/10 active:bg-black/20 font-bold transition-colors text-sm" onclick="event.stopPropagation();changeProductQty(${p.id},1)">+</button>
+      ? `<div class="w-20 h-8 flex items-center justify-between bg-white border border-primary rounded-full overflow-hidden shadow-sm shrink-0">
+           <button class="w-6 h-full flex items-center justify-center text-primary hover:bg-primary/5 active:bg-primary/10 font-bold transition-colors text-sm" onclick="event.stopPropagation();changeProductQty(${p.id},-1)">−</button>
+           <span class="font-mono text-xs font-black text-primary text-center flex-1">${qty}</span>
+           <button class="w-6 h-full flex items-center justify-center text-primary hover:bg-primary/5 active:bg-primary/10 font-bold transition-colors text-sm" onclick="event.stopPropagation();changeProductQty(${p.id},1)">+</button>
          </div>`
-      : `<button class="bg-primary text-white px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all shadow-sm shadow-primary/20 shrink-0 active:scale-95" onclick="event.stopPropagation();addToCart(${p.id})">ADD</button>`;
+      : `<button class="w-20 h-8 flex items-center justify-center bg-white border border-primary text-primary hover:bg-primary hover:text-white rounded-full text-[11px] font-black uppercase transition-all shadow-sm shrink-0 active:scale-95 duration-200" onclick="event.stopPropagation();addToCart(${p.id})">ADD</button>`;
+
+    // Active Card highlights when qty > 0 (glowing shadow, subtle scale, soft green borders)
+    const cardClass = qty > 0 
+      ? 'border-primary/40 bg-primary/[0.01] scale-[1.02] shadow-premium-glow' 
+      : 'border-slate-100 shadow-[0_4px_16px_rgba(0,0,0,0.03)]';
 
     return `
-      <div class="bg-white rounded-3xl p-3.5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col group cursor-pointer hover:border-primary/20 active:scale-[0.98] transition-all relative overflow-hidden" onclick="openProductModal(${p.id})">
-        <div class="w-full aspect-square bg-gray-50 rounded-2xl p-3 mb-2.5 flex items-center justify-center relative overflow-hidden shrink-0">
-          <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
+      <div class="bg-white rounded-[2rem] p-3.5 border ${cardClass} flex flex-col group cursor-pointer hover:border-primary/20 active:scale-[0.98] transition-all duration-300 relative overflow-hidden" onclick="openProductModal(${p.id})">
+        <div class="w-full aspect-square bg-slate-50 rounded-[1.5rem] p-3 mb-3 flex items-center justify-center relative overflow-hidden shrink-0 transition-transform duration-300 group-hover:scale-[1.02]">
+          <img alt="${p.name}" class="max-h-full max-w-full object-contain" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
         </div>
         <div class="flex flex-col flex-grow">
-          <h4 class="text-[11px] font-bold text-on-surface line-clamp-2 mb-1 leading-tight min-h-[28px]">${p.name}</h4>
-          <p class="text-[9px] font-semibold text-gray-400 mb-1.5">${weightText}</p>
-          ${p.rating ? `<div class="flex items-center gap-1 mb-2">
+          <h4 class="text-[11px] font-bold text-slate-800 line-clamp-2 mb-1.5 leading-tight min-h-[30px]">${p.name}</h4>
+          <p class="text-[9px] font-semibold text-slate-400 mb-2">${weightText}</p>
+          ${p.rating ? `<div class="flex items-center gap-1 mb-2.5">
             <span class="text-[9px] text-amber-500 font-bold tracking-tight">${stars}</span>
-            <span class="text-[8px] text-gray-400 font-medium">${reviewsText}</span>
+            <span class="text-[8px] text-slate-400 font-medium">${reviewsText}</span>
           </div>` : ''}
           <div class="flex justify-between items-center mt-auto gap-2">
             <span class="text-sm font-black text-primary">₹${p.price}</span>
@@ -2679,7 +2716,7 @@ function updateBottomNav(pageId) {
   if (!nav) return;
   
   // Show/hide nav based on page
-  const showNavPages = ['page-shop', 'page-pnr', 'page-orders', 'page-account', 'page-cart', 'page-offers', 'page-support', 'page-games', 'page-category-view', 'page-search'];
+  const showNavPages = ['page-shop', 'page-orders', 'page-account', 'page-cart', 'page-offers', 'page-support', 'page-games', 'page-category-view', 'page-search'];
   nav.style.display = '';
   nav.style.transform = '';
   if (showNavPages.includes(pageId)) {
@@ -2757,35 +2794,31 @@ document.addEventListener('DOMContentLoaded', () => {
   loadState();
   setDefaultDates();
   
-  const onboarded = localStorage.getItem('railquick_onboarded') === 'true';
-  if (appState.user) {
-    if (!appState.user.phone) {
-      navigateTo('page-account');
-      showToast('Please add your mobile number to complete profile', 'warning');
-    } else {
-      navigateTo('page-shop');
-    }
-  } else if (localStorage.getItem('railquick_logging_in') === 'true') {
-    // Skip splash, keep loading state to avoid flash of splash screen
-    document.getElementById('page-splash').classList.remove('active');
-    showLoading('Completing secure login...');
-    
-    // Safety timeout: if Clerk doesn't load/respond in 6 seconds, show splash
-    setTimeout(() => {
+  // Always show splash screen at startup
+  document.getElementById('page-splash').classList.add('active');
+  appState.currentPage = 'page-splash';
+  updateBottomNav('page-splash');
+  
+  // Auto-navigate to page-pnr after 1.5 seconds (1500 ms)
+  setTimeout(() => {
+    if (appState.currentPage === 'page-splash') {
       if (localStorage.getItem('railquick_logging_in') === 'true') {
-        localStorage.removeItem('railquick_logging_in');
-        hideLoading();
-        navigateTo('page-splash');
+        document.getElementById('page-splash').classList.remove('active');
+        showLoading('Completing secure login...');
+        
+        // Safety timeout: if Clerk doesn't load/respond in 6 seconds, redirect to page-pnr
+        setTimeout(() => {
+          if (localStorage.getItem('railquick_logging_in') === 'true') {
+            localStorage.removeItem('railquick_logging_in');
+            hideLoading();
+            navigateTo('page-pnr');
+          }
+        }, 6000);
+      } else {
+        navigateTo('page-pnr');
       }
-    }, 6000);
-  } else if (onboarded) {
-    // Already clicked Get Started previously, skip splash straight to shop page
-    navigateTo('page-shop');
-  } else {
-    document.getElementById('page-splash').classList.add('active');
-    appState.currentPage = 'page-splash';
-    updateBottomNav('page-splash');
-  }
+    }
+  }, 1500);
   
   // Reset PNR and ticket data on launch so past search data is not shown
   appState.pnrData = null;

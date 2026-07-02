@@ -14,12 +14,12 @@
 
 /* Custom interactive active states */
 .active-nav-btn {
-  color: #004D3C !important;
+  color: #0FA968 !important;
 }
 
 .active-nav-btn .nav-icon {
-  background-color: rgba(0, 77, 60, 0.1);
-  color: #004D3C !important;
+  background-color: rgba(15, 169, 104, 0.1);
+  color: #0FA968 !important;
 }
 
 /* Custom fade effects */
