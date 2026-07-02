@@ -338,6 +338,78 @@ const PRODUCTS = [
     reviews: 189,
     description: "Ultra-durable nylon braided charging cable, supporting up to 60W charge capacity.",
     tags: ['USB-C', 'Braided', 'Charging']
+  },
+  {
+    id: 109,
+    name: 'Warm Butter Croissant',
+    price: 80,
+    category: 'snacks',
+    weight: '75 g',
+    img: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&h=400&fit=crop',
+    rating: 4.8,
+    reviews: 154,
+    description: "Flaky, buttery, freshly baked French-style croissant. Warm and delicious.",
+    tags: ['Bakery', 'Warm', 'Butter', 'Veg']
+  },
+  {
+    id: 110,
+    name: 'Roasted Salted Almonds',
+    price: 120,
+    category: 'snacks',
+    weight: '100 g',
+    img: 'https://images.unsplash.com/photo-1508061253366-f7da158b6d96?w=400&h=400&fit=crop',
+    rating: 4.7,
+    reviews: 320,
+    description: "Premium California almonds, dry-roasted and lightly tossed in pink Himalayan salt.",
+    tags: ['Nuts', 'Roasted', 'Healthy', 'Veg']
+  },
+  {
+    id: 207,
+    name: 'Chilled Cold Coffee Can',
+    price: 60,
+    category: 'beverages',
+    weight: '250 ml',
+    img: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=400&h=400&fit=crop',
+    rating: 4.6,
+    reviews: 580,
+    description: "Rich, creamy cold brew coffee in a ready-to-drink chilled can.",
+    tags: ['Coffee', 'Chilled', 'Cold Brew']
+  },
+  {
+    id: 208,
+    name: 'Fresh Lime Soda',
+    price: 40,
+    category: 'beverages',
+    weight: '300 ml',
+    img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=400&h=400&fit=crop',
+    rating: 4.8,
+    reviews: 910,
+    description: "Squeezed fresh limes blended with soda and sugar syrup for instant replenishment.",
+    tags: ['Lime', 'Soda', 'Chilled', 'Refreshing']
+  },
+  {
+    id: 306,
+    name: 'Pocket Wet Wipes',
+    price: 30,
+    category: 'hygiene',
+    weight: '10 Wipes',
+    img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=400&fit=crop',
+    rating: 4.7,
+    reviews: 402,
+    description: "Mini pocket pack of gentle, alcohol-free refreshing wet wipes.",
+    tags: ['Wipes', 'Travel size', 'Gentle']
+  },
+  {
+    id: 407,
+    name: 'Universal Multi-Charging Cable',
+    price: 299,
+    category: 'tech',
+    weight: '3-in-1',
+    img: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=400&h=400&fit=crop',
+    rating: 4.9,
+    reviews: 2150,
+    description: "3-in-1 nylon braided charging cable with Type-C, Lightning, and Micro-USB connectors.",
+    tags: ['3-in-1', 'Multi cable', 'Fast charge']
   }
 ];
 
@@ -1229,7 +1301,7 @@ function renderProducts(products) {
         </div>
         
         <div class="w-full aspect-square bg-[#F4F6F5]/70 rounded-2xl p-4 mb-3 flex items-center justify-center relative overflow-hidden shrink-0">
-          <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.src='product_water.png'">
+          <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
         </div>
         <h4 class="text-xs font-bold text-on-surface line-clamp-2 mb-1 min-h-[32px]">${p.name}</h4>
         <p class="text-[9px] font-bold text-gray-400 mb-3">${weightText}</p>
@@ -1303,7 +1375,7 @@ function renderCategoryProducts(cat) {
         </div>
         
         <div class="w-full aspect-square bg-[#F4F6F5]/70 rounded-2xl p-4 mb-3 flex items-center justify-center relative overflow-hidden shrink-0">
-          <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.src='product_water.png'">
+          <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
         </div>
         <h4 class="text-xs font-bold text-on-surface line-clamp-2 mb-1 min-h-[32px]">${p.name}</h4>
         <p class="text-[9px] font-bold text-gray-400 mb-3">${weightText}</p>
@@ -1563,7 +1635,7 @@ function renderCartItems() {
   list.innerHTML = appState.cart.map(item => `
     <div class="bg-white border border-outline-variant/50 rounded-2xl p-4 flex gap-4 shadow-sm">
       <div class="w-16 h-16 bg-[#F4F6F5] rounded-xl flex items-center justify-center p-2 shrink-0">
-        <img class="max-h-full max-w-full object-contain" src="${item.img}" alt="${item.name}" onerror="this.src='product_water.png'" />
+        <img class="max-h-full max-w-full object-contain" src="${item.img}" alt="${item.name}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';" />
       </div>
       <div class="flex-grow flex flex-col justify-between py-0.5">
         <div>
@@ -2177,7 +2249,7 @@ function openProductModal(productId) {
   appState.modalQty = 1;
   
   document.getElementById('modal-img').src = p.img;
-  document.getElementById('modal-img').onerror = () => { document.getElementById('modal-img').src = 'product_water.png'; };
+  document.getElementById('modal-img').onerror = function() { this.onerror=null; this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop'; };
   document.getElementById('modal-category').textContent = p.category.charAt(0).toUpperCase() + p.category.slice(1);
   document.getElementById('modal-name').textContent = p.name;
   document.getElementById('modal-stars').textContent = getStars(p.rating);
