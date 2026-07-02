@@ -1,624 +1,1820 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>RailQuick — Blinkit Style Train Essentials Delivery</title>
-  <meta name="description" content="RailQuick delivers snacks, beverages, hygiene and comfort essentials to your seat in train. Express delivery at Delhi Station." />
-  <meta name="theme-color" content="#0C831F" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>RailQuick - Premium Journey Delivery</title>
+  
+  <!-- Clerk Authentication: Official JS SDK (Loaded via CDN with async execution, fallback checked in app.js) -->
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_c21vb3RoLWphY2thbC0xOC5jbGVyay5hY2NvdW50cy5kZXYk"
+    onload="window.__clerkScriptLoaded = true;"
+    onerror="window.__clerkScriptFailed = true;"
+    src="https://smooth-jackal-18.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
+    type="text/javascript"
+  ></script>
+  
+  <!-- Tailwind CSS CDN with Forms & Containers -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Google Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  
+  <!-- Google Fonts (Hanken Grotesk, Inter, Playfair Display, JetBrains Mono) -->
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&amp;family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet"/>
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#004D3C", // Deep Emerald
+            "primary-light": "#006A4E",
+            "secondary": "#D4AF37", // Gold
+            "background": "#F8F9FA",
+            "surface": "#FFFFFF",
+            "on-surface": "#1A1C1E",
+            "on-surface-variant": "#44474E",
+            "outline-variant": "#E1E2EC",
+            "emerald-midnight": "#00201A"
+          },
+          borderRadius: {
+            "squircle": "1.25rem",
+            "2xl": "1rem",
+            "3xl": "1.5rem",
+            "4xl": "2rem",
+            "elite": "2rem"
+          },
+          spacing: {
+            "xs": "8px",
+            "base": "4px",
+            "sm": "12px",
+            "md": "16px",
+            "lg": "24px",
+            "xl": "32px",
+            "margin-mobile": "20px"
+          },
+          fontFamily: {
+            "headline": ["Hanken Grotesk", "sans-serif"],
+            "body": ["Inter", "sans-serif"],
+            "serif-display": ["Playfair Display", "serif"],
+            "mono": ["JetBrains Mono", "monospace"]
+          },
+          boxShadow: {
+            "premium": "0 10px 30px -10px rgba(0, 0, 0, 0.08)",
+            "glass": "inset 0 0 0 1px rgba(255, 255, 255, 0.2)",
+            "inner-glow": "inset 0 0 20px rgba(255, 255, 255, 0.05)"
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Base wrapper styling */
+    html, body {
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      margin: 0;
+      padding: 0;
+      background-color: #0d131a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      overscroll-behavior: none;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    body {
+      touch-action: none;
+    }
+
+    .app-wrapper {
+      width: 100%;
+      max-width: 412px;
+      height: 100%;
+      max-height: 892px;
+      position: relative;
+      background: #F8F9FA;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+      touch-action: none;
+    }
+
+    /* Page container transitions */
+    .page {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      touch-action: pan-y;
+      overscroll-behavior-y: contain;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      z-index: 5;
+      padding-bottom: 16px; /* Minimal bottom padding */
+      scrollbar-width: none; /* Hide scrollbars */
+    }
+
+    .page::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-none {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .page.active {
+      opacity: 1;
+      transform: translateX(0);
+      z-index: 10;
+      pointer-events: all;
+    }
+
+    .page.slide-out {
+      opacity: 0;
+      transform: translateX(-30%);
+      z-index: 5;
+    }
+
+    .page.tab-page {
+      transform: none !important;
+      transition: opacity 0.25s ease;
+    }
+
+    /* Custom visual classes */
+    .glass-overlay {
+      background: linear-gradient(180deg, 
+        rgba(0, 0, 0, 0.3) 0%, 
+        rgba(0, 0, 0, 0.0) 25%, 
+        rgba(0, 0, 0, 0.4) 60%, 
+        rgba(0, 0, 0, 0.95) 100%);
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+
+    .gradient-header {
+      background: radial-gradient(circle at top right, #006A4E 0%, #00201A 100%);
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .material-symbols-outlined.fill-1 {
+      font-variation-settings: 'FILL' 1;
+    }
+
+    /* Keyframe Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-up {
+      animation: fadeInUp 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+
+    @keyframes glowPulse {
+      from { box-shadow: 0 0 10px rgba(212, 175, 55, 0.3); }
+      to { box-shadow: 0 0 22px rgba(212, 175, 55, 0.7); }
+    }
+    .glow-pulse {
+      animation: glowPulse 2.0s infinite alternate ease-in-out;
+    }
+
+    /* Custom date chips list */
+    .custom-date-selector {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .date-item {
+      flex-shrink: 0;
+      background: #F4F6F5;
+      border: 1px solid #E1E2EC;
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      min-width: 60px;
+      transition: all 0.2s ease;
+    }
+    .date-item.selected {
+      background: #004D3C;
+      border-color: #004D3C;
+      color: white !important;
+    }
+    .date-item.selected span {
+      color: white !important;
+    }
+    .date-day {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #666;
+      text-transform: uppercase;
+    }
+    .date-num {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #1A1C1E;
+      margin-top: 2px;
+    }
+
+    /* Category pills custom premium styling */
+    .category-pill {
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: 9999px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .category-pill.active {
+      background: #004D3C !important;
+      border-color: #004D3C !important;
+      box-shadow: 0 8px 16px -4px rgba(0, 77, 60, 0.3) !important;
+    }
+    .category-pill .cat-label {
+      color: #475569;
+      font-size: 11px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+    .category-pill.active .cat-label {
+      color: white !important;
+      font-weight: 800 !important;
+    }
+    .category-pill .material-symbols-outlined {
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+    .category-pill.active .material-symbols-outlined {
+      color: #D4AF37 !important; /* Gold icons inside active emerald pills look extremely premium! */
+    }
+
+    /* Route live timeline styling */
+    .train-timeline {
+      position: relative;
+      padding-left: 28px;
+      margin-top: 15px;
+    }
+    .train-timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: #E1E2EC;
+      z-index: 1;
+    }
+    .timeline-node {
+      position: relative;
+      padding-bottom: 24px;
+      z-index: 2;
+    }
+    .timeline-node:last-child {
+      padding-bottom: 0;
+    }
+    .node-dot {
+      position: absolute;
+      left: -23px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #E1E2EC;
+      border: 2px solid white;
+      transition: all 0.3s;
+    }
+    .timeline-node.passed .node-dot {
+      background: #004D3C;
+    }
+    .timeline-node.current .node-dot {
+      background: #D4AF37;
+      box-shadow: 0 0 10px #D4AF37;
+      transform: scale(1.3);
+    }
+    .timeline-node.current .node-dot::after {
+      content: '';
+    }
+    .node-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .node-station {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #1A1C1E;
+    }
+    .node-platform {
+      font-size: 0.65rem;
+      color: #666;
+      background: #EEE;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+    .delay-tag {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 3px;
+    }
+    .delay-tag.ontime {
+      background: #E8F5E9;
+      color: #004D3C;
+    }
+    .delay-tag.late {
+      background: #FFF3CD;
+      color: #856404;
+    }
+    .time-actual {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: #1A1C1E;
+    }
+    .time-sched {
+      font-size: 0.7rem;
+      color: #999;
+      text-decoration: line-through;
+      text-align: right;
+    }
+
+/* ===== BOTTOM NAVIGATION BAR ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 412px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 6px 0 env(safe-area-inset-bottom, 8px);
+  z-index: 45;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bottom-nav.hidden-nav {
+  transform: translateX(-50%) translateY(100%);
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 16px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 32px;
+  height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: #004D3C;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-item.active::before {
+  transform: translateX(-50%) scaleX(1);
+}
+.nav-item .nav-icon {
+  font-size: 22px;
+  color: #9CA3AF;
+  transition: all 0.25s ease;
+}
+.nav-item.active .nav-icon {
+  color: #004D3C;
+  font-variation-settings: 'FILL' 1;
+}
+.nav-item .nav-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: #9CA3AF;
+  letter-spacing: 0.03em;
+  transition: color 0.25s ease;
+}
+.nav-item.active .nav-label {
+  color: #004D3C;
+}
+.nav-item:active {
+  transform: scale(0.92);
+}
+.nav-item .nav-badge {
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  background: #EF4444;
+  color: white;
+  font-size: 8px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+/* ===== RIPPLE EFFECT ===== */
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(0, 77, 60, 0.15);
+  transform: scale(0);
+  animation: rippleAnim 0.6s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* ===== SKELETON LOADING ===== */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 12px;
+}
+.skeleton-card {
+  background: white;
+  border-radius: 20px;
+  padding: 12px;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.skeleton-img {
+  width: 100%;
+  height: 120px;
+  border-radius: 14px;
+}
+.skeleton-text {
+  height: 12px;
+  margin-top: 10px;
+  width: 80%;
+}
+.skeleton-text-sm {
+  height: 10px;
+  margin-top: 6px;
+  width: 50%;
+}
+.skeleton-btn {
+  height: 36px;
+  margin-top: 12px;
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* ===== FLOATING PARTICLES / BOKEH ===== */
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity: 0.6; }
+  50% { opacity: 0.3; }
+  100% { transform: translateY(-100vh) scale(0.3); opacity: 0; }
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+}
+.particle-1 { width: 6px; height: 6px; background: rgba(212,175,55,0.4); left: 15%; bottom: -10px; animation: floatUp 8s linear infinite; }
+.particle-2 { width: 4px; height: 4px; background: rgba(255,255,255,0.3); left: 35%; bottom: -10px; animation: floatUp 12s linear infinite 2s; }
+.particle-3 { width: 8px; height: 8px; background: rgba(212,175,55,0.25); left: 65%; bottom: -10px; animation: floatUp 10s linear infinite 4s; }
+.particle-4 { width: 5px; height: 5px; background: rgba(255,255,255,0.2); left: 80%; bottom: -10px; animation: floatUp 9s linear infinite 1s; }
+.particle-5 { width: 3px; height: 3px; background: rgba(212,175,55,0.35); left: 50%; bottom: -10px; animation: floatUp 11s linear infinite 3s; }
+.particle-6 { width: 7px; height: 7px; background: rgba(255,255,255,0.15); left: 25%; bottom: -10px; animation: floatUp 14s linear infinite 5s; }
+
+/* ===== ENHANCED ANIMATIONS ===== */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+.animate-scale-in {
+  animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 77, 60, 0.2); }
+  50% { box-shadow: 0 0 35px rgba(0, 77, 60, 0.4); }
+}
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+}
+
+/* ===== IMPROVED CARDS ===== */
+.premium-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.premium-card:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+.premium-card:active {
+  transform: scale(0.98);
+}
+
+/* ===== SAFE AREA & APP CHROME ===== */
+.app-status-bar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  position: relative;
+  z-index: 30;
+}
+
+/* Page bottom padding for nav bar */
+.page { padding-bottom: 80px !important; }
+.page#page-splash { padding-bottom: 0 !important; }
+
+/* Cart FAB adjustment for bottom nav */
+#cart-fab { bottom: 72px !important; }
+
+/* Improved scrollbar hide */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Enhanced modal animations */
+.modal-overlay { transition: opacity 0.3s ease; }
+.modal-card { 
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-overlay:not(.hidden) .modal-card {
+  transform: translateY(0);
+}
+  </style>
 </head>
-<body>
+<body class="antialiased">
+
 <div id="app" class="app-wrapper">
 
-  <!-- ==================== SPLASH PAGE ==================== -->
+  <!-- ==================== SPLASH / WELCOME PAGE ==================== -->
   <div id="page-splash" class="page active">
-    <div class="splash-bg" style="background-image: url('splash_hero.png')"></div>
-    <div class="splash-overlay"></div>
-    <div class="splash-content">
-      <div class="splash-logo-wrapper">
-        <h1 class="splash-brand">
-          <span class="brand-rail">Rail</span><span class="brand-quick">Quick</span>
-        </h1>
-        <p class="splash-tagline">Essentials Delivery Platform</p>
-        <p class="splash-tagline-sub">Delivered to your seat in train</p>
-      </div>
-
-      <div class="splash-bottom">
-        <div class="splash-divider">Launching in</div>
-        <div class="splash-city">DELHI</div>
-        <div class="splash-skyline">
-          <svg width="240" height="36" viewBox="0 0 240 36" fill="none">
-            <path d="M0 36 L10 28 L15 28 L20 20 L25 28 L30 28 L35 24 L40 24 L45 16 L50 24 L55 24 L60 28 L70 28 L75 12 L80 12 L82 8 L84 8 L86 4 L88 4 L90 0 L92 4 L94 4 L96 8 L98 8 L100 12 L105 12 L110 28 L120 28 L125 20 L128 20 L132 14 L136 20 L140 20 L145 28 L155 28 L160 22 L165 22 L168 16 L171 22 L175 22 L180 28 L190 28 L195 18 L200 18 L205 24 L210 24 L215 28 L225 28 L230 32 L240 36Z" fill="white" opacity="0.3"/>
-          </svg>
+    <!-- Hero Background -->
+    <div class="absolute inset-0 z-0">
+      <div class="w-full h-full bg-cover bg-center transition-transform duration-[10000ms] scale-105" style="background-image: url('splash_hero.png');"></div>
+    </div>
+    <!-- Cinematic Gradient Overlay -->
+    <div class="glass-overlay z-10"></div>
+    <!-- Floating Particles -->
+    <div class="particle particle-1"></div>
+    <div class="particle particle-2"></div>
+    <div class="particle particle-3"></div>
+    <div class="particle particle-4"></div>
+    <div class="particle particle-5"></div>
+    <div class="particle particle-6"></div>
+    <!-- Main Content Area -->
+    <div class="relative z-20 flex flex-col h-full px-6 pt-8 pb-4 items-center justify-between text-center">
+      <!-- Top Section -->
+      <div class="flex flex-col items-center gap-1.5 animate-fade-in-up w-full drop-shadow-2xl">
+        <!-- Logo Wrapper (Image-based branding) -->
+        <div class="flex flex-col items-center gap-3 mt-6">
+          <div class="w-64 h-16 rounded-full bg-white/95 border border-secondary/30 shadow-2xl flex items-center justify-center p-2">
+            <img src="railquick_logo.png" alt="RailQuick Logo" class="w-full h-full object-contain">
+          </div>
+          <div class="text-center mt-1">
+            <p class="font-body text-[9px] text-white/70 font-extrabold uppercase tracking-[0.25em]">
+              Seat Delivery Platform
+            </p>
+          </div>
         </div>
-        <p class="splash-hindi">Har Safar, Ab Aur Behtar</p>
-        <button class="btn-get-started" onclick="navigateTo('page-pnr')">
-          Get Started
-          <span class="arrow-circle">→</span>
-        </button>
+        <p class="font-body text-xs text-white/90 font-medium mt-4 text-center leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+          India's Premium Train Essentials Delivery.<br/>Fresh & sealed items directly to your seat.
+        </p>
+      </div>
+      
+      <!-- Bottom Section -->
+      <div class="w-full max-w-sm flex flex-col items-center gap-4 animate-fade-in-up" style="animation-delay: 0.2s;">
+        <!-- Launching Indicator -->
+        <div class="flex flex-col items-center w-full">
+          <span class="font-label-sm text-[9px] text-secondary font-bold tracking-[0.2em] uppercase drop-shadow-md">Launching in</span>
+          <h2 class="font-headline text-4xl text-white tracking-tighter leading-none mt-1 drop-shadow-lg font-black">DELHI</h2>
+          <p class="font-body text-[10px] text-white/80 font-medium mt-1 text-center drop-shadow-md">Express service for every passenger.</p>
+        </div>
+        
+        <!-- Call to Action -->
+        <div class="w-full">
+          <button class="pulse-glow w-full bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-700 animate-gradient hover:brightness-110 active:scale-95 transition-all duration-300 text-white py-4 px-6 rounded-full flex items-center justify-between group border border-emerald-400/30 shadow-2xl" id="get-started" onclick="navigateTo('page-pnr')">
+            <span class="font-headline text-base font-bold pl-6 tracking-wide">Get Started</span>
+            <div class="bg-white/20 p-2.5 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform">
+              <span class="material-symbols-outlined text-white text-lg">arrow_forward</span>
+            </div>
+          </button>
+        </div>
+        
+        <!-- Elite Detail Footer -->
+        <div class="mt-1 opacity-70 hover:opacity-100 transition-opacity">
+          <p class="font-label-sm text-[8px] text-white/60 tracking-widest uppercase drop-shadow-md">Powered by RailQuick Logistics</p>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ==================== PNR & TRAIN STATUS PAGE ==================== -->
-  <div id="page-pnr" class="page">
-    <div class="pnr-hero">
-      <div class="pnr-hero-bg" style="background-image: url('pnr_hero.png')"></div>
-      <div class="pnr-hero-overlay"></div>
-      <button class="pnr-back-btn" onclick="navigateTo('page-splash')">←</button>
-      <div class="pnr-hero-content">
-        <h1 class="pnr-hero-title">PNR & Train Status</h1>
-        <p class="pnr-hero-sub">Live updates. Hassle-free journey.</p>
-      </div>
-    </div>
-
-    <div class="pnr-card">
-      <div class="pnr-tabs">
-        <button class="pnr-tab active" id="tab-pnr" onclick="switchPNRTab('pnr')">
-          <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
-          Check PNR Status
+  <div id="page-pnr" class="page bg-background">
+    <!-- Header Section -->
+    <header class="gradient-header pt-8 pb-32 px-margin-mobile relative overflow-hidden shadow-lg">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-3xl rounded-full -mr-16 -mt-16 pointer-events-none"></div>
+      <div class="absolute bottom-0 left-0 w-48 h-48 bg-secondary/5 blur-3xl rounded-full -ml-16 -mb-16 pointer-events-none"></div>
+      <div class="flex items-center gap-md relative z-10">
+        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 active:scale-90 transition-transform backdrop-blur-sm border border-white/10 hover:bg-white/20" onclick="navigateTo('page-splash')">
+          <span class="material-symbols-outlined text-white">arrow_back</span>
         </button>
-        <button class="pnr-tab" id="tab-live" onclick="switchPNRTab('live')">
-          <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Live Train Status
-        </button>
+        <h1 class="font-serif-display text-2xl text-white tracking-tight">PNR &amp; Train Status</h1>
       </div>
+      <div class="relative z-10 mt-6 px-1">
+        <p class="font-body text-xs text-white/80 leading-normal">Live updates • Hassle-free journey</p>
+      </div>
+    </header>
 
-      <!-- PNR Check Panel -->
-      <div id="panel-pnr" class="pnr-panel">
-        <div class="input-group">
-          <input type="number" id="pnr-input" class="rq-input" placeholder="Enter 10 digit PNR" maxlength="10" oninput="validatePNR(this)" />
-          <span class="input-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
-          </span>
-        </div>
-        <button class="btn-green full-width" onclick="checkPNRStatus()">Check Status</button>
-
-        <div class="or-divider"><span>OR</span></div>
-
-        <div class="section-header-small">
-          <span class="section-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
-          </span>
-          Search Train
-        </div>
-        <div class="input-group">
-          <input type="text" id="train-search-input" class="rq-input" placeholder="Train Number or Name" />
-          <span class="input-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </span>
-        </div>
-        <div class="input-label">Journey Date</div>
-        <div id="search-date-selector" class="custom-date-selector"></div>
-        <input type="date" id="train-date-input" style="display: none;" />
-        <button class="btn-green full-width" onclick="searchTrain()">Search Train Route</button>
-
-        <div style="text-align: center; margin-top: 18px;">
-          <a href="#" class="pnr-skip-link" onclick="navigateTo('page-shop')">
-            Skip & Browse Essentials
-            <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;stroke-width:2.5;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
+    <!-- Main Content Form Box -->
+    <main class="relative z-20 -mt-12 px-margin-mobile">
+      <section class="bg-surface rounded-elite shadow-[0_8px_30px_rgb(0,0,0,0.06)] p-6 border border-black/[0.04]">
+        
+        <!-- Tab Headers -->
+        <div class="flex mb-6 gap-4 border-b border-outline-variant/50">
+          <button class="flex-1 pb-3 font-headline font-bold text-primary border-primary border-b-2" id="tab-pnr" onclick="switchPNRTab('pnr')">
+            Check PNR
+          </button>
+          <button class="flex-1 pb-3 font-headline font-semibold text-on-surface-variant hover:text-primary transition-colors border-b-2 border-transparent" id="tab-live" onclick="switchPNRTab('live')">
+            Live Status
+          </button>
         </div>
 
-        <!-- Extra UI/UX design travel services cards -->
-        <div class="section-header-small" style="margin-top: 28px;">
-          <span class="section-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          </span>
-          Station Services
-        </div>
-        <div class="pnr-services-grid">
-          <div class="pnr-service-card" onclick="showToast('Platform Finder: Search train to find platform', 'info')">
-            <span class="pnr-service-icon">🚉</span>
-            <span class="pnr-service-title">Platform Finder</span>
+        <!-- PNR Input Panel (No copy icon) -->
+        <div id="panel-pnr" class="pnr-panel space-y-5">
+          <div class="relative">
+            <label class="absolute -top-2 left-4 bg-white px-2 text-[10px] font-bold text-primary uppercase tracking-wider z-10">PNR Number</label>
+            <input class="w-full bg-white border border-outline-variant rounded-xl py-4 px-4 font-headline font-semibold text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm hover:border-primary/50" placeholder="Enter 10 digit PNR" type="number" id="pnr-input" oninput="validatePNR(this)" />
           </div>
-          <div class="pnr-service-card" onclick="showToast('Coach layout mapper loaded', 'info')">
-            <span class="pnr-service-icon">📐</span>
-            <span class="pnr-service-title">Seat Layout</span>
+          <button class="w-full bg-primary text-white py-4 rounded-xl font-headline font-bold hover:bg-primary-light active:scale-[0.98] transition-all shadow-[0_8px_20px_rgb(0,77,60,0.2)] uppercase tracking-wider text-sm flex justify-center items-center gap-2" onclick="checkPNRStatus()">
+            Check Status
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+          
+          <div class="relative flex items-center justify-center my-6">
+            <div class="w-full border-t border-outline-variant/60"></div>
+            <span class="absolute px-4 bg-white font-mono text-[9px] text-on-surface-variant/50 uppercase tracking-[0.25em]">Search Train Route</span>
           </div>
-          <div class="pnr-service-card" onclick="showToast('Automated Refund Calculator ready', 'info')">
-            <span class="pnr-service-icon">💰</span>
-            <span class="pnr-service-title">Refund Calc</span>
+
+          <!-- Search Train Form -->
+          <div class="space-y-4">
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/40 pointer-events-none">search</span>
+              <input class="w-full bg-white border border-outline-variant rounded-xl py-3.5 px-4 pl-12 font-body text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm hover:border-primary/50" placeholder="Train Number or Name (e.g. 12002)" type="text" id="train-search-input" />
+            </div>
+            <!-- Date Picker (Allows previous dates) -->
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/40 pointer-events-none">calendar_today</span>
+              <input class="w-full bg-white border border-outline-variant rounded-xl py-3.5 px-4 pl-12 font-body text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm hover:border-primary/50" type="date" id="train-date-input" />
+            </div>
+            
+            <button class="w-full bg-white border-2 border-primary/20 text-primary py-3.5 rounded-xl font-headline font-bold hover:bg-primary/5 hover:border-primary active:scale-[0.98] transition-all uppercase tracking-wider text-sm border-b" onclick="searchTrain()">
+              Search Train
+            </button>
+          </div>
+
+          <div class="text-center mt-4">
+            <a href="#" class="inline-flex items-center gap-1 text-primary font-semibold text-xs hover:opacity-80 transition-opacity" onclick="navigateTo('page-shop')">
+              Skip &amp; Browse Essentials
+              <span class="material-symbols-outlined text-[16px]">arrow_right_alt</span>
+            </a>
           </div>
         </div>
-      </div>
 
-      <!-- Live Train Status Panel -->
-      <div id="panel-live" class="pnr-panel hidden">
-        <div class="input-group">
-          <input type="number" id="live-train-input" class="rq-input" placeholder="Enter Train Number (e.g. 12301)" />
-          <span class="input-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
-          </span>
+        <!-- Live Status Panel -->
+        <div id="panel-live" class="pnr-panel hidden space-y-5">
+          <div class="relative">
+            <label class="absolute -top-2 left-4 bg-white px-2 text-[10px] font-bold text-primary uppercase tracking-wider z-10">Train Number</label>
+            <input class="w-full bg-white border border-outline-variant rounded-xl py-4 px-4 font-headline font-semibold text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm hover:border-primary/50" placeholder="Enter Train Number (e.g. 12301)" type="number" id="live-train-input" />
+          </div>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/40 pointer-events-none">calendar_today</span>
+            <input class="w-full bg-white border border-outline-variant rounded-xl py-3.5 px-4 pl-12 font-body text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all shadow-sm hover:border-primary/50" type="date" id="live-date-input" />
+          </div>
+          <button class="w-full bg-primary text-white py-4 rounded-xl font-headline font-bold hover:bg-primary-light active:scale-[0.98] transition-all shadow-[0_8px_20px_rgb(0,77,60,0.2)] uppercase tracking-wider text-sm flex justify-center items-center gap-2" onclick="checkLiveStatus()">
+            Get Live Status
+            <span class="material-symbols-outlined text-sm">gps_fixed</span>
+          </button>
         </div>
-        <div class="input-label">Journey Date</div>
-        <div id="live-date-selector" class="custom-date-selector"></div>
-        <input type="date" id="live-date-input" style="display: none;" />
-        <button class="btn-green full-width" onclick="checkLiveStatus()">Get Live Status</button>
-      </div>
 
-      <!-- Results Container -->
-      <div id="pnr-results" class="pnr-results hidden"></div>
+      </section>
 
-      <!-- Promo Banner -->
-      <div class="promo-banner">
-        <div class="promo-banner-text">
-          <div class="promo-banner-title">Essentials delivered right to your coach</div>
-          <div class="promo-banner-sub">Hassle free · Fresh & Sealed · Guaranteed</div>
+      <!-- Results Display Container -->
+      <section id="pnr-results" class="pnr-results hidden mt-6"></section>
+
+      <!-- Station services: Extra UI/UX details -->
+      <section class="mt-8 mb-12">
+        <h3 class="text-xs font-bold text-on-surface-variant/70 uppercase tracking-widest mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-secondary text-lg">explore</span>
+          Travel Utility Services
+        </h3>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="showToast('Platform Finder: Search train to view scheduled platforms', 'info')">
+            <span class="material-symbols-outlined text-primary text-xl mb-1">directions_railway</span>
+            <span class="text-[9px] font-bold text-on-surface tracking-tight">Platform Finder</span>
+          </div>
+          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="showToast('Seat Map Locator: Choose your coach class to see the layout map', 'info')">
+            <span class="material-symbols-outlined text-primary text-xl mb-1">airline_seat_recline_extra</span>
+            <span class="text-[9px] font-bold text-on-surface tracking-tight">Seat Map</span>
+          </div>
+          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="showToast('Refund Estimator: Calculate standard cancellation charges', 'info')">
+            <span class="material-symbols-outlined text-primary text-xl mb-1">currency_rupee</span>
+            <span class="text-[9px] font-bold text-on-surface tracking-tight">Refund Calc</span>
+          </div>
+          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="showToast('Train Schedule: Look up timetables and station stoppages', 'info')">
+            <span class="material-symbols-outlined text-primary text-xl mb-1">schedule</span>
+            <span class="text-[9px] font-bold text-on-surface tracking-tight">Timetable</span>
+          </div>
+          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="showToast('Helpline: Calling Railway Helpline 139...', 'info')">
+            <span class="material-symbols-outlined text-primary text-xl mb-1">call</span>
+            <span class="text-[9px] font-bold text-on-surface tracking-tight">Helpline 139</span>
+          </div>
+          <div class="bg-white border border-outline-variant/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/40 hover:-translate-y-0.5 active:scale-95 transition-all shadow-sm" onclick="showToast('Station Alarm: Trigger GPS wake up alert before target station', 'info')">
+            <span class="material-symbols-outlined text-primary text-xl mb-1">alarm</span>
+            <span class="text-[9px] font-bold text-on-surface tracking-tight">Wake Alarm</span>
+          </div>
         </div>
-        <div class="promo-banner-emoji">🎒</div>
-      </div>
-    </div>
+      </section>
+
+      <!-- Bottom Promo Section -->
+      <section class="mb-12">
+        <div class="relative overflow-hidden rounded-[2rem] shadow-[0_12px_40px_rgb(0,77,60,0.15)] group">
+          <img alt="Premium Train Journey" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out" src="https://lh3.googleusercontent.com/aida/AP1WRLsW8Bmjz-ZJKm4SylX3eG-Hiw-EfjyKXeKzUFc-0p7w2eXMEhBmDkKzO2HedlNwN4xxkBUODTZdRJRwi_SaCFAJ_9euCu6zW8m1EWGnF5KivejLchfE6XyJ8j23gUeo-qErWqNHrN_jUzbdLB9rRsUq3xuM5phBPXAorf__i7svWjJdrlXmq5WhONB2g-BuiqMc_hq1pvBG9yQX7wOeEGUNc3qkS-sz-qiTes0NYs5k-SHPT8ym0y9_7A"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-emerald-midnight/95 via-primary/70 to-transparent"></div>
+          <div class="absolute inset-0 bg-black/10 backdrop-blur-[2px]"></div>
+          <div class="relative z-10 p-6 pt-32">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-4 shadow-lg shadow-black/10">
+              <span class="material-symbols-outlined text-secondary text-[14px]">workspace_premium</span>
+              <span class="text-[9px] font-bold text-secondary uppercase tracking-[0.2em] pt-0.5">Premium Store</span>
+            </div>
+            <h4 class="text-white font-serif-display text-2xl mb-3 leading-tight drop-shadow-md">Seamless Station<br/>Deliveries</h4>
+            <p class="text-white/80 text-xs mb-6 font-body font-light drop-shadow-sm max-w-[85%]">Get your travel essentials delivered directly to your seat at the next station. No more platform hunting.</p>
+            <button class="bg-gradient-to-r from-secondary to-[#B8942E] text-emerald-midnight px-6 py-3 rounded-2xl text-[12px] font-bold shadow-xl shadow-secondary/20 hover:shadow-2xl hover:shadow-secondary/30 active:scale-[0.98] transition-all uppercase tracking-widest flex items-center justify-center gap-2 w-full" onclick="navigateTo('page-shop')">Shop Essentials <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <!-- Continue to Shop Bar -->
-    <div class="continue-shop-bar hidden" id="continue-bar">
-      <div class="train-info-mini" id="train-info-mini"></div>
-      <button class="btn-green" onclick="proceedToShop()" style="padding:12px 20px;font-size:0.85rem;">Order Essentials →</button>
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[412px] bg-white border-t border-outline-variant/60 px-5 py-4 flex justify-between items-center z-50 shadow-floating hidden" id="continue-bar">
+      <div class="train-info-mini flex flex-col" id="train-info-mini">
+        <strong class="text-sm text-primary">Train Name</strong>
+        <span class="text-xs text-secondary font-bold">Delivery to Seat B2, 45</span>
+      </div>
+      <button class="bg-primary text-white font-headline font-bold text-xs px-5 py-3 rounded-xl uppercase tracking-wider hover:bg-primary-light active:scale-95 transition-all shadow-md" onclick="proceedToShop()">Order Essentials →</button>
     </div>
   </div>
 
-  <!-- ==================== SHOP PAGE ==================== -->
-  <div id="page-shop" class="page tab-page">
-    <div class="shop-topbar">
-      <div>
-        <div class="delivering-label" id="shop-delivering-label">Delivering in trains arriving in</div>
-        <div class="city-select" id="shop-delivery-header"><span class="city-orange">Delhi</span>&nbsp;▾</div>
-      </div>
-      <button class="notif-btn" onclick="showNotif()">
-        <svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <span class="notif-badge" id="notif-count">2</span>
-      </button>
-    </div>
-
-    <!-- Search Bar with Blinkit style Green Outer Wrapper -->
-    <div class="search-outer-container">
-      <div class="search-container">
-        <div class="search-bar" onclick="focusSearch()">
-          <span class="search-icon">
-            <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </span>
-          <input type="text" id="product-search" class="search-input" placeholder="Search snacks, water, powerbank..." oninput="filterProducts(this.value)" />
+  <!-- ==================== SHOP / HOME PAGE ==================== -->
+  <div id="page-shop" class="page tab-page bg-background">
+    <!-- Sophisticated Header Section -->
+    <section class="gradient-header w-full pt-6 pb-16 px-margin-mobile rounded-b-[3rem] relative overflow-hidden">
+      <!-- Abstract light artifacts for depth -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-primary-light/20 blur-[100px] rounded-full -mr-20 -mt-20"></div>
+      <div class="absolute bottom-0 left-0 w-48 h-48 bg-secondary/5 blur-[80px] rounded-full -ml-20 -mb-20"></div>
+      
+      <!-- Top Status Bar -->
+      <div class="flex justify-between items-start mb-6 relative z-10">
+        <div class="flex flex-col gap-1">
+          <span class="text-[10px] font-black text-secondary uppercase tracking-[0.2em] leading-none mb-1">RailQuick</span>
+          <h1 class="text-[28px] font-serif-display text-white leading-none font-extrabold mb-1 tracking-tight" id="shop-delivering-label">Deliver in</h1>
+          <div class="flex items-center gap-1.5 mt-0.5" id="shop-delivery-header">
+            <span class="material-symbols-outlined text-[14px] text-secondary">train</span>
+            <span class="font-mono text-[10px] text-white/80 font-semibold uppercase tracking-widest">Select Train / PNR</span>
+          </div>
         </div>
-        <button class="search-btn" onclick="filterProducts(document.getElementById('product-search').value)">
-          <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <!-- Profile Account Button -->
+        <div class="w-12 h-12 rounded-full bg-white/10 p-[1px] relative shadow-lg cursor-pointer" onclick="navigateTo('page-account')">
+          <div class="absolute inset-0 rounded-full border border-secondary/40"></div>
+          <div class="w-full h-full rounded-full overflow-hidden bg-emerald-midnight flex items-center justify-center">
+            <span class="material-symbols-outlined text-white/80 text-[24px]">person</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Refined PNR Glass Card -->
+      <div class="glass-card rounded-3xl p-4 relative z-10 cursor-pointer shadow-premium" id="shop-pnr-card" onclick="navigateTo('page-pnr')">
+        <div class="flex justify-between items-start">
+          <div>
+            <h2 class="font-serif-display text-3xl text-secondary" id="shop-pnr-seat">Seat —</h2>
+          </div>
+          <div class="text-right">
+            <p class="text-[9px] font-bold text-white/60 uppercase tracking-[0.2em] mb-1">Ticket</p>
+            <div class="flex items-center gap-1.5 text-white bg-white/10 px-2.5 py-1 rounded-lg">
+              <span class="material-symbols-outlined text-secondary text-[14px] fill-1">verified</span>
+              <span class="text-xs font-bold tracking-tight" id="shop-pnr-status">No PNR</span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center text-white">
+          <div class="flex flex-col">
+            <span class="text-[9px] text-white/40 uppercase font-bold">From</span>
+            <span class="text-sm font-semibold truncate max-w-[120px]" id="shop-pnr-from">New Delhi</span>
+          </div>
+          <div class="flex flex-col items-center flex-grow px-4">
+            <div class="w-full h-[1px] bg-white/10 relative">
+              <span class="material-symbols-outlined absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[14px] text-secondary rotate-90">navigation</span>
+            </div>
+          </div>
+          <div class="flex flex-col text-right">
+            <span class="text-[9px] text-white/40 uppercase font-bold">To</span>
+            <span class="text-sm font-semibold truncate max-w-[120px]" id="shop-pnr-to">Select Station</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search Section (Floating Overlap) -->
+    <section class="px-margin-mobile relative z-20 -mt-7">
+      <div class="bg-surface rounded-2xl shadow-premium p-1 border flex items-center h-14 border-secondary/20 focus-within:border-primary/50 transition-colors">
+        <div class="w-12 flex items-center justify-center text-primary-light">
+          <span class="material-symbols-outlined text-[24px]">search</span>
+        </div>
+        <input class="flex-grow bg-transparent border-none focus:ring-0 text-sm font-medium tracking-wide placeholder-on-surface-variant/40" placeholder="Search snacks, drinks, hygiene..." type="text" id="product-search" oninput="filterProducts(this.value)" />
+      </div>
+    </section>
+
+    <!-- Train Info Strip (Alternate) -->
+    <div id="train-strip" class="mx-margin-mobile mt-4 bg-white border border-outline-variant/60 rounded-xl p-3 flex items-center justify-between hidden shadow-sm">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined">train</span>
+        </div>
+        <div>
+          <div class="text-xs font-bold text-on-surface leading-tight" id="strip-train-name">Express</div>
+          <div class="text-[10px] text-secondary font-bold" id="strip-seat">Seat —</div>
+        </div>
+      </div>
+      <button class="text-xs font-bold text-primary hover:text-primary-light" onclick="navigateTo('page-pnr')">Change</button>
+        <!-- Premium Categories Section -->
+    <section class="mt-6 mb-6 overflow-hidden">
+      <div class="px-margin-mobile flex items-center justify-between mb-4">
+        <h3 class="text-sm font-headline font-bold text-on-surface">Explore Categories</h3>
+        <button class="text-xs font-bold text-primary hover:opacity-75 flex items-center gap-0.5" onclick="filterCategory('all', null)">
+          View All
         </button>
       </div>
-    </div>
+      
+      <!-- Horizontal Scrollable Category Pills -->
+      <div class="flex gap-3 overflow-x-auto pb-3 scrollbar-none px-margin-mobile -mx-margin-mobile select-none" style="-webkit-overflow-scrolling: touch;">
+        <!-- All Pill -->
+        <button class="category-pill active" onclick="filterCategory('all', this)">
+          <span class="material-symbols-outlined text-primary">apps</span>
+          <span class="cat-label">All Items</span>
+        </button>
 
-    <!-- Train Info Strip -->
-    <div id="train-strip" class="train-strip hidden">
-      <div class="train-strip-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
-      </div>
-      <div class="train-strip-info">
-        <div class="train-strip-name" id="strip-train-name">Train Name</div>
-        <div class="train-strip-seat" id="strip-seat">Seat: —</div>
-      </div>
-      <button class="strip-change" onclick="navigateTo('page-pnr')">Change</button>
-    </div>
+        <!-- Snacks Pill -->
+        <button class="category-pill" onclick="filterCategory('snacks', this)">
+          <span class="material-symbols-outlined text-amber-500">cookie</span>
+          <span class="cat-label">Snacks</span>
+        </button>
 
-    <!-- Categories -->
-    <div class="categories-scroll">
-      <div class="category-pill active" onclick="filterCategory('all', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        </div>
-        <div class="cat-label">All</div>
-      </div>
-      <div class="category-pill" onclick="filterCategory('snacks', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        </div>
-        <div class="cat-label">Snacks</div>
-      </div>
-      <div class="category-pill" onclick="filterCategory('beverages', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 2H6v4h12V2zM6 10h12v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10z"/><line x1="12" y1="6" x2="12" y2="10"/></svg>
-        </div>
-        <div class="cat-label">Beverages</div>
-      </div>
-      <div class="category-pill" onclick="filterCategory('hygiene', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-4.3-7-11-7-11S5 10.7 5 15a7 7 0 0 0 7 7z"/></svg>
-        </div>
-        <div class="cat-label">Hygiene</div>
-      </div>
-      <div class="category-pill" onclick="filterCategory('electronics', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
-        </div>
-        <div class="cat-label">Electronics</div>
-      </div>
-      <div class="category-pill" onclick="filterCategory('comfort', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/><path d="M3 13h18M9 9v4M15 9v4"/></svg>
-        </div>
-        <div class="cat-label">Comfort</div>
-      </div>
-      <div class="category-pill" onclick="filterCategory('all', this)">
-        <div class="cat-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-        </div>
-        <div class="cat-label">More</div>
-      </div>
-    </div>
+        <!-- Drinks Pill -->
+        <button class="category-pill" onclick="filterCategory('beverages', this)">
+          <span class="material-symbols-outlined text-sky-500">local_cafe</span>
+          <span class="cat-label">Drinks</span>
+        </button>
 
-    <!-- Hero Banner -->
-    <div class="hero-banner">
-      <div class="hero-banner-text">
-        <h2 class="hero-banner-title">Essentials,<br/>Delivered to your<br/>seat in train</h2>
-        <p class="hero-banner-sub">At the next station in</p>
-        <p class="hero-banner-time">15 mins</p>
-        <button class="btn-banner" onclick="scrollToProducts()">Order Now →</button>
-      </div>
-      <div class="hero-banner-img">
-        <img src="delivery_person.png" alt="RailQuick Delivery" />
-      </div>
-    </div>
+        <!-- Hygiene Pill -->
+        <button class="category-pill" onclick="filterCategory('hygiene', this)">
+          <span class="material-symbols-outlined text-emerald-600">clean_hands</span>
+          <span class="cat-label">Hygiene</span>
+        </button>
 
-    <!-- Products Section -->
-    <div class="section-header" id="products-section">
-      <span class="section-title">Top Picks for You</span>
-      <button class="see-all" onclick="filterCategory('all', null)">See All</button>
-    </div>
-    <div class="products-grid" id="products-grid"></div>
+        <!-- Tech Pill -->
+        <button class="category-pill" onclick="filterCategory('tech', this)">
+          <span class="material-symbols-outlined text-violet-600">devices</span>
+          <span class="cat-label">Tech &amp; Comfort</span>
+        </button>
+    </section>
+
+    <!-- Marketing Asset Banner (Emerald gradient) -->
+    <section class="px-margin-mobile mb-8">
+      <div class="relative w-full h-40 bg-primary rounded-[2rem] overflow-hidden shadow-lg border border-white/10">
+        <div class="absolute inset-0">
+          <img alt="Professional Delivery Service" class="w-full h-full object-cover object-right opacity-50" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLSbWU6XFZMMUfJxOy35YEMggd4QFGwjX-k1Rufp5SN4dy4O20pJIWp-P9k56MLvz7buK7i_lwNtf4uVr2zEFu27l-FmB8bFKFnSk0i9j5fEIh7ulovHSLnSWbiFc599Xjf_nhHWYrNnSM-qJRiWdQu7281GvLpYudPln6wtbcjlnWQiLljnfesrXWM71k1bo2tExCm3wc8t9GVD1nJOhkvQ-k9ePkncRLMW295dICbhq05dKSTDWTXZF1BXtNHWpj_Z9bOuzf6ew">
+          <div class="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-transparent"></div>
+        </div>
+        <div class="relative z-10 h-full flex flex-col justify-center p-6 max-w-[70%]">
+          <span class="text-[9px] font-bold text-secondary uppercase tracking-[0.2em] mb-1">Station Special</span>
+          <h2 class="text-base font-headline font-extrabold text-white leading-tight mb-3">Essentials in 15 mins at Delhi Junction</h2>
+          <button class="w-fit bg-secondary text-primary font-bold text-[9px] px-4 py-2 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all uppercase tracking-wider" onclick="scrollToProducts()">
+            Order Now
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- Products List Section -->
+    <section class="px-margin-mobile mb-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-base font-headline font-bold text-on-surface" id="products-section">Trending Essentials</h3>
+        <button class="text-primary-light font-bold text-xs hover:opacity-75 flex items-center gap-1" onclick="filterCategory('all', null)">
+          See All <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+        </button>
+      </div>
+      
+      <!-- Grid Items (2-column layout matching design) -->
+      <div class="grid grid-cols-2 gap-4" id="products-grid"></div>
+    </section>
 
     <!-- Trust Badges -->
-    <div class="trust-badges">
-      <div class="trust-badge">
-        <span class="trust-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" style="color:#3B82F6;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </span>
+    <section class="px-margin-mobile mb-10 flex gap-4">
+      <div class="flex-1 bg-white border border-outline-variant/30 rounded-2xl p-3 flex items-center gap-3 shadow-sm">
+        <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined text-lg">verified_user</span>
+        </div>
         <div>
-          <div class="trust-title">Safe Packaging</div>
-          <div class="trust-sub">Your safety, our priority</div>
+          <div class="text-[10px] font-bold text-on-surface">Sealed Safety</div>
+          <div class="text-[8px] text-gray-500">Hygiene assured</div>
         </div>
       </div>
-      <div class="trust-badge">
-        <span class="trust-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" style="color:#3B82F6;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        </span>
+      <div class="flex-1 bg-white border border-outline-variant/30 rounded-2xl p-3 flex items-center gap-3 shadow-sm">
+        <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined text-lg">schedule</span>
+        </div>
         <div>
-          <div class="trust-title">On-time Delivery</div>
-          <div class="trust-sub">At the next station</div>
+          <div class="text-[10px] font-bold text-on-surface">Next Stop</div>
+          <div class="text-[8px] text-gray-500">Seat-guaranteed</div>
         </div>
       </div>
-    </div>
+    </section>
   </div>
 
   <!-- ==================== CART PAGE ==================== -->
-  <div id="page-cart" class="page">
-    <div class="page-header">
-      <button class="back-btn-dark" onclick="navigateTo('page-shop')">←</button>
-      <h2 class="page-title">My Cart</h2>
-      <button class="cart-clear" onclick="clearCart()">Clear</button>
+  <div id="page-cart" class="page bg-background animate-fade-in-up">
+    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-5 py-4 flex justify-between items-center z-40 shadow-sm">
+      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="navigateTo('page-shop')">
+        <span class="material-symbols-outlined text-xl">arrow_back</span>
+      </button>
+      <h2 class="text-base font-headline font-bold text-on-surface">My Cart</h2>
+      <button class="text-xs font-bold text-red-600 hover:text-red-800" onclick="clearCart()">Clear</button>
     </div>
 
-    <div class="delivery-card" id="delivery-card">
-      <span class="delivery-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="color:var(--green);"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      </span>
-      <div class="delivery-info">
-        <div class="delivery-title">Delivering to your seat</div>
-        <div class="delivery-detail" id="delivery-detail">Enter PNR to set delivery seat</div>
+    <!-- Seat Delivery Info -->
+    <div class="m-5 bg-white border-l-4 border-primary rounded-xl p-4 flex gap-3 shadow-sm" id="delivery-card">
+      <span class="material-symbols-outlined text-primary text-xl">location_on</span>
+      <div class="flex-1">
+        <div class="text-xs font-bold text-on-surface">Delivering to your seat</div>
+        <div class="text-[10px] text-gray-500 mt-1" id="delivery-detail">Please enter ticket PNR to verify seat</div>
       </div>
-      <button class="delivery-change" onclick="navigateTo('page-pnr')">Change</button>
+      <button class="text-xs font-bold text-secondary" onclick="navigateTo('page-pnr')">Change</button>
     </div>
 
-    <div id="cart-items-list" class="cart-items-list"></div>
+    <!-- Cart items list container -->
+    <div id="cart-items-list" class="px-5 space-y-3"></div>
 
-    <div id="cart-empty" class="cart-empty hidden">
-      <div class="empty-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--text-light);"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    <!-- Empty state -->
+    <div id="cart-empty" class="text-center py-16 px-6 hidden">
+      <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4 text-gray-400">
+        <span class="material-symbols-outlined text-4xl">shopping_cart</span>
       </div>
-      <div class="empty-title">Your cart is empty</div>
-      <div class="empty-sub">Add essentials for your journey!</div>
-      <button class="btn-green" onclick="navigateTo('page-shop')">Browse Products</button>
+      <h3 class="font-headline text-base font-bold text-on-surface">Your cart is empty</h3>
+      <p class="text-xs text-gray-500 mt-1 mb-6">Add travel essentials for your journey!</p>
+      <button class="bg-primary text-white px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider" onclick="navigateTo('page-shop')">Browse Products</button>
     </div>
 
-    <!-- Promo Code -->
-    <div class="promo-section">
-      <div style="font-size:0.85rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:6px;margin-bottom:10px;">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;color:var(--green);"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+    <!-- Promo code input box -->
+    <div class="mx-5 my-6 bg-white border border-outline-variant/60 rounded-2xl p-4 shadow-sm">
+      <div class="text-xs font-bold text-on-surface flex items-center gap-1.5 mb-3">
+        <span class="material-symbols-outlined text-primary text-base">local_offer</span>
         Apply Promo Code
       </div>
-      <div style="display:flex;gap:8px;">
-        <input type="text" id="promo-input" class="rq-input" placeholder="Enter coupon code" style="margin-bottom:0;padding:10px 14px;text-transform:uppercase;" />
-        <button onclick="applyPromoCode()" class="btn-green" style="padding:0 16px;white-space:nowrap;font-size:0.85rem;border-radius:var(--radius-sm);height:44px;box-shadow:none;">Apply</button>
+      <div class="flex gap-2">
+        <input type="text" id="promo-input" class="flex-1 bg-[#F4F6F5] border border-outline-variant rounded-xl px-3.5 py-2 text-xs uppercase tracking-wider focus:outline-none focus:border-primary" placeholder="Enter Code (RAILQUICK15)" />
+        <button onclick="applyPromoCode()" class="bg-primary text-white font-headline font-bold text-xs px-4 rounded-xl hover:bg-primary-light transition-all">Apply</button>
       </div>
-      <div id="promo-status" style="font-size:0.78rem;font-weight:600;display:none;margin-top:6px;"></div>
+      <div id="promo-status" class="text-[10px] font-bold hidden mt-2"></div>
     </div>
 
-    <!-- Price Summary -->
-    <div id="cart-summary" class="cart-summary">
-      <div class="summary-row"><span>Subtotal</span><span id="summary-subtotal">₹0</span></div>
-      <div class="summary-row"><span>Delivery fee</span><span class="delivery-fee-green">FREE</span></div>
-      <div class="summary-row"><span>GST (5%)</span><span id="summary-gst">₹0</span></div>
-      <div class="summary-divider"></div>
-      <div class="summary-row summary-total"><span>Total</span><span id="summary-total">₹0</span></div>
+    <!-- Billing Summary receipt -->
+    <div id="cart-summary" class="mx-5 bg-white border border-outline-variant/60 rounded-2xl p-4 space-y-3 shadow-sm">
+      <div class="flex justify-between text-xs text-gray-500">
+        <span>Items Subtotal</span>
+        <span id="summary-subtotal">₹0</span>
+      </div>
+      <div class="flex justify-between text-xs text-gray-500">
+        <span>Delivery Partner Fee</span>
+        <span id="summary-delivery">₹30</span>
+      </div>
+      <div class="flex justify-between text-xs text-gray-500">
+        <span>Station Handling Fee</span>
+        <span id="summary-handling">₹10</span>
+      </div>
+      <div class="flex justify-between text-xs text-gray-500">
+        <span>Tax GST (5%)</span>
+        <span id="summary-gst">₹0</span>
+      </div>
+      <div class="border-t border-dashed border-gray-200 pt-2 flex justify-between text-sm font-bold text-on-surface">
+        <span>Grand Total</span>
+        <span id="summary-total" class="text-secondary font-black">₹0</span>
+      </div>
     </div>
 
-    <button class="btn-green full-width checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout →</button>
+    <div class="px-5 mt-8">
+      <button class="w-full bg-primary text-white py-4 rounded-xl font-headline font-bold hover:bg-primary-light active:scale-[0.98] transition-all shadow-md uppercase tracking-wider text-xs" onclick="proceedToCheckout()">Proceed to Checkout →</button>
+    </div>
   </div>
 
   <!-- ==================== CHECKOUT PAGE ==================== -->
-  <div id="page-checkout" class="page">
-    <div class="page-header">
-      <button class="back-btn-dark" onclick="navigateTo('page-cart')">←</button>
-      <h2 class="page-title">Checkout</h2>
-      <div></div>
-    </div>
-
-    <div class="checkout-steps">
-      <div class="step active" id="step-1"><div class="step-circle">1</div><div class="step-label">Details</div></div>
-      <div class="step-line"></div>
-      <div class="step" id="step-2"><div class="step-circle">2</div><div class="step-label">Payment</div></div>
-      <div class="step-line"></div>
-      <div class="step" id="step-3"><div class="step-circle">3</div><div class="step-label">Done</div></div>
-    </div>
-
-    <!-- Step 1: Details -->
-    <div class="checkout-section" id="checkout-step-1">
-      <h3 class="checkout-section-title">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--green);"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m16 19 2 3"/></svg>
-        Delivery Details
-      </h3>
-      <div class="checkout-detail-card" id="checkout-pnr-details">
-        <div class="detail-row"><span class="detail-label">Train</span><span class="detail-value" id="checkout-train">—</span></div>
-        <div class="detail-row"><span class="detail-label">Coach / Seat</span><span class="detail-value" id="checkout-seat">—</span></div>
-        <div class="detail-row"><span class="detail-label">Station</span><span class="detail-value">New Delhi (NDLS)</span></div>
-        <div class="detail-row"><span class="detail-label">ETA</span><span class="detail-value" id="checkout-eta" style="color:var(--green);font-weight:700;">~15 mins</span></div>
-      </div>
-
-      <div id="checkout-manual-details" class="hidden" style="display:flex;flex-direction:column;gap:12px;background:white;border-radius:var(--radius);padding:16px;box-shadow:var(--card-shadow);margin-bottom:20px;">
-        <div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:4px;">Enter Delivery Details Manually</div>
-        <div class="input-group" style="margin-bottom:0;"><input type="text" class="rq-input" id="manual-train" placeholder="Train Number or Name" style="margin-bottom:0;" /></div>
-        <div style="display:flex;gap:10px;">
-          <input type="text" class="rq-input" id="manual-coach" placeholder="Coach (e.g. C1)" style="margin-bottom:0;flex:1;" />
-          <input type="text" class="rq-input" id="manual-seat" placeholder="Seat (e.g. 24)" style="margin-bottom:0;flex:1;" />
-        </div>
-      </div>
-
-      <h3 class="checkout-section-title" style="margin-top:20px;">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--green);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        Contact Details
-      </h3>
-      <div class="input-group"><input type="text" class="rq-input" id="contact-name" placeholder="Full Name" /></div>
-      <div class="input-group"><input type="tel" class="rq-input" id="contact-phone" placeholder="Phone Number" /></div>
-
-      <h3 class="checkout-section-title" style="margin-top:20px;">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--green);"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        Order Summary
-      </h3>
-      <div id="checkout-items-mini" class="checkout-items-mini"></div>
-      <div class="checkout-total-row">
-        <span>Total Amount</span>
-        <span id="checkout-total-amt" style="font-weight:800;color:var(--navy);font-size:1.2rem;">₹0</span>
-      </div>
-      <button class="btn-green full-width" style="margin-top:20px;" onclick="goToPayment()">Continue to Payment →</button>
-    </div>
-
-    <!-- Step 2: Payment -->
-    <div class="checkout-section hidden" id="checkout-step-2">
-      <h3 class="checkout-section-title">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--green);"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        Choose Payment Method
-      </h3>
-      <div class="payment-options">
-        <div class="payment-option selected" onclick="selectPayment(this, 'upi')" id="pay-upi">
-          <div class="pay-icon">🇮🇳</div>
-          <div class="pay-info"><div class="pay-title">UPI</div><div class="pay-sub">GPay, PhonePe, Paytm</div></div>
-          <div class="pay-radio"></div>
-        </div>
-        <div class="payment-option" onclick="selectPayment(this, 'card')" id="pay-card">
-          <div class="pay-icon">💳</div>
-          <div class="pay-info"><div class="pay-title">Debit / Credit Card</div><div class="pay-sub">Visa, Mastercard, RuPay</div></div>
-          <div class="pay-radio"></div>
-        </div>
-        <div class="payment-option" onclick="selectPayment(this, 'cod')" id="pay-cod">
-          <div class="pay-icon">💵</div>
-          <div class="pay-info"><div class="pay-title">Cash on Delivery</div><div class="pay-sub">Pay cash/UPI at seat</div></div>
-          <div class="pay-radio"></div>
-        </div>
-      </div>
-
-      <div id="upi-input-section" class="payment-detail-section" style="display:block;">
-        <div class="input-group">
-          <input type="text" class="rq-input" placeholder="Enter UPI ID (e.g. name@okaxis)" id="upi-id-input" />
-          <span class="input-icon">@</span>
-        </div>
-        <div class="upi-apps">
-          <div class="upi-app" onclick="selectUPIApp(this)"><div class="upi-app-icon" style="background:#1a8cff;">G</div><div class="upi-app-name">GPay</div></div>
-          <div class="upi-app" onclick="selectUPIApp(this)"><div class="upi-app-icon" style="background:#5f259f;">P</div><div class="upi-app-name">PhonePe</div></div>
-          <div class="upi-app" onclick="selectUPIApp(this)"><div class="upi-app-icon" style="background:#00baf2;">Pt</div><div class="upi-app-name">Paytm</div></div>
-        </div>
-      </div>
-
-      <div class="order-total-pay">
-        <span>To Pay</span>
-        <span id="pay-total-amt" style="color:var(--green);font-weight:800;font-size:1.3rem;">₹0</span>
-      </div>
-
-      <button class="btn-green full-width" style="margin-top:20px;" onclick="placeOrder()">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:16px;height:16px;color:white;margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Place Order
+  <div id="page-checkout" class="page bg-background">
+    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-5 py-4 flex justify-between items-center z-40 shadow-sm">
+      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="navigateTo('page-cart')">
+        <span class="material-symbols-outlined text-xl">arrow_back</span>
       </button>
-      <p class="secure-note">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:14px;height:14px;color:var(--green);"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Your order is safe & secure
+      <h2 class="text-base font-headline font-bold text-on-surface">Checkout</h2>
+      <div class="w-9 h-9"></div>
+    </div>
+
+    <!-- Step Indicators -->
+    <div class="checkout-steps flex items-center justify-center gap-1.5 py-5 px-5 bg-white border-b border-outline-variant/40">
+      <div class="step flex items-center gap-1 active" id="step-1">
+        <span class="w-6 h-6 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center" id="step-circle-1">1</span>
+        <span class="text-[10px] font-bold text-primary">Details</span>
+      </div>
+      <span class="w-6 h-[1px] bg-gray-200 step-line"></span>
+      <div class="step flex items-center gap-1" id="step-2">
+        <span class="w-6 h-6 rounded-full bg-gray-100 text-gray-500 text-[10px] font-bold flex items-center justify-center" id="step-circle-2">2</span>
+        <span class="text-[10px] font-bold text-gray-500">Payment</span>
+      </div>
+      <span class="w-6 h-[1px] bg-gray-200 step-line"></span>
+      <div class="step flex items-center gap-1" id="step-3">
+        <span class="w-6 h-6 rounded-full bg-gray-100 text-gray-500 text-[10px] font-bold flex items-center justify-center" id="step-circle-3">3</span>
+        <span class="text-[10px] font-bold text-gray-500">Done</span>
+      </div>
+    </div>
+
+    <!-- Step 1 details panel -->
+    <div class="checkout-section p-5" id="checkout-step-1">
+      <h3 class="text-xs font-bold text-primary uppercase tracking-wider mb-4 flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-base">directions_railway</span>
+        Delivery Seat Details
+      </h3>
+      
+      <!-- PNR delivery card -->
+      <div class="bg-white border border-outline-variant/60 rounded-[2rem] p-5 shadow-premium space-y-4 mb-5 relative overflow-hidden" id="checkout-pnr-details">
+        <!-- Accent line -->
+        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary"></div>
+        
+        <div class="flex justify-between items-start pb-3 border-b border-gray-100">
+          <div>
+            <div class="text-[10px] font-black text-primary uppercase tracking-widest">Delivery Target</div>
+            <h4 class="text-sm font-serif-display font-black text-on-surface mt-0.5" id="checkout-train">—</h4>
+          </div>
+          <span class="bg-primary/10 text-primary text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1 select-none">
+            <span class="material-symbols-outlined text-[10px]">verified</span> Confirmed
+          </span>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4 text-xs pt-1">
+          <div>
+            <span class="text-gray-400 font-semibold block mb-0.5">Seat & Berth</span>
+            <strong class="text-on-surface text-xs font-bold" id="checkout-seat">—</strong>
+          </div>
+          <div>
+            <span class="text-gray-400 font-semibold block mb-0.5">Delivery Station</span>
+            <strong class="text-on-surface text-xs font-bold" id="checkout-station">New Delhi (NDLS)</strong>
+          </div>
+          <div>
+            <span class="text-gray-400 font-semibold block mb-0.5">Delivery Window</span>
+            <strong class="text-on-surface text-xs font-bold" id="checkout-time">On-Time Arrival</strong>
+          </div>
+          <div>
+            <span class="text-gray-400 font-semibold block mb-0.5">Estimated ETA</span>
+            <strong class="text-primary text-xs font-black" id="checkout-eta">~15 mins</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manual delivery card if no PNR details -->
+      <div id="checkout-manual-details" class="bg-white border border-outline-variant/60 rounded-2xl p-4 shadow-sm space-y-4 mb-5 hidden">
+        <div class="text-xs font-bold text-on-surface">Set Details Manually</div>
+        <div>
+          <input type="text" class="w-full bg-[#F4F6F5] border border-outline-variant rounded-xl py-3 px-4 text-xs font-medium focus:outline-none" placeholder="Train Number / Name (e.g. 12002)" id="manual-train" />
+        </div>
+        <div class="flex gap-3">
+          <input type="text" class="w-1/2 bg-[#F4F6F5] border border-outline-variant rounded-xl py-3 px-4 text-xs font-medium focus:outline-none" placeholder="Coach (e.g. B2)" id="manual-coach" />
+          <input type="text" class="w-1/2 bg-[#F4F6F5] border border-outline-variant rounded-xl py-3 px-4 text-xs font-medium focus:outline-none" placeholder="Seat No (e.g. 45)" id="manual-seat" />
+        </div>
+      </div>
+
+      <h3 class="text-xs font-bold text-primary uppercase tracking-wider mb-4 flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-base">person</span>
+        Contact Information
+      </h3>
+      <div class="bg-white border border-outline-variant/60 rounded-2xl p-4 shadow-sm space-y-4 mb-5">
+        <div>
+          <input type="text" class="w-full bg-[#F4F6F5] border border-outline-variant rounded-xl py-3 px-4 text-xs font-medium focus:outline-none" placeholder="Full Name" id="contact-name" />
+        </div>
+        <div>
+          <input type="tel" class="w-full bg-[#F4F6F5] border border-outline-variant rounded-xl py-3 px-4 text-xs font-medium focus:outline-none" placeholder="Phone Number" id="contact-phone" />
+        </div>
+      </div>
+
+      <h3 class="text-xs font-bold text-primary uppercase tracking-wider mb-4 flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-base">shopping_bag</span>
+        Order Items
+      </h3>
+      <div id="checkout-items-mini" class="space-y-2 mb-5"></div>
+
+      <div class="bg-white border border-outline-variant/60 rounded-2xl p-4 shadow-sm flex justify-between items-center">
+        <span class="text-xs font-bold text-gray-500">Total Payable</span>
+        <span class="text-base font-black text-secondary" id="checkout-total-amt">₹0</span>
+      </div>
+
+      <button class="w-full bg-primary text-white py-4 rounded-xl font-headline font-bold hover:bg-primary-light active:scale-95 transition-all mt-6 uppercase tracking-wider text-xs" onclick="goToPayment()">Continue to Payment →</button>
+    </div>
+
+    <!-- Step 2 Payment panel -->
+    <div class="checkout-section p-5 hidden" id="checkout-step-2">
+      <h3 class="text-xs font-bold text-primary uppercase tracking-wider mb-4">Choose Payment Mode</h3>
+      
+      <div class="payment-options space-y-3 mb-6">
+        <!-- UPI Option -->
+        <div class="payment-option selected border-2 border-primary bg-emerald-50/40 rounded-2xl p-4 flex items-center gap-4 cursor-pointer" onclick="selectPayment(this, 'upi')" id="pay-upi">
+          <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-lg shadow-sm">🇮🇳</div>
+          <div class="flex-grow">
+            <div class="text-xs font-bold text-on-surface">UPI Instant Pay</div>
+            <div class="text-[10px] text-gray-500">Pay via Google Pay, PhonePe, Paytm</div>
+          </div>
+          <div class="pay-radio w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
+            <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+          </div>
+        </div>
+        <!-- Card Option -->
+        <div class="payment-option border border-outline-variant bg-white rounded-2xl p-4 flex items-center gap-4 cursor-pointer" onclick="selectPayment(this, 'card')" id="pay-card">
+          <div class="w-10 h-10 rounded-xl bg-[#F4F6F5] flex items-center justify-center text-lg shadow-sm">💳</div>
+          <div class="flex-grow">
+            <div class="text-xs font-bold text-on-surface">Debit / Credit Card</div>
+            <div class="text-[10px] text-gray-500">Visa, Mastercard, RuPay cards</div>
+          </div>
+          <div class="pay-radio w-5 h-5 rounded-full border-2 border-gray-200"></div>
+        </div>
+        <!-- COD Option -->
+        <div class="payment-option border border-outline-variant bg-white rounded-2xl p-4 flex items-center gap-4 cursor-pointer" onclick="selectPayment(this, 'cod')" id="pay-cod">
+          <div class="w-10 h-10 rounded-xl bg-[#F4F6F5] flex items-center justify-center text-lg shadow-sm">💵</div>
+          <div class="flex-grow">
+            <div class="text-xs font-bold text-on-surface">Cash on Delivery (COD)</div>
+            <div class="text-[10px] text-gray-500">Pay cash/UPI at seat on delivery</div>
+          </div>
+          <div class="pay-radio w-5 h-5 rounded-full border-2 border-gray-200"></div>
+        </div>
+      </div>
+
+      <!-- UPI input box -->
+      <div id="upi-input-section" class="bg-white border border-outline-variant rounded-2xl p-4 space-y-4 mb-6">
+        <div class="relative">
+          <input type="text" class="w-full bg-[#F4F6F5] border border-outline-variant rounded-xl py-3 px-4 pr-12 text-xs font-medium focus:outline-none" placeholder="Enter UPI ID (e.g. name@okaxis)" id="upi-id-input" />
+          <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">@</span>
+        </div>
+        <div class="upi-apps flex gap-3.5 justify-center">
+          <div class="upi-app flex flex-col items-center cursor-pointer" onclick="selectUPIApp(this)">
+            <div class="w-11 h-11 rounded-xl bg-blue-500 text-white flex items-center justify-center font-bold text-sm shadow">G</div>
+            <span class="text-[9px] font-bold text-gray-500 mt-1">GPay</span>
+          </div>
+          <div class="upi-app flex flex-col items-center cursor-pointer" onclick="selectUPIApp(this)">
+            <div class="w-11 h-11 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-sm shadow">P</div>
+            <span class="text-[9px] font-bold text-gray-500 mt-1">PhonePe</span>
+          </div>
+          <div class="upi-app flex flex-col items-center cursor-pointer" onclick="selectUPIApp(this)">
+            <div class="w-11 h-11 rounded-xl bg-cyan-500 text-white flex items-center justify-center font-bold text-sm shadow">Pt</div>
+            <span class="text-[9px] font-bold text-gray-500 mt-1">Paytm</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-outline-variant/60 rounded-2xl p-4 shadow-sm flex justify-between items-center mb-6">
+        <span class="text-xs font-bold text-gray-500">Payable Total</span>
+        <span class="text-base font-black text-primary animate-pulse" id="pay-total-amt">₹0</span>
+      </div>
+
+      <button class="w-full bg-primary text-white py-4 rounded-xl font-headline font-bold hover:bg-primary-light active:scale-95 transition-all uppercase tracking-wider text-xs flex justify-center items-center gap-1.5 shadow-lg" onclick="placeOrder()">
+        <span class="material-symbols-outlined text-base">lock</span>
+        Securely Pay &amp; Place Order
+      </button>
+      <p class="secure-note text-[9px] text-gray-400 text-center mt-3 flex items-center justify-center gap-1">
+        <span class="material-symbols-outlined text-xs text-primary">verified</span>
+        Safe &amp; secure 128-bit SSL encrypted payment gateway
       </p>
     </div>
 
-    <!-- Step 3: Success -->
-    <div class="checkout-section hidden" id="checkout-step-3">
-      <div class="order-success">
-        <div class="success-animation"><div class="success-circle"><span class="success-check">✓</span></div></div>
-        <h2 class="success-title">Order Placed! 🎉</h2>
-        <p class="success-sub">Your essentials are being prepared and will be delivered directly to your coach & seat.</p>
-        <div class="order-id-badge">Order ID: <strong id="order-id-display">RQ-XXXXXX</strong></div>
-        <div class="delivery-estimate-card">
-          <div class="est-row"><span>Delivering to</span><strong id="success-seat">Your Seat</strong></div>
-          <div class="est-row"><span>Estimated time</span><strong style="color:var(--green);">15 – 20 mins</strong></div>
-          <div class="est-row"><span>Station</span><strong>New Delhi (NDLS)</strong></div>
+    <!-- Step 3 Order success panel -->
+    <div class="checkout-section p-5 hidden" id="checkout-step-3">
+      <div class="order-success text-center py-8">
+        <div class="success-animation mb-6">
+          <div class="success-circle w-20 h-20 rounded-full bg-emerald-50 flex items-center justify-center mx-auto shadow-md">
+            <span class="success-check text-4xl text-primary font-black">✓</span>
+          </div>
         </div>
-        <button class="btn-green full-width" onclick="navigateTo('page-orders')">Track Order</button>
-        <button class="btn-ghost full-width" style="margin-top:10px;" onclick="navigateTo('page-shop')">Continue Shopping</button>
+        <h2 class="text-xl font-headline font-bold text-on-surface">Order Confirmed!</h2>
+        <p class="text-xs text-gray-500 mt-2 mb-6 max-w-[280px] mx-auto">Your essentials will be prepared and delivered directly to your train coach &amp; seat.</p>
+        
+        <div class="order-id-badge bg-emerald-50 text-primary px-5 py-2.5 rounded-xl text-xs font-bold inline-block mb-6 shadow-sm border border-emerald-100">
+          Order ID: <strong id="order-id-display">RQ-XXXXXX</strong>
+        </div>
+
+        <div class="bg-white border border-outline-variant/60 rounded-[1.5rem] p-5 text-left space-y-3 shadow-premium mb-8">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-gray-500">Delivering to</span>
+            <strong class="text-on-surface" id="success-seat">Coach B2, Seat 45</strong>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-gray-500">Estimated Delivery</span>
+            <strong class="text-primary font-extrabold">15 – 20 mins</strong>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-gray-500">Station Point</span>
+            <strong class="text-on-surface">New Delhi (NDLS)</strong>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <button class="w-full bg-primary text-white py-4 rounded-xl font-headline font-bold hover:bg-primary-light active:scale-95 transition-all uppercase tracking-wider text-xs shadow-md" onclick="navigateTo('page-orders')">Track Your Order</button>
+          <button class="w-full bg-white border border-outline-variant text-on-surface py-3.5 rounded-xl font-headline font-semibold hover:bg-gray-50 active:scale-95 transition-all text-xs" onclick="navigateTo('page-shop')">Continue Shopping</button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ==================== ORDERS PAGE ==================== -->
-  <div id="page-orders" class="page tab-page">
-    <div class="page-header">
-      <button class="back-btn-dark" onclick="navigateTo('page-shop')">←</button>
-      <h2 class="page-title">My Orders</h2>
-      <div></div>
+  <div id="page-orders" class="page tab-page bg-background">
+    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-5 py-4 flex justify-between items-center z-40 shadow-sm">
+      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="navigateTo('page-account')">
+        <span class="material-symbols-outlined text-xl">arrow_back</span>
+      </button>
+      <h2 class="text-base font-headline font-bold text-on-surface">My Orders</h2>
+      <div class="w-9 h-9"></div>
     </div>
-    <div id="orders-list" class="orders-list"></div>
-    <div id="orders-empty" class="cart-empty">
-      <div class="empty-icon">
-        <svg class="icon-svg" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--text-light);"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+    
+    <div id="orders-list" class="orders-list p-5 space-y-4"></div>
+
+    <div id="orders-empty" class="text-center py-20 px-6 hidden">
+      <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4 text-gray-400">
+        <span class="material-symbols-outlined text-4xl">inventory_2</span>
       </div>
-      <div class="empty-title">No orders yet</div>
-      <div class="empty-sub">Add some snacks and comfort items to see them here!</div>
-      <button class="btn-green" onclick="navigateTo('page-shop')">Shop Now</button>
+      <h3 class="font-headline text-base font-bold text-on-surface">No orders yet</h3>
+      <p class="text-xs text-gray-500 mt-1 mb-6">Add snacks or comfort items to start your list!</p>
+      <button class="bg-primary text-white px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider" onclick="navigateTo('page-shop')">Shop Now</button>
     </div>
   </div>
 
   <!-- ==================== ACCOUNT PAGE ==================== -->
-  <div id="page-account" class="page tab-page">
-    <div class="page-header">
-      <button class="back-btn-dark" onclick="navigateTo('page-shop')">←</button>
-      <h2 class="page-title">My Account</h2>
-      <div></div>
+  <div id="page-account" class="page tab-page bg-background flex flex-col h-full">
+    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-5 py-4 flex justify-between items-center z-40 shadow-sm">
+      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="navigateTo('page-shop')">
+        <span class="material-symbols-outlined text-xl">arrow_back</span>
+      </button>
+      <h2 class="text-base font-headline font-bold text-on-surface">My Account</h2>
+      <div class="w-9 h-9"></div>
     </div>
 
-    <div id="account-login-section" class="account-section">
-      <div class="account-banner">
-        <div class="account-banner-icon">
-          <svg class="icon-svg" viewBox="0 0 24 24" style="width:40px;height:40px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        </div>
-        <h2 class="account-login-title">Sign in to RailQuick</h2>
-        <p class="account-login-sub">Save train details, track orders, and experience lightning-fast delivery.</p>
-        <button class="btn-google" onclick="googleSignIn()">
-          <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.36-8.16 2.36-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-          Continue with Google
-        </button>
-        <button class="btn-phone" onclick="showPhoneLogin()">
-          <svg class="icon-svg" viewBox="0 0 24 24" style="width:18px;height:18px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-          Continue with Phone
-        </button>
-      </div>
-    </div>
-
-    <div id="account-logged-section" class="account-section hidden">
-      <div class="account-profile-card">
-        <div class="profile-avatar" id="profile-avatar">K</div>
-        <div class="profile-info">
-          <div class="profile-name" id="profile-name">User</div>
-          <div class="profile-email" id="profile-email">user@gmail.com</div>
-          <div class="profile-badge">✓ Verified Member</div>
-        </div>
-      </div>
-      <div class="account-menu">
-        <div class="menu-item" onclick="navigateTo('page-orders')">
-          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
-          <span class="menu-text">My Orders</span><span class="menu-arrow">›</span>
-        </div>
-        <div class="menu-item" onclick="navigateTo('page-pnr')">
-          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="12" y1="5" x2="12" y2="19"/></svg></span>
-          <span class="menu-text">PNR & Train Status</span><span class="menu-arrow">›</span>
-        </div>
-        <div class="menu-item">
-          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
-          <span class="menu-text">Payment Methods</span><span class="menu-arrow">›</span>
-        </div>
-        <div class="menu-item">
-          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
-          <span class="menu-text">Notifications</span><span class="menu-arrow">›</span>
-        </div>
-        <div class="menu-item">
-          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/></svg></span>
-          <span class="menu-text">Help & Support</span><span class="menu-arrow">›</span>
-        </div>
-        <div class="menu-item danger" onclick="signOut()">
-          <span class="menu-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
-          <span class="menu-text">Sign Out</span><span class="menu-arrow">›</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== PRODUCT MODAL ==================== -->
-  <div id="product-modal" class="modal-overlay hidden" onclick="closeModal(event)">
-    <div class="modal-card" id="modal-card">
-      <button class="modal-close" onclick="closeProductModal()">✕</button>
-      <div class="modal-img-wrapper"><img id="modal-img" src="" alt="" class="modal-img" /></div>
-      <div class="modal-body">
-        <div class="modal-category" id="modal-category">Category</div>
-        <h2 class="modal-product-name" id="modal-name">Product Name</h2>
-        <div class="modal-rating-row">
-          <span class="modal-stars" id="modal-stars">★★★★☆</span>
-          <span class="modal-reviews" id="modal-reviews">(124 reviews)</span>
-        </div>
-        <div class="modal-price" id="modal-price">₹0</div>
-        <p class="modal-description" id="modal-desc">Product description.</p>
-        <div class="modal-tags" id="modal-tags"></div>
-        <div class="modal-qty-row">
-          <div class="qty-control">
-            <button class="qty-btn" onclick="changeModalQty(-1)">−</button>
-            <span class="qty-val" id="modal-qty">1</span>
-            <button class="qty-btn" onclick="changeModalQty(1)">+</button>
+    <!-- Login section -->
+    <div id="account-login-section" class="flex-1 overflow-y-auto">
+      <div class="flex flex-col items-center justify-start pt-8 pb-24 px-6 min-h-full relative">
+        <!-- Animated Background Gradient -->
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
+        
+        <!-- Logo + Branding -->
+        <div class="relative z-10 flex flex-col items-center w-full">
+          <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center mb-6 shadow-xl pulse-glow">
+            <span class="material-symbols-outlined text-white text-4xl">train</span>
           </div>
-          <span class="modal-total" id="modal-total">₹0</span>
+          <h2 class="text-2xl font-headline font-black text-on-surface mb-2 tracking-tight">Welcome to RailQuick</h2>
+          <p class="text-sm text-gray-500 mb-8 text-center max-w-[280px] leading-relaxed">Sign in to track orders, save preferences &amp; checkout faster.</p>
+          
+          <!-- Clerk Sign-In Embedded Here -->
+          <div id="clerk-sign-in-mount" class="w-full min-h-[200px]">
+            <div class="clerk-loading-state flex flex-col items-center justify-center py-8 gap-4">
+              <div class="w-10 h-10 border-[3px] border-primary border-t-transparent rounded-full animate-spin"></div>
+              <p class="text-xs text-gray-400 font-medium">Connecting to sign-in...</p>
+            </div>
+          </div>
+          
+
+          <!-- Security Badge -->
+          <div class="mt-6 flex items-center gap-2 text-gray-400">
+            <span class="material-symbols-outlined text-sm">lock</span>
+            <span class="text-[10px] font-medium">Secured by Clerk · End-to-end encrypted</span>
+          </div>
         </div>
-        <button class="btn-green full-width" onclick="addToCartFromModal()">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Logged in section -->
+    <div id="account-logged-section" class="p-6 space-y-5 hidden">
+      <div class="bg-gradient-to-br from-primary to-primary-light rounded-3xl p-5 flex items-center gap-4 shadow-lg relative overflow-hidden">
+        <div class="absolute inset-0 bg-white/5"></div>
+        <div class="relative w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm text-white font-headline font-black text-xl flex items-center justify-center shadow border border-white/20" id="profile-avatar">K</div>
+        <div class="flex-1 relative">
+          <div class="text-sm font-bold text-white" id="profile-name">User</div>
+          <div class="text-[10px] text-white/70 mt-0.5" id="profile-email">user@gmail.com</div>
+          <div class="text-[9px] font-bold text-secondary mt-1.5 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[10px] fill-1">verified</span>
+            VERIFIED MEMBER
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-outline-variant/60 rounded-3xl overflow-hidden shadow-sm">
+        <div class="flex items-center gap-3.5 px-5 py-4 border-b border-gray-100 cursor-pointer active:bg-gray-50 transition-colors" onclick="navigateTo('page-orders')">
+          <span class="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500">
+            <span class="material-symbols-outlined text-base">inventory_2</span>
+          </span>
+          <span class="text-xs font-bold text-on-surface flex-1">My Orders</span>
+          <span class="material-symbols-outlined text-gray-400 text-base">chevron_right</span>
+        </div>
+        <div class="flex items-center gap-3.5 px-5 py-4 border-b border-gray-100 cursor-pointer active:bg-gray-50 transition-colors" onclick="navigateTo('page-pnr')">
+          <span class="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500">
+            <span class="material-symbols-outlined text-base">train</span>
+          </span>
+          <span class="text-xs font-bold text-on-surface flex-1">PNR &amp; Live Tracking</span>
+          <span class="material-symbols-outlined text-gray-400 text-base">chevron_right</span>
+        </div>
+        <div class="flex items-center gap-3.5 px-5 py-4 border-b border-gray-100 cursor-pointer active:bg-gray-50 transition-colors" onclick="navigateTo('page-offers')">
+          <span class="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500">
+            <span class="material-symbols-outlined text-base">local_offer</span>
+          </span>
+          <span class="text-xs font-bold text-on-surface flex-1">Offers &amp; Coupons</span>
+          <span class="material-symbols-outlined text-gray-400 text-base">chevron_right</span>
+        </div>
+        <div class="flex items-center gap-3.5 px-5 py-4 border-b border-gray-100 cursor-pointer active:bg-gray-50 transition-colors" onclick="navigateTo('page-support')">
+          <span class="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500">
+            <span class="material-symbols-outlined text-base">support_agent</span>
+          </span>
+          <span class="text-xs font-bold text-on-surface flex-1">Help &amp; Support Chat</span>
+          <span class="material-symbols-outlined text-gray-400 text-base">chevron_right</span>
+        </div>
+        <div class="flex items-center gap-3.5 px-5 py-4 border-b border-gray-100 cursor-pointer active:bg-gray-50 transition-colors" onclick="navigateTo('page-games')">
+          <span class="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500">
+            <span class="material-symbols-outlined text-base">casino</span>
+          </span>
+          <span class="text-xs font-bold text-on-surface flex-1">Pass the Time (Games)</span>
+          <span class="material-symbols-outlined text-gray-400 text-base">chevron_right</span>
+        </div>
+        <div class="flex items-center gap-3.5 px-5 py-4 cursor-pointer active:bg-red-50 text-red-600 transition-colors" onclick="signOut()">
+          <span class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center text-red-500">
+            <span class="material-symbols-outlined text-base">logout</span>
+          </span>
+          <span class="text-xs font-bold flex-1">Sign Out</span>
+          <span class="material-symbols-outlined text-red-300 text-base">chevron_right</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Toast -->
-  <div id="toast" class="toast hidden">
-    <span id="toast-icon">✓</span>
-    <span id="toast-msg">Added to cart!</span>
+  <!-- ==================== OFFERS & COUPONS PAGE ==================== -->
+  <div id="page-offers" class="page bg-background">
+    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-5 py-4 flex justify-between items-center z-40 shadow-sm">
+      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="navigateTo('page-account')">
+        <span class="material-symbols-outlined text-xl">arrow_back</span>
+      </button>
+      <h2 class="text-base font-headline font-bold text-on-surface">Offers &amp; Coupons</h2>
+      <div class="w-9 h-9"></div>
+    </div>
+    
+    <div class="p-5 space-y-4">
+      <!-- Coupon Card 1 -->
+      <div class="bg-gradient-to-br from-primary/10 to-primary-light/5 border border-primary/20 rounded-3xl p-5 shadow-sm relative overflow-hidden">
+        <div class="absolute right-0 top-0 bg-primary text-white text-[9px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-wider">Mega Deal</div>
+        <span class="material-symbols-outlined text-3xl text-primary mb-3">local_pizza</span>
+        <h3 class="text-sm font-bold text-on-surface">Get 50% Off on your seat meals!</h3>
+        <p class="text-[10px] text-gray-500 mt-1 mb-4">Valid on orders above ₹200. Max discount of ₹100.</p>
+        <div class="flex items-center justify-between bg-white border border-outline-variant rounded-xl p-2">
+          <span class="font-mono text-xs font-black text-secondary tracking-widest px-2" id="coupon-code-1">RAIL50</span>
+          <button class="bg-primary text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider active:scale-95 transition-all" onclick="applyCouponCode('RAIL50')">Apply</button>
+        </div>
+      </div>
+
+      <!-- Coupon Card 2 -->
+      <div class="bg-gradient-to-br from-secondary/10 to-[#B8942E]/5 border border-secondary/20 rounded-3xl p-5 shadow-sm relative overflow-hidden">
+        <div class="absolute right-0 top-0 bg-secondary text-white text-[9px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-wider">Chai Lover</div>
+        <span class="material-symbols-outlined text-3xl text-secondary mb-3">emoji_food_beverage</span>
+        <h3 class="text-sm font-bold text-on-surface">Get 20% Off on hot tea beverages!</h3>
+        <p class="text-[10px] text-gray-500 mt-1 mb-4">Valid only during morning journeys (6:00 AM - 11:00 AM).</p>
+        <div class="flex items-center justify-between bg-white border border-outline-variant rounded-xl p-2">
+          <span class="font-mono text-xs font-black text-secondary tracking-widest px-2" id="coupon-code-2">CHAI20</span>
+          <button class="bg-secondary text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider active:scale-95 transition-all" onclick="applyCouponCode('CHAI20')">Apply</button>
+        </div>
+      </div>
+
+      <!-- Coupon Card 3 -->
+      <div class="bg-gradient-to-br from-emerald-500/10 to-teal-500/5 border border-emerald-500/20 rounded-3xl p-5 shadow-sm relative overflow-hidden">
+        <div class="absolute right-0 top-0 bg-emerald-600 text-white text-[9px] font-black px-3 py-1 rounded-bl-xl uppercase tracking-wider">Free Delivery</div>
+        <span class="material-symbols-outlined text-3xl text-emerald-600 mb-3">local_shipping</span>
+        <h3 class="text-sm font-bold text-on-surface">No Delivery Charges on your booking!</h3>
+        <p class="text-[10px] text-gray-500 mt-1 mb-4">Valid across all partner stations for orders above ₹150.</p>
+        <div class="flex items-center justify-between bg-white border border-outline-variant rounded-xl p-2">
+          <span class="font-mono text-xs font-black text-secondary tracking-widest px-2" id="coupon-code-3">FREEDEL</span>
+          <button class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider active:scale-95 transition-all" onclick="applyCouponCode('FREEDEL')">Apply</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Cart FAB -->
-  <button id="cart-fab" class="cart-fab hidden" onclick="navigateTo('page-cart')">
-    <svg class="icon-svg" viewBox="0 0 24 24" style="width:20px;height:20px;color:white;stroke-width:2.5;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-    <span class="cart-fab-count" id="cart-fab-count">0</span>
-    <span class="cart-fab-price" id="cart-fab-price">₹0</span>
+  <!-- ==================== CATEGORY VIEW PAGE ==================== -->
+  <div id="page-category-view" class="page bg-background">
+    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-5 py-4 flex justify-between items-center z-40 shadow-sm">
+      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="navigateTo('page-shop')">
+        <span class="material-symbols-outlined text-xl">arrow_back</span>
+      </button>
+      <h2 class="text-base font-headline font-bold text-on-surface" id="category-view-title">Category</h2>
+      <div class="w-9 h-9"></div>
+    </div>
+
+    <!-- Category Products Grid -->
+    <div class="p-5">
+      <div id="category-products-grid" class="grid grid-cols-2 gap-4">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TRACK ORDER PAGE ==================== -->
+  <div id="page-track-order" class="page bg-background">
+    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-5 py-4 flex justify-between items-center z-40 shadow-sm">
+      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="navigateTo('page-orders')">
+        <span class="material-symbols-outlined text-xl">arrow_back</span>
+      </button>
+      <h2 class="text-base font-headline font-bold text-on-surface">Track Order</h2>
+      <div class="w-9 h-9"></div>
+    </div>
+    
+    <div class="p-5 space-y-5">
+      <!-- Active Train Location Status -->
+      <div class="bg-gradient-to-br from-primary to-primary-light text-white rounded-3xl p-5 shadow-lg relative overflow-hidden">
+        <div class="absolute right-2 bottom-[-10px] text-[120px] text-white/10 font-bold pointer-events-none select-none">
+          <span class="material-symbols-outlined text-[110px] opacity-20">train</span>
+        </div>
+        <span class="bg-white/20 text-white text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">Live ETA Dispatch</span>
+        <h3 class="text-base font-headline font-black mt-3" id="track-hero-title">Preparing your order...</h3>
+        <p class="text-xs text-white/80 mt-1" id="track-hero-desc">Your essentials are being packed and sealed.</p>
+        <div class="mt-4 pt-3 border-t border-white/20 flex justify-between text-xs font-bold font-mono">
+          <span id="track-hero-order-id">Order ID: —</span>
+          <span id="track-hero-seat">Seat: —</span>
+        </div>
+      </div>
+      
+      <!-- Premium Progress Map Line -->
+      <div class="bg-white border border-outline-variant/60 rounded-3xl p-5 shadow-sm space-y-5">
+        <h4 class="text-xs font-black text-secondary uppercase tracking-wider">Delivery Milestones</h4>
+        
+        <div class="space-y-4 font-body text-xs relative pl-6 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[2px] before:bg-gray-100" id="track-milestones">
+          <!-- Step 1: Confirmed -->
+          <div class="relative flex items-start gap-3">
+            <span class="absolute left-[-22px] top-0.5 w-3 h-3 rounded-full bg-emerald-600 border-2 border-white ring-2 ring-emerald-500/20"></span>
+            <div>
+              <div class="font-bold text-on-surface">Order Placed &amp; Confirmed</div>
+              <div class="text-[10px] text-gray-500 mt-0.5">Kitchen Partner accepted. Payment verified.</div>
+            </div>
+          </div>
+          <!-- Step 2: Prepared -->
+          <div class="relative flex items-start gap-3">
+            <span class="absolute left-[-22px] top-0.5 w-3 h-3 rounded-full bg-emerald-600 border-2 border-white ring-2 ring-emerald-500/20"></span>
+            <div>
+              <div class="font-bold text-on-surface">Food Prepared &amp; Sealed</div>
+              <div class="text-[10px] text-gray-500 mt-0.5">Packed in eco-safe double-sealed travel container.</div>
+            </div>
+          </div>
+          <!-- Step 3: Out for Delivery -->
+          <div class="relative flex items-start gap-3" id="track-step-delivery">
+            <span class="absolute left-[-22px] top-0.5 w-3 h-3 rounded-full bg-primary border-2 border-white ring-2 ring-primary/20 animate-pulse"></span>
+            <div>
+              <div class="font-bold text-primary" id="track-step-delivery-title">Handed to Delivery Hero</div>
+              <div class="text-[10px] text-gray-500 mt-0.5" id="track-step-delivery-desc">Agent is waiting at the platform.</div>
+            </div>
+          </div>
+          <!-- Step 4: Seat Delivery -->
+          <div class="relative flex items-start gap-3 opacity-50" id="track-step-seat">
+            <span class="absolute left-[-22px] top-0.5 w-3 h-3 rounded-full bg-gray-200 border-2 border-white"></span>
+            <div>
+              <div class="font-bold text-on-surface" id="track-step-seat-title">Delivery to your seat</div>
+              <div class="text-[10px] text-gray-500 mt-0.5">Deliveries commence upon train arrival.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Delivery Agent Profile Card -->
+      <div class="bg-white border border-outline-variant/60 rounded-3xl p-4 shadow-sm flex items-center gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-gray-100 overflow-hidden relative border border-gray-100 flex items-center justify-center shrink-0">
+          <img src="delivery_person.png" alt="Delivery Hero" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop'">
+        </div>
+        <div class="flex-grow">
+          <div class="text-xs font-black text-secondary uppercase tracking-widest">Your Delivery Hero</div>
+          <div class="text-sm font-bold text-on-surface mt-0.5" id="track-agent-name">Ramesh Kumar</div>
+          <div class="text-[10px] text-primary font-bold mt-0.5">✓ Verified Agent</div>
+        </div>
+        <a href="tel:+919876543210" class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center active:scale-90 transition-transform">
+          <span class="material-symbols-outlined text-lg">call</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== HELP & SUPPORT CHATBOT PAGE ==================== -->
+  <div id="page-support" class="page bg-background flex flex-col absolute inset-0">
+    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-5 py-4 flex justify-between items-center z-40 shadow-sm shrink-0">
+      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="navigateTo('page-account')">
+        <span class="material-symbols-outlined text-xl">arrow_back</span>
+      </button>
+      <h2 class="text-base font-headline font-bold text-on-surface flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-primary text-lg">support_agent</span>
+        RailQuick Support
+      </h2>
+      <div class="w-9 h-9"></div>
+    </div>
+    
+    <!-- Chat messages area -->
+    <div id="support-chat-messages" class="flex-grow overflow-y-auto p-5 space-y-4 font-body">
+      <!-- Welcome message -->
+      <div class="flex items-start gap-2.5 max-w-[85%]">
+        <div class="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center shrink-0 animate-pulse">
+          <span class="material-symbols-outlined text-sm">robot_2</span>
+        </div>
+        <div class="bg-white border border-outline-variant/60 rounded-2xl p-3.5 shadow-sm text-xs font-medium text-on-surface leading-relaxed">
+          Hello! I'm your RailQuick Assistant. How can I help you with your train journey and seat deliveries today?
+        </div>
+      </div>
+    </div>
+    
+    <!-- Quick reply buttons -->
+    <div class="p-4 bg-white border-t border-outline-variant/40 space-y-2 shrink-0">
+      <div class="text-[9px] font-black text-gray-400 uppercase tracking-wider mb-1.5 px-1">Suggested Questions</div>
+      <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none" id="support-quick-replies">
+        <button class="bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-3.5 py-2 rounded-xl shrink-0 active:scale-95 transition-all" onclick="sendSupportMessage('What if my train is delayed?')">Delayed Train?</button>
+        <button class="bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-3.5 py-2 rounded-xl shrink-0 active:scale-95 transition-all" onclick="sendSupportMessage('How is food delivered to my seat?')">How is it delivered?</button>
+        <button class="bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-3.5 py-2 rounded-xl shrink-0 active:scale-95 transition-all" onclick="sendSupportMessage('Can I cancel my order?')">Can I cancel?</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SPIN THE WHEEL GAME PAGE ==================== -->
+  <div id="page-games" class="page bg-background">
+    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-5 py-4 flex justify-between items-center z-40 shadow-sm">
+      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="navigateTo('page-account')">
+        <span class="material-symbols-outlined text-xl">arrow_back</span>
+      </button>
+      <h2 class="text-base font-headline font-bold text-on-surface">Pass the Time</h2>
+      <div class="w-9 h-9"></div>
+    </div>
+    
+    <div class="p-6 text-center space-y-6">
+      <div class="space-y-1">
+        <h3 class="text-lg font-serif-display font-black text-on-surface">Spin the Lucky Wheel!</h3>
+        <p class="text-xs text-gray-500 max-w-[280px] mx-auto">Win exclusive food discount coupons while you enjoy your train journey.</p>
+      </div>
+      
+      <!-- Interactive spin wheel container -->
+      <div class="relative w-64 h-64 mx-auto mt-6 flex items-center justify-center select-none">
+        <!-- Marker pointer -->
+        <div class="absolute top-[-10px] z-20 text-3xl animate-bounce text-primary drop-shadow">▼</div>
+        
+        <!-- The Wheel canvas -->
+        <div id="lucky-wheel" class="w-full h-full rounded-full border-[8px] border-secondary bg-white relative shadow-2xl flex items-center justify-center transition-transform duration-[4000ms] ease-out">
+          <!-- Segment lines and text -->
+          <div class="absolute inset-0 rounded-full overflow-hidden flex items-center justify-center font-bold text-[10px]">
+            <!-- Segment 1: RAIL50 -->
+            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-6 text-secondary rotate-0"><span class="bg-primary/20 px-2 py-0.5 rounded-full">RAIL50</span></div>
+            <!-- Segment 2: Try Again -->
+            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-6 text-gray-400 rotate-60"><span>TRY AGAIN</span></div>
+            <!-- Segment 3: CHAI20 -->
+            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-6 text-secondary rotate-120"><span class="bg-secondary/20 px-2 py-0.5 rounded-full">CHAI20</span></div>
+            <!-- Segment 4: Free Del -->
+            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-6 text-emerald-600 rotate-180"><span class="bg-emerald-50 px-2 py-0.5 rounded-full">FREEDEL</span></div>
+            <!-- Segment 5: Try Again -->
+            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-6 text-gray-400 rotate-240"><span>TRY AGAIN</span></div>
+            <!-- Segment 6: Surprise -->
+            <div class="absolute origin-center w-full h-full flex flex-col justify-start pt-6 text-primary rotate-300"><span class="bg-primary/10 px-2 py-0.5 rounded-full">RAIL100</span></div>
+          </div>
+          <!-- Inner circle hub -->
+          <div class="w-14 h-14 rounded-full bg-secondary border-4 border-white z-10 flex items-center justify-center text-white font-serif-display font-black text-xs shadow-md">WIN</div>
+        </div>
+      </div>
+      
+      <div>
+        <button id="spin-button" class="bg-primary text-white font-headline font-bold text-xs py-4 px-10 rounded-2xl uppercase tracking-wider hover:bg-primary-light active:scale-95 transition-all shadow-lg" onclick="spinWheel()">Spin the Wheel</button>
+      </div>
+      
+      <!-- Result declaration card -->
+      <div id="game-result-card" class="bg-white border border-outline-variant/60 rounded-3xl p-5 shadow-sm hidden max-w-[320px] mx-auto text-center animate-fade-in-up">
+        <span class="material-symbols-outlined text-4xl text-primary mb-2">celebration</span>
+        <h4 class="text-sm font-bold text-on-surface" id="game-result-title">You Won!</h4>
+        <p class="text-[10px] text-gray-500 mt-1 mb-3" id="game-result-sub">Use this code at checkout to claim your reward.</p>
+        <div class="flex items-center justify-between bg-primary/5 border border-primary/20 rounded-xl p-2.5 max-w-[200px] mx-auto">
+          <strong class="font-mono text-xs text-primary tracking-widest px-2" id="game-result-code">—</strong>
+          <button class="bg-primary text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase active:scale-95 transition-all" onclick="applyGameCoupon()">Use Code</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PRODUCT DETAILS MODAL ==================== -->
+  <div id="product-modal" class="modal-overlay fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end justify-center hidden" onclick="closeModal(event)">
+    <div class="modal-card bg-white rounded-t-[2rem] w-full max-w-[412px] max-h-[85vh] overflow-y-auto z-50 relative animate-fade-in-up" id="modal-card">
+      <button class="modal-close w-8 h-8 rounded-full bg-black/5 flex items-center justify-center text-gray-600 absolute top-4 right-4 z-50" onclick="closeProductModal()">✕</button>
+      
+      <div class="modal-img-wrapper bg-[#F4F6F5] h-52 w-full flex items-center justify-center p-6 relative">
+        <img id="modal-img" src="" alt="" class="max-h-full max-w-full object-contain" />
+      </div>
+      
+      <div class="modal-body p-6">
+        <div class="modal-category text-[9px] font-black text-primary uppercase tracking-[0.25em] mb-1" id="modal-category">Category</div>
+        <h2 class="modal-product-name text-lg font-headline font-extrabold text-on-surface mb-2" id="modal-name">Product Name</h2>
+        <div class="modal-rating-row flex items-center gap-2 mb-3">
+          <span class="modal-stars text-yellow-500 text-sm" id="modal-stars">★★★★☆</span>
+          <span class="modal-reviews text-[10px] text-gray-500" id="modal-reviews">(0 reviews)</span>
+        </div>
+        <div class="modal-price text-xl font-black text-primary mb-3" id="modal-price">₹0</div>
+        <p class="modal-description text-xs text-gray-600 leading-relaxed mb-4 border-b border-gray-100 pb-4" id="modal-desc">Product description.</p>
+        <div class="modal-tags flex flex-wrap gap-1.5 mb-5" id="modal-tags"></div>
+        
+        <div class="modal-qty-row flex justify-between items-center border-t border-gray-100 pt-4 mb-6">
+          <div class="qty-control flex items-center bg-[#F4F6F5] border border-outline-variant/60 rounded-xl overflow-hidden">
+            <button class="w-10 h-10 flex items-center justify-center font-bold text-lg text-primary" onclick="changeModalQty(-1)">−</button>
+            <span class="qty-val font-mono font-bold text-on-surface min-w-[36px] text-center" id="modal-qty">1</span>
+            <button class="w-10 h-10 flex items-center justify-center font-bold text-lg text-primary" onclick="changeModalQty(1)">+</button>
+          </div>
+          <span class="modal-total text-base font-black text-secondary" id="modal-total">₹0</span>
+        </div>
+        
+        <button class="w-full bg-primary text-white py-4 rounded-xl font-headline font-bold hover:bg-primary-light active:scale-95 transition-all uppercase tracking-wider text-xs shadow-md" onclick="addToCartFromModal()">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LOGIN INTERCEPT MODAL ==================== -->
+  <div id="modal-google-login" class="modal-overlay fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden" onclick="closeGoogleLoginModal(event)">
+    <div class="bg-white rounded-3xl w-[320px] p-7 text-center shadow-2xl relative border border-gray-100" onclick="event.stopPropagation()">
+      <button class="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center text-gray-400 absolute top-4 right-4 text-sm font-bold hover:bg-black/10 transition-colors" onclick="closeGoogleLoginModal(true)">✕</button>
+      
+      <div class="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto mb-4 p-1.5">
+        <img src="railquick_logo.png" alt="RailQuick" class="w-full h-full object-cover rounded-xl">
+      </div>
+      
+      <h3 class="text-lg font-headline font-extrabold text-on-surface mb-1">Sign in to Order</h3>
+      <p class="text-[11px] text-gray-500 mb-5 leading-relaxed px-3">You need to be signed in to place an order. Fast &amp; secure — just one tap.</p>
+      
+      <button 
+        class="w-full bg-primary hover:bg-primary-light text-white rounded-2xl py-3.5 px-5 flex items-center justify-center gap-2 font-bold text-sm active:scale-95 transition-all shadow-lg mb-3" 
+        onclick="closeGoogleLoginModal(true); navigateTo('page-account');">
+        <span class="material-symbols-outlined text-lg">login</span>
+        Sign In to Continue
+      </button>
+
+      <p class="text-[9px] text-gray-400 mt-2">Secured by <span class="font-semibold text-primary">Clerk</span> · End-to-end encrypted</p>
+    </div>
+  </div>
+
+  <!-- ==================== BOTTOM NAVIGATION BAR ==================== -->
+  <nav id="bottom-nav" class="bottom-nav hidden-nav">
+    <div class="nav-item active" data-page="page-shop" onclick="navTo('page-shop')">
+      <span class="material-symbols-outlined nav-icon fill-1">home</span>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" data-page="page-pnr" onclick="navTo('page-pnr')">
+      <span class="material-symbols-outlined nav-icon">train</span>
+      <span class="nav-label">PNR</span>
+    </div>
+    <div class="nav-item" data-page="page-orders" onclick="navTo('page-orders')">
+      <span class="material-symbols-outlined nav-icon">inventory_2</span>
+      <span class="nav-label">Orders</span>
+      <span class="nav-badge" id="nav-orders-badge" style="display:none;">0</span>
+    </div>
+    <div class="nav-item" data-page="page-account" onclick="navTo('page-account')">
+      <span class="material-symbols-outlined nav-icon">person</span>
+      <span class="nav-label">Account</span>
+    </div>
+  </nav>
+
+  <!-- Toast Notification System -->
+  <div id="toast" class="toast fixed bottom-[72px] left-1/2 -translate-x-1/2 bg-on-surface text-white px-5 py-3 rounded-2xl flex items-center gap-3 z-[100] shadow-floating hidden" style="max-width: 380px;">
+    <span id="toast-icon" class="w-5 h-5 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">✓</span>
+    <span id="toast-msg" class="text-xs font-bold tracking-tight">Added to cart!</span>
+  </div>
+
+  <!-- Sticky Cart FAB on Shopping Front -->
+  <button id="cart-fab" class="cart-fab fixed bottom-4 left-1/2 -translate-x-1/2 bg-primary hover:bg-primary-light text-white flex items-center justify-between w-11/12 max-w-[370px] px-5 py-3.5 rounded-2xl z-40 shadow-floating active:scale-95 transition-all hidden" onclick="navigateTo('page-cart')">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-white">shopping_bag</span>
+      <div class="flex flex-col text-left">
+        <span class="text-xs font-bold leading-tight">View Cart</span>
+        <span class="text-[9px] text-white/80" id="cart-fab-count">0 items</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-1 font-headline font-bold text-sm text-secondary">
+      <span id="cart-fab-price">₹0</span>
+      <span class="material-symbols-outlined text-white">chevron_right</span>
+    </div>
   </button>
 
-  <!-- Loading -->
-  <div id="loading-overlay" class="loading-overlay hidden">
-    <div class="loading-spinner"></div>
-    <div class="loading-text" id="loading-text">Fetching live data...</div>
+  <!-- Loader Overlay -->
+  <div id="loading-overlay" class="loading-overlay absolute inset-0 bg-black/50 backdrop-blur-sm flex flex-col items-center justify-center z-[100] hidden">
+    <div class="loading-spinner w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+    <div class="loading-text text-white text-xs font-bold mt-4 animate-pulse" id="loading-text">Loading...</div>
   </div>
 
-  <!-- Bottom Navigation -->
-  <div class="bottom-nav">
-    <button class="nav-btn active" id="nav-home" onclick="activateNav('home'); navigateTo('page-shop')">
-      <span class="nav-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
-      <span class="nav-label">Home</span>
-    </button>
-    <button class="nav-btn" id="nav-pnr" onclick="activateNav('pnr'); navigateTo('page-pnr')">
-      <span class="nav-icon"><svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="12" y1="5" x2="12" y2="19"/></svg></span>
-      <span class="nav-label">PNR / Status</span>
-    </button>
-    <button class="nav-btn" id="nav-orders" onclick="activateNav('orders'); navigateTo('page-orders')">
-      <span class="nav-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
-      <span class="nav-label">Orders</span>
-    </button>
-    <button class="nav-btn" id="nav-account" onclick="activateNav('account'); navigateTo('page-account')">
-      <span class="nav-icon"><svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-      <span class="nav-label">Account</span>
-    </button>
-  </div>
+
+
 </div>
 
 <script src="app.js"></script>

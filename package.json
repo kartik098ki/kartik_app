@@ -9,8 +9,12 @@
     "dev": "node api/server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "@clerk/clerk-js": "^6.22.0",
     "cors": "^2.8.5",
+    "express": "^4.18.2",
     "railkit": "^4.0.1"
+  },
+  "devDependencies": {
+    "clerk": "^1.5.0"
   }
 }
