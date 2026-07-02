@@ -944,14 +944,14 @@
         </button>
       </div>
       
-      <!-- Horizontal Scrollable Category Pills -->
-      <div class="flex gap-3 overflow-x-auto pb-3 scrollbar-none px-margin-mobile -mx-margin-mobile select-none" style="-webkit-overflow-scrolling: touch;">
+      <!-- Grid Layout of Categories -->
+      <div class="grid grid-cols-5 gap-1.5 select-none px-margin-mobile">
         <!-- All Pill -->
         <button class="category-pill active" onclick="filterCategory('all', this)">
           <div class="cat-icon-wrapper bg-emerald-50 border border-emerald-100/50">
             <span class="material-symbols-outlined text-primary text-[28px]">apps</span>
           </div>
-          <span class="cat-label">All Items</span>
+          <span class="cat-label">All</span>
         </button>
 
         <!-- Snacks Pill -->
@@ -983,7 +983,7 @@
           <div class="cat-icon-wrapper bg-purple-50 border border-purple-100/50">
             <span class="material-symbols-outlined text-violet-600 text-[28px]">devices</span>
           </div>
-          <span class="cat-label">Tech &amp; Comfort</span>
+          <span class="cat-label">Tech</span>
         </button>
       </div>
     </section>
@@ -1822,17 +1822,19 @@
   </div>
 
   <!-- Sticky Cart FAB on Shopping Front -->
-  <button id="cart-fab" class="cart-fab fixed bottom-4 left-1/2 -translate-x-1/2 bg-primary hover:bg-primary-light text-white flex items-center justify-between w-11/12 max-w-[370px] px-5 py-3.5 rounded-2xl z-40 shadow-floating active:scale-95 transition-all hidden" onclick="navigateTo('page-cart')">
+  <button id="cart-fab" class="cart-fab fixed bottom-4 left-1/2 -translate-x-1/2 bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-between w-11/12 max-w-[370px] px-5 py-4 rounded-2xl z-40 shadow-2xl active:scale-95 transition-all hidden" onclick="navigateTo('page-cart')">
     <div class="flex items-center gap-3">
-      <span class="material-symbols-outlined text-white">shopping_bag</span>
+      <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
+        <span class="material-symbols-outlined text-white text-base">shopping_bag</span>
+      </div>
       <div class="flex flex-col text-left">
-        <span class="text-xs font-bold leading-tight">View Cart</span>
-        <span class="text-[9px] text-white/80" id="cart-fab-count">0 items</span>
+        <span class="text-[10px] text-white/70 font-bold uppercase tracking-wider leading-none">View Cart</span>
+        <span class="text-xs font-black text-white mt-0.5" id="cart-fab-count">0 items</span>
       </div>
     </div>
-    <div class="flex items-center gap-1 font-headline font-bold text-sm text-secondary">
+    <div class="flex items-center gap-2 font-headline font-black text-sm text-white bg-white/10 px-3 py-1.5 rounded-xl">
       <span id="cart-fab-price">₹0</span>
-      <span class="material-symbols-outlined text-white">chevron_right</span>
+      <span class="material-symbols-outlined text-white text-sm">arrow_forward</span>
     </div>
   </button>
 

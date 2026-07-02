@@ -2175,36 +2175,17 @@ function initAccountPage() {
     // Mount Clerk's embedded sign-in form
     const mountEl = document.getElementById('clerk-sign-in-mount');
     if (mountEl && clerkInstance && clerkInitDone) {
-      // Remove any loading state
-      const loadingEl = mountEl.querySelector('.clerk-loading-state');
-      if (loadingEl) loadingEl.remove();
-      
-      // Only mount if not already mounted
-      if (!mountEl.querySelector('.cl-rootBox') && !mountEl.querySelector('.cl-component')) {
-        mountEl.innerHTML = '';
-        // Small delay to allow DOM to settle before mounting
-        setTimeout(() => {
-          try {
-            clerkInstance.mountSignIn(mountEl, {
-              appearance: {
-                elements: {
-                  rootBox: 'w-full',
-                  card: 'shadow-none border-0 p-0 w-full max-w-sm mx-auto bg-transparent',
-                  formButtonPrimary: 'bg-[#004D3C] hover:bg-[#006A4E]',
-                }
-              }
-            });
-          } catch(e) {
-            console.warn('[Clerk] Could not mount sign-in:', e);
-            mountEl.innerHTML = `
-              <button class="w-full bg-primary hover:bg-primary-light text-white rounded-xl py-3 px-4 flex items-center justify-center gap-2 text-sm font-bold active:scale-95 transition-all shadow-md" onclick="googleSignIn()">
-                <span class="material-symbols-outlined text-lg">login</span>
-                Sign In with Clerk
-              </button>
-            `;
-          }
-        }, 50);
-      }
+      mountEl.innerHTML = `
+        <div class="w-full p-1 space-y-4">
+          <button onclick="triggerClerkSignIn()" class="w-full bg-[#004D3C] hover:bg-[#006A4E] text-white py-4 px-6 rounded-2xl font-headline font-bold active:scale-95 transition-all uppercase tracking-wider text-xs shadow-md flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-lg">login</span>
+            Sign In with Clerk
+          </button>
+          <p class="text-[10px] text-gray-400 text-center leading-normal">
+            Click above to sign in securely. You will be redirected back here automatically.
+          </p>
+        </div>
+      `;
     } else if (mountEl && !clerkInstance) {
       // Clerk not loaded yet — show loading or retry button
       if (!mountEl.querySelector('.clerk-loading-state') && !mountEl.querySelector('button')) {
@@ -2238,27 +2219,26 @@ function closeGoogleLoginModal(force = false) {
   if (modal) modal.classList.add('hidden');
 }
 
-function googleSignIn() {
+function triggerClerkSignIn() {
   const clerk = clerkInstance || window.Clerk;
   if (clerk && clerkInitDone) {
     try {
-      clerk.openSignIn({
-        afterSignInUrl: window.location.href,
-        afterSignUpUrl: window.location.href,
-        redirectUrl: window.location.href
+      showLoading('Redirecting to secure login...');
+      clerk.redirectToSignIn({
+        redirectUrl: window.location.origin
       });
     } catch(e) {
-      console.warn('[Clerk] openSignIn failed, navigating to account page:', e);
-      navigateTo('page-account');
+      console.error('[Clerk] Redirect failed:', e);
+      showToast('Redirect failed. Please check internet connection.', 'error');
+      hideLoading();
     }
   } else {
-    // Clerk not ready yet, go to account page where mount will happen
-    navigateTo('page-account');
-    // Also try to initialize Clerk if it hasn't been done
-    if (!clerkInstance) {
-      initClerk();
-    }
+    showToast('Sign-in service is initializing. Please try again in a second...', 'info');
   }
+}
+
+function googleSignIn() {
+  triggerClerkSignIn();
 }
 
 function simulateGoogleLogin() {
