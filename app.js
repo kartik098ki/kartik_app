@@ -2334,6 +2334,7 @@ function syncClerkUser() {
   }
   saveState();
   initAccountPage();
+  updateHomeProfileAvatar();
 }
 
 function signOut() {
@@ -2518,6 +2519,12 @@ function sendSupportMessage(text) {
       replyText = "We partner with authorized catering services at stations. When the train pulls in, our delivery agent will come directly to your coach and hand the package to you at your seat/berth!";
     } else if (text.includes('cancel')) {
       replyText = "You can cancel your order up to 1 hour before the scheduled arrival of the train at your delivery station. Cancel options are available in the 'Orders' tab.";
+    } else if (text.includes('where') && text.includes('order')) {
+      replyText = 'You can track your order status in the My Orders tab. Tap the Track button next to your order to see real-time delivery updates with live GPS tracking.';
+    } else if (text.includes('refund')) {
+      replyText = 'Refund requests are processed within 5-7 business days. For orders cancelled before preparation, refunds are instant. Please check your payment method for the credited amount.';
+    } else if (text.includes('payment')) {
+      replyText = 'We accept UPI, credit/debit cards, net banking, and cash on delivery at selected stations. All transactions are secured with 256-bit encryption.';
     }
     
     const botBubble = document.createElement('div');
@@ -3419,4 +3426,58 @@ function saveCompulsoryPhone() {
   } else {
     showToast('Please sign in first', 'error');
   }
+}
+
+// ===== TRAIN TRIVIA QUIZ GAME =====
+let currentQuizQ = 0;
+const QUIZ_QUESTIONS = [
+  { q: 'Which is the longest railway platform in India?', options: ['Gorakhpur', 'Kharagpur', 'Bilaspur', 'Hubli'], answer: 0 },
+  { q: 'What does PNR stand for?', options: ['Passenger Name Record', 'Personal Number Registry', 'Platform Node Route', 'Public Network Rail'], answer: 0 },
+  { q: 'Which is the fastest train in India?', options: ['Rajdhani Express', 'Vande Bharat Express', 'Shatabdi Express', 'Duronto Express'], answer: 1 },
+  { q: 'Indian Railways is the ____ largest rail network.', options: ['2nd', '3rd', '4th', '5th'], answer: 2 },
+  { q: 'Which city has the busiest railway station?', options: ['Mumbai (CST)', 'New Delhi', 'Howrah', 'Chennai'], answer: 0 }
+];
+
+function startTrainQuiz() {
+  currentQuizQ = 0;
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+  const container = document.getElementById('quiz-container');
+  if (!container) return;
+  container.classList.remove('hidden');
+  if (currentQuizQ >= QUIZ_QUESTIONS.length) {
+    container.innerHTML = `
+      <div class="text-center py-4 space-y-2">
+        <span class="material-symbols-outlined text-4xl text-purple-600">emoji_events</span>
+        <h4 class="text-sm font-bold text-on-surface">Quiz Complete!</h4>
+        <p class="text-[10px] text-gray-500">Great job! You know your Indian Railways well.</p>
+        <button class="bg-purple-600 text-white px-5 py-2 rounded-xl text-[10px] font-bold uppercase mt-2 active:scale-95 transition-all" onclick="startTrainQuiz()">Play Again</button>
+      </div>
+    `;
+    return;
+  }
+  const q = QUIZ_QUESTIONS[currentQuizQ];
+  container.innerHTML = `
+    <div class="bg-purple-50 border border-purple-100 rounded-2xl p-4 space-y-3">
+      <div class="text-[9px] font-black text-purple-400 uppercase tracking-wider">Question ${currentQuizQ + 1} of ${QUIZ_QUESTIONS.length}</div>
+      <p class="text-xs font-bold text-on-surface leading-relaxed">${q.q}</p>
+      <div class="space-y-2">
+        ${q.options.map((opt, i) => `
+          <button class="w-full text-left bg-white border border-purple-100 rounded-xl px-3 py-2.5 text-[10px] font-bold text-slate-700 hover:border-purple-400 active:scale-[0.98] transition-all" onclick="answerQuiz(${i}, ${q.answer})">${opt}</button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function answerQuiz(selected, correct) {
+  if (selected === correct) {
+    showToast('✓ Correct!', 'success');
+  } else {
+    showToast('✗ Wrong! Answer: ' + QUIZ_QUESTIONS[currentQuizQ].options[correct], 'error');
+  }
+  currentQuizQ++;
+  setTimeout(() => renderQuizQuestion(), 800);
 }

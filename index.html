@@ -675,6 +675,22 @@
         </div>
       </div>
       
+      <!-- Feature Highlights -->
+      <div class="flex gap-2.5 justify-center flex-wrap animate-fade-in-up" style="animation-delay: 0.15s;">
+        <div class="bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-emerald-400 text-xs">local_shipping</span>
+          <span class="text-[9px] text-white/90 font-bold">Seat Delivery</span>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-emerald-400 text-xs">gps_fixed</span>
+          <span class="text-[9px] text-white/90 font-bold">Live Tracking</span>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-emerald-400 text-xs">timer</span>
+          <span class="text-[9px] text-white/90 font-bold">10 Min ETA</span>
+        </div>
+      </div>
+      
       <!-- Bottom Section -->
       <div class="w-full max-w-sm flex flex-col items-center gap-3 animate-fade-in-up mt-auto" style="animation-delay: 0.2s;">
         <!-- Launching Indicator -->
@@ -879,7 +895,7 @@
         <!-- Profile Account Button -->
         <div class="w-12 h-12 rounded-full bg-white/10 p-[1px] relative shadow-lg cursor-pointer" onclick="navigateTo('page-account')">
           <div class="absolute inset-0 rounded-full border border-secondary/40"></div>
-          <div class="w-full h-full rounded-full overflow-hidden bg-emerald-midnight flex items-center justify-center">
+          <div id="shop-profile-avatar-container" class="w-full h-full rounded-full overflow-hidden bg-emerald-midnight flex items-center justify-center">
             <span class="material-symbols-outlined text-white/80 text-[24px]">person</span>
           </div>
         </div>
@@ -946,9 +962,12 @@
     <!-- Premium Categories Section -->
     <section class="mt-6 mb-6 overflow-hidden">
       <div class="px-margin-mobile flex items-center justify-between mb-4">
-        <h3 class="text-sm font-headline font-bold text-on-surface">Explore Categories</h3>
-        <button class="text-xs font-bold text-primary hover:opacity-75 flex items-center gap-0.5" onclick="filterCategory('all', null)">
-          View All
+        <div class="flex items-center gap-2">
+          <div class="w-1 h-5 bg-primary rounded-full"></div>
+          <h3 class="text-sm font-headline font-bold text-on-surface">Explore Categories</h3>
+        </div>
+        <button class="text-[10px] font-bold text-primary/70 hover:text-primary flex items-center gap-0.5 transition-colors" onclick="filterCategory('all', null)">
+          See all <span class="material-symbols-outlined text-xs">chevron_right</span>
         </button>
       </div>
       
@@ -1310,14 +1329,19 @@
 
     <!-- Step 3 Order success panel -->
     <div class="checkout-section p-5 hidden" id="checkout-step-3">
-      <div class="order-success text-center py-8">
-        <div class="success-animation mb-6">
-          <div class="success-circle w-20 h-20 rounded-full bg-emerald-50 flex items-center justify-center mx-auto shadow-md">
-            <span class="success-check text-4xl text-primary font-black">✓</span>
+      <div class="order-success text-center py-6">
+        <!-- Animated Success Ring -->
+        <div class="success-animation mb-5">
+          <div class="relative w-24 h-24 mx-auto">
+            <div class="absolute inset-0 rounded-full bg-emerald-100 animate-ping opacity-20"></div>
+            <div class="absolute inset-1 rounded-full bg-emerald-50 animate-pulse"></div>
+            <div class="relative w-full h-full rounded-full bg-gradient-to-br from-emerald-400 to-primary flex items-center justify-center shadow-xl">
+              <span class="material-symbols-outlined text-white text-4xl">check_circle</span>
+            </div>
           </div>
         </div>
-        <h2 class="text-xl font-headline font-bold text-on-surface">Order Confirmed!</h2>
-        <p class="text-xs text-gray-500 mt-2 mb-6 max-w-[280px] mx-auto">Your essentials will be prepared and delivered directly to your train coach &amp; seat.</p>
+        <h2 class="text-xl font-headline font-black text-on-surface">Order Confirmed! 🎉</h2>
+        <p class="text-xs text-gray-500 mt-2 mb-5 max-w-[280px] mx-auto leading-relaxed">Your essentials are being prepared and will be delivered directly to your train seat.</p>
         
         <div class="order-id-badge bg-emerald-50 text-primary px-5 py-2.5 rounded-xl text-xs font-bold inline-block mb-6 shadow-sm border border-emerald-100">
           Order ID: <strong id="order-id-display">RQ-XXXXXX</strong>
@@ -1571,7 +1595,13 @@
         <div class="absolute right-2 bottom-[-10px] text-[120px] text-white/10 font-bold pointer-events-none select-none">
           <span class="material-symbols-outlined text-[110px] opacity-20">train</span>
         </div>
-        <span class="bg-white/20 text-white text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">Live ETA Dispatch</span>
+        <div class="flex items-center gap-2">
+          <span class="bg-white/20 text-white text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+            Live ETA Dispatch
+          </span>
+          <span class="bg-emerald-400/20 text-emerald-200 text-[9px] font-black px-2.5 py-1 rounded-full font-mono">ETA ~12 min</span>
+        </div>
         <h3 class="text-base font-headline font-black mt-3" id="track-hero-title">Preparing your order...</h3>
         <p class="text-xs text-white/80 mt-1" id="track-hero-desc">Your essentials are being packed and sealed.</p>
         <div class="mt-4 pt-3 border-t border-white/20 flex justify-between text-xs font-bold font-mono">
@@ -1623,7 +1653,7 @@
                   <span>45km to Kanpur</span>
                 </div>
               </div>
-              <span class="text-[10px] font-mono font-black text-emerald-700 animate-pulse bg-emerald-100/50 px-2 py-1 rounded-lg">LIVE GPS</span>
+              <span class="text-[10px] font-mono font-black text-emerald-700 animate-pulse bg-emerald-100 px-2.5 py-1 rounded-lg border border-emerald-200 shadow-sm shadow-emerald-200/50">🟢 LIVE</span>
             </div>
 
             <!-- Station 2: Kanpur Central (Upcoming) -->
@@ -1741,10 +1771,14 @@
       <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="navigateTo('page-account')">
         <span class="material-symbols-outlined text-xl">arrow_back</span>
       </button>
-      <h2 class="text-base font-headline font-bold text-on-surface flex items-center gap-1.5">
-        <span class="material-symbols-outlined text-primary text-lg">support_agent</span>
-        RailQuick Support
-      </h2>
+      <div class="flex flex-col">
+        <h2 class="text-sm font-headline font-bold text-on-surface flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-primary text-lg">support_agent</span>
+          RailQuick Support
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        </h2>
+        <span class="text-[9px] text-gray-400 font-medium ml-7">Online · Replies instantly</span>
+      </div>
       <div class="w-9 h-9"></div>
     </div>
     
@@ -1756,7 +1790,7 @@
           <span class="material-symbols-outlined text-sm">robot_2</span>
         </div>
         <div class="bg-white border border-outline-variant/60 rounded-2xl p-3.5 shadow-sm text-xs font-medium text-on-surface leading-relaxed">
-          Hello! I'm your RailQuick Assistant. How can I help you with your train journey and seat deliveries today?
+          Hi there! 👋 I'm your RailQuick AI assistant. I can help with orders, deliveries, train schedules, refunds and more. How can I help you today?
         </div>
       </div>
     </div>
@@ -1768,6 +1802,8 @@
         <button class="bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-3.5 py-2 rounded-xl shrink-0 active:scale-95 transition-all" onclick="sendSupportMessage('What if my train is delayed?')">Delayed Train?</button>
         <button class="bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-3.5 py-2 rounded-xl shrink-0 active:scale-95 transition-all" onclick="sendSupportMessage('How is food delivered to my seat?')">How is it delivered?</button>
         <button class="bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-3.5 py-2 rounded-xl shrink-0 active:scale-95 transition-all" onclick="sendSupportMessage('Can I cancel my order?')">Can I cancel?</button>
+        <button class="bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-3.5 py-2 rounded-xl shrink-0 active:scale-95 transition-all" onclick="sendSupportMessage('Where is my order?')">Where's my order?</button>
+        <button class="bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold px-3.5 py-2 rounded-xl shrink-0 active:scale-95 transition-all" onclick="sendSupportMessage('What is my refund status?')">Refund status</button>
       </div>
     </div>
     
@@ -1837,6 +1873,17 @@
           <strong class="font-mono text-xs text-primary tracking-widest px-2" id="game-result-code">—</strong>
           <button class="bg-primary text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase active:scale-95 transition-all" onclick="applyGameCoupon()">Use Code</button>
         </div>
+      </div>
+      
+      <!-- Train Trivia Quiz -->
+      <div class="bg-white border border-outline-variant/60 rounded-3xl p-5 shadow-sm text-center space-y-3 mt-6 max-w-[320px] mx-auto">
+        <div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center mx-auto">
+          <span class="material-symbols-outlined text-purple-600 text-2xl">quiz</span>
+        </div>
+        <h4 class="text-sm font-headline font-bold text-on-surface">Train Trivia Quiz</h4>
+        <p class="text-[10px] text-gray-500">Test your Indian Railways knowledge!</p>
+        <button class="bg-purple-600 text-white px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider active:scale-95 transition-all shadow-md" onclick="startTrainQuiz()">Start Quiz</button>
+        <div id="quiz-container" class="hidden text-left space-y-3 mt-2"></div>
       </div>
     </div>
   </div>
