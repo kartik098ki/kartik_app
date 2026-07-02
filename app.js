@@ -2283,6 +2283,7 @@ function triggerClerkSignIn() {
   const clerk = clerkInstance || window.Clerk;
   if (clerk && clerkInitDone) {
     try {
+      localStorage.setItem('railquick_logging_in', 'true');
       showLoading('Redirecting to secure login...');
       clerk.redirectToSignIn({
         redirectUrl: window.location.origin
@@ -2313,21 +2314,35 @@ function showPhoneLogin() { showPhoneLoginPrompt(); }
 function syncClerkUser() {
   if (!clerkInstance) return;
   const user = clerkInstance.user;
+  
+  // Clear logging in flag and spinner since Clerk loaded the session
+  localStorage.removeItem('railquick_logging_in');
+  hideLoading();
+
   if (user) {
+    const savedPhone = localStorage.getItem(`railquick_phone_${user.id}`) || user.primaryPhoneNumber?.phoneNumber || '';
     appState.user = {
       name: user.fullName || user.firstName || user.username || 'User',
       email: user.primaryEmailAddress?.emailAddress || '',
-      phone: user.primaryPhoneNumber?.phoneNumber || '',
+      phone: savedPhone,
       avatarUrl: user.imageUrl || '',
       avatar: (user.fullName || user.firstName || 'U')[0].toUpperCase(),
       provider: 'clerk',
       clerkId: user.id,
       loginAt: new Date().toISOString()
     };
+    if (savedPhone) {
+      localStorage.setItem(`railquick_phone_${user.id}`, savedPhone);
+    }
     
-    // Auto redirect to page-shop if they are currently stuck on page-splash
+    // Auto redirect if currently stuck on page-splash
     if (appState.currentPage === 'page-splash') {
-      navigateTo('page-shop');
+      if (!savedPhone) {
+        navigateTo('page-account');
+        showToast('Please add your mobile number to complete profile', 'warning');
+      } else {
+        navigateTo('page-shop');
+      }
     }
   } else {
     appState.user = null;
@@ -2403,6 +2418,12 @@ function addToCartFromModal() {
   closeProductModal();
   showToast(`✓ ${appState.modalProduct.name.split(' ').slice(0, 3).join(' ')} × ${qty} added!`);
   renderProducts(PRODUCTS);
+  
+  // Also sync search overlay results if open
+  const searchInput = document.getElementById('overlay-search-input');
+  if (searchInput && searchInput.value) {
+    runOverlaySearch(searchInput.value);
+  }
 }
 
 // ===== TOAST NOTIFICATION =====
@@ -2700,8 +2721,25 @@ document.addEventListener('DOMContentLoaded', () => {
   setDefaultDates();
   
   if (appState.user) {
-    // Already signed in! Skip splash directly to shop page.
-    navigateTo('page-shop');
+    if (!appState.user.phone) {
+      navigateTo('page-account');
+      showToast('Please add your mobile number to complete profile', 'warning');
+    } else {
+      navigateTo('page-shop');
+    }
+  } else if (localStorage.getItem('railquick_logging_in') === 'true') {
+    // Skip splash, keep loading state to avoid flash of splash screen
+    document.getElementById('page-splash').classList.remove('active');
+    showLoading('Completing secure login...');
+    
+    // Safety timeout: if Clerk doesn't load/respond in 6 seconds, show splash
+    setTimeout(() => {
+      if (localStorage.getItem('railquick_logging_in') === 'true') {
+        localStorage.removeItem('railquick_logging_in');
+        hideLoading();
+        navigateTo('page-splash');
+      }
+    }, 6000);
   } else {
     document.getElementById('page-splash').classList.add('active');
     appState.currentPage = 'page-splash';
@@ -2745,20 +2783,28 @@ function setupClerkListeners(clerk) {
 
   // React to sign-in / sign-out events
   clerk.addListener(({ user }) => {
+    // Clear logging in flag and spinner since Clerk loaded the session
+    localStorage.removeItem('railquick_logging_in');
+    hideLoading();
+
     const wasSignedIn = !!appState.user;
     const isNowSignedIn = !!user;
 
     if (isNowSignedIn) {
+      const savedPhone = localStorage.getItem(`railquick_phone_${user.id}`) || user.primaryPhoneNumber?.phoneNumber || '';
       appState.user = {
         name: user.fullName || user.firstName || user.username || 'User',
         email: user.primaryEmailAddress?.emailAddress || '',
-        phone: user.primaryPhoneNumber?.phoneNumber || '',
+        phone: savedPhone,
         avatarUrl: user.imageUrl || '',
         avatar: (user.fullName || user.firstName || 'U')[0].toUpperCase(),
         provider: 'clerk',
         clerkId: user.id,
         loginAt: new Date().toISOString()
       };
+      if (savedPhone) {
+        localStorage.setItem(`railquick_phone_${user.id}`, savedPhone);
+      }
     } else {
       appState.user = null;
     }
@@ -3239,32 +3285,20 @@ function setStationAlarm() {
 // ===== SEARCH OVERLAY HANDLERS =====
 
 function openSearchOverlay() {
-  const overlay = document.getElementById('page-search');
-  if (overlay) {
-    overlay.classList.remove('hidden');
-    // Hide bottom navigation bar when search is open
-    const nav = document.querySelector('.bottom-nav');
-    if (nav) nav.classList.add('hidden');
-    
-    // Auto-focus input
-    const input = document.getElementById('overlay-search-input');
-    if (input) {
-      input.value = '';
-      setTimeout(() => input.focus(), 150);
-    }
-    
-    clearOverlaySearch();
+  navigateTo('page-search');
+  
+  // Auto-focus input
+  const input = document.getElementById('overlay-search-input');
+  if (input) {
+    input.value = '';
+    setTimeout(() => input.focus(), 150);
   }
+  
+  clearOverlaySearch();
 }
 
 function closeSearchOverlay() {
-  const overlay = document.getElementById('page-search');
-  if (overlay) {
-    overlay.classList.add('hidden');
-    // Show bottom navigation bar again
-    const nav = document.querySelector('.bottom-nav');
-    if (nav) nav.classList.remove('hidden');
-  }
+  navigateTo('page-shop');
 }
 
 function clearOverlaySearch() {
@@ -3358,7 +3392,7 @@ function runOverlaySearch(q) {
         : `<button class="border border-primary bg-primary/5 hover:bg-primary text-primary hover:text-white px-3 py-1 rounded-full text-[9px] font-black uppercase transition-all shadow-sm shrink-0 min-w-[56px] text-center" onclick="event.stopPropagation();addSearchProductToCart(${p.id})">ADD</button>`;
 
       return `
-        <div class="bg-white rounded-3xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="addSearchProductToCart(${p.id})">
+        <div class="bg-white rounded-3xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.03)] border border-outline-variant/60 flex flex-col group cursor-pointer hover:border-primary/30 active:scale-[0.98] transition-all relative overflow-hidden" onclick="openProductModal(${p.id})">
           <div class="w-full aspect-square bg-[#F4F6F5]/70 rounded-2xl p-4 mb-3 flex items-center justify-center relative overflow-hidden shrink-0">
             <img alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300" src="${p.img}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop';">
           </div>
@@ -3420,6 +3454,7 @@ function saveCompulsoryPhone() {
   
   if (appState.user) {
     appState.user.phone = phoneVal;
+    localStorage.setItem(`railquick_phone_${appState.user.clerkId || 'guest'}`, phoneVal);
     saveState();
     initAccountPage();
     showToast('✓ Mobile number verified & linked!', 'success');
