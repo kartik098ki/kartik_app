@@ -625,7 +625,10 @@ function navigateTo(pageId) {
   updateBottomNav(pageId);
 }
 
-// activateNav removed — bottom nav bar has been removed
+function completeOnboarding() {
+  localStorage.setItem('railquick_onboarded', 'true');
+  navigateTo('page-pnr');
+}
 
 // ===== PNR & LIVE STATUS FLOWS =====
 function switchPNRTab(tab) {
@@ -2720,6 +2723,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadState();
   setDefaultDates();
   
+  const onboarded = localStorage.getItem('railquick_onboarded') === 'true';
   if (appState.user) {
     if (!appState.user.phone) {
       navigateTo('page-account');
@@ -2740,6 +2744,9 @@ document.addEventListener('DOMContentLoaded', () => {
         navigateTo('page-splash');
       }
     }, 6000);
+  } else if (onboarded) {
+    // Already clicked Get Started previously, skip splash straight to shop page
+    navigateTo('page-shop');
   } else {
     document.getElementById('page-splash').classList.add('active');
     appState.currentPage = 'page-splash';

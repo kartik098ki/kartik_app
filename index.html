@@ -643,76 +643,80 @@
 <div id="app" class="app-wrapper">
 
   <!-- ==================== SPLASH / WELCOME PAGE ==================== -->
-  <div id="page-splash" class="page active">
-    <!-- Hero Background -->
-    <div class="absolute inset-0 z-0">
-      <div class="w-full h-full bg-cover bg-center transition-transform duration-[10000ms] scale-105" style="background-image: url('splash_hero.png');"></div>
-    </div>
-    <!-- Cinematic Gradient Overlay -->
-    <div class="glass-overlay z-10"></div>
-    <!-- Floating Particles -->
-    <div class="particle particle-1"></div>
-    <div class="particle particle-2"></div>
-    <div class="particle particle-3"></div>
-    <div class="particle particle-4"></div>
-    <div class="particle particle-5"></div>
-    <div class="particle particle-6"></div>
+  <div id="page-splash" class="page active" style="background: radial-gradient(circle at 50% 30%, #004D3C 0%, #002D24 60%, #00120E 100%) !important;">
+    <!-- Ambient Blur Artifacts -->
+    <div class="absolute top-[25%] left-[50%] -translate-x-1/2 w-80 h-80 rounded-full bg-emerald-400/20 blur-[100px] pointer-events-none"></div>
+    <div class="absolute bottom-[20%] right-[-10%] w-72 h-72 rounded-full bg-amber-500/10 blur-[120px] pointer-events-none"></div>
+    
+    <!-- Cinematically Masked Glass Overlay -->
+    <div class="absolute inset-0 bg-black/20 backdrop-blur-[1px] z-10 pointer-events-none"></div>
+    
     <!-- Main Content Area -->
-    <div class="relative z-20 flex flex-col h-full px-6 pt-12 pb-6 items-center text-center">
-      <!-- Top Section -->
-      <div class="flex flex-col items-center gap-1 animate-fade-in-up w-full drop-shadow-2xl">
-        <h1 class="text-5xl font-black text-white tracking-tighter leading-none mb-3">RailQuick</h1>
-        <p class="font-body text-[11px] text-white/90 font-medium text-center leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
-          India's Premium Train Essentials Delivery.<br/>Fresh & sealed items directly to your seat.
+    <div class="relative z-20 flex flex-col h-full px-6 pt-16 pb-8 items-center text-center">
+      <!-- Top Branding -->
+      <div class="flex flex-col items-center gap-2 animate-fade-in-up w-full drop-shadow-2xl">
+        <span class="bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[10px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-inner mb-2 select-none">
+          Premium Train Delivery
+        </span>
+        <h1 class="text-5xl font-black text-white tracking-tighter leading-none mb-2 font-headline">RailQuick</h1>
+        <p class="font-body text-xs text-white/80 max-w-[280px] leading-relaxed mx-auto">
+          Fresh essentials &amp; travel comforts delivered sealed directly to your train coach &amp; seat.
         </p>
       </div>
       
-      <!-- Centered Premium Pulsing Icon -->
-      <div class="flex-grow flex items-center justify-center py-6 animate-fade-in-up" style="animation-delay: 0.1s;">
-        <div class="w-24 h-24 rounded-[2.25rem] bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center shadow-2xl relative">
-          <span class="material-symbols-outlined text-white text-[48px]">train</span>
-          <div class="absolute inset-0 rounded-[2.25rem] border border-emerald-400/30 animate-ping opacity-30"></div>
-        </div>
-      </div>
-      
-      <!-- Feature Highlights -->
-      <div class="flex gap-2.5 justify-center flex-wrap animate-fade-in-up" style="animation-delay: 0.15s;">
-        <div class="bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-emerald-400 text-xs">local_shipping</span>
-          <span class="text-[9px] text-white/90 font-bold">Seat Delivery</span>
-        </div>
-        <div class="bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-emerald-400 text-xs">gps_fixed</span>
-          <span class="text-[9px] text-white/90 font-bold">Live Tracking</span>
-        </div>
-        <div class="bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-emerald-400 text-xs">timer</span>
-          <span class="text-[9px] text-white/90 font-bold">10 Min ETA</span>
-        </div>
-      </div>
-      
-      <!-- Bottom Section -->
-      <div class="w-full max-w-sm flex flex-col items-center gap-3 animate-fade-in-up mt-auto" style="animation-delay: 0.2s;">
-        <!-- Launching Indicator -->
-        <div class="flex flex-col items-center w-full mb-1">
-          <span class="font-label-sm text-[8px] text-secondary font-black tracking-[0.2em] uppercase drop-shadow-md">Launching in</span>
-          <h2 class="font-headline text-3xl text-white tracking-tighter leading-none mt-1 drop-shadow-lg font-black">DELHI</h2>
-          <p class="font-body text-[9px] text-white/80 font-medium mt-1 text-center drop-shadow-md">Express service for every passenger.</p>
+      <!-- Centered Logo Hub -->
+      <div class="flex-grow flex flex-col items-center justify-center py-6 animate-fade-in-up" style="animation-delay: 0.1s;">
+        <div class="relative w-36 h-36 flex items-center justify-center">
+          <!-- Pulse rings -->
+          <div class="absolute inset-0 rounded-[2.5rem] border border-emerald-400/20 animate-ping opacity-60"></div>
+          <div class="absolute inset-4 rounded-[2rem] border border-emerald-500/30 animate-pulse opacity-40"></div>
+          
+          <!-- Core Logo Box -->
+          <div class="relative w-24 h-24 rounded-[2.25rem] bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-2xl border border-white/20 flex items-center justify-center shadow-[0_12px_40px_rgba(0,0,0,0.4)]">
+            <span class="material-symbols-outlined text-white text-[54px] drop-shadow-lg">train</span>
+          </div>
         </div>
         
-        <!-- Call to Action -->
+        <!-- Live Stoppage Highlights -->
+        <div class="flex gap-2 justify-center flex-wrap mt-8">
+          <div class="bg-white/5 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-emerald-400 text-xs">local_shipping</span>
+            <span class="text-[9px] text-white/90 font-black uppercase tracking-wide">Seat Delivery</span>
+          </div>
+          <div class="bg-white/5 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-emerald-400 text-xs">gps_fixed</span>
+            <span class="text-[9px] text-white/90 font-black uppercase tracking-wide">Live GPS</span>
+          </div>
+          <div class="bg-white/5 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-emerald-400 text-xs">timer</span>
+            <span class="text-[9px] text-white/90 font-black uppercase tracking-wide">10 Min ETA</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Bottom CTA Card Area -->
+      <div class="w-full max-w-sm flex flex-col items-center gap-5 animate-fade-in-up mt-auto" style="animation-delay: 0.2s;">
+        <!-- Launching Card -->
+        <div class="w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-lg text-center relative overflow-hidden">
+          <div class="absolute right-0 top-0 bg-secondary/80 text-primary text-[8px] font-black px-2.5 py-0.5 rounded-bl-lg uppercase tracking-wider">Live</div>
+          <span class="text-[9px] font-black text-secondary uppercase tracking-[0.25em] block mb-1">Delivering At</span>
+          <h2 class="font-headline text-2xl text-white tracking-tight leading-none font-black">DELHI JUNCTION (DLI)</h2>
+          <p class="font-body text-[10px] text-white/60 mt-1.5 leading-relaxed">Fastest station platform delivery network.</p>
+        </div>
+        
+        <!-- Get Started CTA Button -->
         <div class="w-full">
-          <button class="pulse-glow w-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 animate-gradient hover:brightness-110 active:scale-[0.98] transition-all duration-300 text-white py-4 px-6 rounded-full flex items-center justify-between group border border-emerald-300/30 shadow-2xl" id="get-started" onclick="navigateTo('page-pnr')">
-            <span class="font-headline text-base font-bold pl-6 tracking-wide text-white">Get Started</span>
-            <div class="bg-white/20 p-2.5 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform">
+          <button class="pulse-glow w-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 animate-gradient hover:brightness-110 active:scale-[0.98] transition-all duration-300 text-white py-4 px-6 rounded-2xl flex items-center justify-between group border border-emerald-300/30 shadow-2xl" id="get-started" onclick="completeOnboarding()">
+            <span class="font-headline text-base font-black pl-4 tracking-wide text-white">Get Started</span>
+            <div class="bg-white/20 p-2 rounded-xl flex items-center justify-center group-hover:translate-x-1 transition-transform">
               <span class="material-symbols-outlined text-white text-lg">arrow_forward</span>
             </div>
           </button>
         </div>
         
-        <!-- Elite Detail Footer -->
-        <div class="mt-1.5 opacity-60">
-          <p class="font-label-sm text-[8px] text-white/60 tracking-widest uppercase drop-shadow-md">Powered by RailQuick Logistics</p>
+        <!-- Elite Footer -->
+        <div class="opacity-40">
+          <p class="font-label-sm text-[8px] text-white/60 tracking-[0.25em] uppercase font-bold">Powered by RailQuick Logistics</p>
         </div>
       </div>
     </div>
