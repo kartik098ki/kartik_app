@@ -1586,9 +1586,18 @@ function changeProductQty(id, delta) {
 
 function updateCartFAB() {
   const fab = document.getElementById('cart-fab');
+  if (!fab) return;
   const count = appState.cart.reduce((s, c) => s + c.qty, 0);
   const total = appState.cart.reduce((s, c) => s + c.price * c.qty, 0);
-  if (count > 0 && (appState.currentPage === 'page-shop' || appState.currentPage === 'page-category-view')) {
+  
+  // Check if keyboard is active on search page
+  const searchInput = document.getElementById('overlay-search-input');
+  const isSearchInputFocused = searchInput && document.activeElement === searchInput;
+  
+  if (count > 0 && !isSearchInputFocused && 
+      (appState.currentPage === 'page-shop' || 
+       appState.currentPage === 'page-category-view' || 
+       appState.currentPage === 'page-search')) {
     fab.classList.remove('hidden');
     document.getElementById('cart-fab-count').textContent = `${count} item${count > 1 ? 's' : ''}`;
     document.getElementById('cart-fab-price').textContent = `₹${total}`;
@@ -3294,17 +3303,29 @@ function setStationAlarm() {
 function openSearchOverlay() {
   navigateTo('page-search');
   
-  // Auto-focus input
+  // Auto-focus input and bind blur/focus listeners to hide/show Cart FAB
   const input = document.getElementById('overlay-search-input');
   if (input) {
     input.value = '';
     setTimeout(() => input.focus(), 150);
+    
+    input.onfocus = () => {
+      const fab = document.getElementById('cart-fab');
+      if (fab) fab.classList.add('hidden');
+    };
+    input.onblur = () => {
+      setTimeout(() => {
+        updateCartFAB();
+      }, 300);
+    };
   }
   
   clearOverlaySearch();
+  loadRecentSearches();
 }
 
 function closeSearchOverlay() {
+  document.getElementById('overlay-search-input')?.blur();
   navigateTo('page-shop');
 }
 
@@ -3320,6 +3341,8 @@ function clearOverlaySearch() {
   
   const resultsView = document.getElementById('search-results-view');
   if (resultsView) resultsView.classList.add('hidden');
+  
+  loadRecentSearches();
 }
 
 function prefillSearch(text) {
@@ -3327,6 +3350,8 @@ function prefillSearch(text) {
   if (input) {
     input.value = text;
     runOverlaySearch(text);
+    saveRecentSearch(text);
+    input.blur(); // Collapse keyboard
   }
 }
 
@@ -3417,16 +3442,24 @@ function runOverlaySearch(q) {
 // Wrapper to sync quantities inside search results list
 function addSearchProductToCart(id) {
   addToCart(id);
+  
+  // Collapse keyboard to avoid layout shifting
   const qInput = document.getElementById('overlay-search-input');
-  const q = qInput ? qInput.value : '';
-  runOverlaySearch(q);
+  if (qInput) {
+    qInput.blur();
+    runOverlaySearch(qInput.value);
+  }
 }
 
 function changeSearchProductQty(id, change) {
   changeProductQty(id, change);
+  
+  // Collapse keyboard to avoid layout shifting
   const qInput = document.getElementById('overlay-search-input');
-  const q = qInput ? qInput.value : '';
-  runOverlaySearch(q);
+  if (qInput) {
+    qInput.blur();
+    runOverlaySearch(qInput.value);
+  }
 }
 
 function updateHomeProfileAvatar() {
@@ -3522,4 +3555,52 @@ function answerQuiz(selected, correct) {
   }
   currentQuizQ++;
   setTimeout(() => renderQuizQuestion(), 800);
+}
+
+// ===== RECENT SEARCH HISTORY =====
+function loadRecentSearches() {
+  const container = document.getElementById('search-recent-container');
+  const list = document.getElementById('search-recent-list');
+  if (!container || !list) return;
+  
+  let recents = [];
+  try {
+    recents = JSON.parse(localStorage.getItem('railquick_recent_searches')) || [];
+  } catch(e) {}
+  
+  if (recents.length === 0) {
+    container.classList.add('hidden');
+    return;
+  }
+  
+  container.classList.remove('hidden');
+  list.innerHTML = recents.map(term => `
+    <button onclick="prefillSearch('${term}')" class="bg-slate-100 hover:bg-slate-200 border border-slate-200/40 rounded-full px-3 py-1.5 text-[10px] font-bold text-slate-700 flex items-center gap-1 active:scale-95 transition-all">
+      <span class="material-symbols-outlined text-[10px] text-slate-400">history</span>
+      ${term}
+    </button>
+  `).join('');
+}
+
+function saveRecentSearch(term) {
+  if (!term || !term.trim()) return;
+  const clean = term.trim();
+  
+  let recents = [];
+  try {
+    recents = JSON.parse(localStorage.getItem('railquick_recent_searches')) || [];
+  } catch(e) {}
+  
+  // Remove duplicate if exists, and push to front
+  recents = recents.filter(x => x.toLowerCase() !== clean.toLowerCase());
+  recents.unshift(clean);
+  recents = recents.slice(0, 6); // Max 6 recent searches
+  
+  localStorage.setItem('railquick_recent_searches', JSON.stringify(recents));
+  loadRecentSearches();
+}
+
+function clearRecentSearches() {
+  localStorage.removeItem('railquick_recent_searches');
+  loadRecentSearches();
 }

@@ -1971,25 +1971,34 @@
   </nav>
 
   <!-- ==================== DEDICATED SEARCH OVERLAY PAGE ==================== -->
-  <div id="page-search" class="page bg-background">
+  <div id="page-search" class="page bg-background flex flex-col" style="overflow: hidden !important; padding-bottom: 0 !important;">
     <!-- Header Input Section -->
-    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-4 py-3 flex items-center gap-3 z-50 shadow-sm">
+    <div class="sticky top-0 bg-white border-b border-outline-variant/60 px-4 py-3 flex items-center gap-3 z-50 shadow-sm shrink-0">
       <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-gray-100 text-primary active:scale-90 transition-transform" onclick="closeSearchOverlay()">
         <span class="material-symbols-outlined text-xl">arrow_back</span>
       </button>
       <div class="flex-1 bg-[#F4F6F5]/80 rounded-xl px-3 flex items-center h-11 border border-transparent focus-within:border-primary/30 transition-all">
         <span class="material-symbols-outlined text-slate-400 text-lg mr-2">search</span>
-        <input type="text" id="overlay-search-input" class="w-full bg-transparent border-none focus:ring-0 text-xs font-semibold placeholder-gray-400" placeholder="Search snacks, drinks, hygiene..." oninput="runOverlaySearch(this.value)" />
+        <input type="text" id="overlay-search-input" class="w-full bg-transparent border-none focus:ring-0 text-xs font-semibold placeholder-gray-400 animate-fade-in-up" placeholder="Search snacks, drinks, hygiene..." oninput="runOverlaySearch(this.value)" onkeydown="if(event.key==='Enter') { saveRecentSearch(this.value); this.blur(); }" />
         <button onclick="clearOverlaySearch()" class="text-slate-400 hover:text-slate-600 hidden" id="search-clear-btn">✕</button>
       </div>
     </div>
 
     <!-- Search Contents -->
-    <div class="p-5 space-y-6 overflow-y-auto h-[calc(100%-60px)]">
+    <div class="flex-grow overflow-y-auto p-5 space-y-6" onscroll="document.getElementById('overlay-search-input')?.blur();">
+      <!-- Recent Searches (Injected dynamically) -->
+      <div id="search-recent-container" class="space-y-3 hidden">
+        <div class="flex justify-between items-center">
+          <h4 class="text-[10px] font-black text-secondary uppercase tracking-widest flex items-center gap-1"><span class="material-symbols-outlined text-xs text-gray-400">history</span> Recent Searches</h4>
+          <button onclick="clearRecentSearches()" class="text-[9px] font-black uppercase text-red-500/80 hover:text-red-500 hover:opacity-75 transition-colors">Clear</button>
+        </div>
+        <div class="flex flex-wrap gap-2" id="search-recent-list"></div>
+      </div>
+
       <!-- Popular Searches (Default view when empty) -->
-      <div id="search-default-view" class="space-y-4">
+      <div id="search-default-view" class="space-y-5">
         <div>
-          <h4 class="text-[10px] font-black text-secondary uppercase tracking-widest mb-3">Popular Searches</h4>
+          <h4 class="text-[10px] font-black text-secondary uppercase tracking-widest mb-3 flex items-center gap-1"><span class="material-symbols-outlined text-xs text-amber-500 animate-pulse">local_fire_department</span> Popular Searches</h4>
           <div class="flex flex-wrap gap-2">
             <button onclick="prefillSearch('Samosa')" class="bg-white border border-outline-variant/60 rounded-full px-3.5 py-2 text-[10px] font-bold text-on-surface hover:border-primary/40 active:scale-95 transition-all">Samosa</button>
             <button onclick="prefillSearch('Chai')" class="bg-white border border-outline-variant/60 rounded-full px-3.5 py-2 text-[10px] font-bold text-on-surface hover:border-primary/40 active:scale-95 transition-all">Chai</button>
@@ -2018,7 +2027,7 @@
       <!-- Results Grid -->
       <div id="search-results-view" class="hidden">
         <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3" id="search-results-title">Search Results</div>
-        <div class="grid grid-cols-2 gap-3" id="search-results-grid">
+        <div class="grid grid-cols-2 gap-3 pb-24" id="search-results-grid">
           <!-- Injected items -->
         </div>
       </div>
