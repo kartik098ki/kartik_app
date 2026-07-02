@@ -2788,7 +2788,7 @@ function retryClerkInit() {
   script.async = true;
   script.crossOrigin = 'anonymous';
   script.setAttribute('data-clerk-publishable-key', CLERK_PUBLISHABLE_KEY);
-  script.src = 'https://smooth-jackal-18.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js';
+  script.src = 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5.22.0/dist/clerk.browser.js';
   script.onload = () => { window.__clerkScriptLoaded = true; };
   script.onerror = () => { window.__clerkScriptFailed = true; };
   document.head.appendChild(script);

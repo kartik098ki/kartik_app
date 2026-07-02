@@ -12,7 +12,7 @@
     data-clerk-publishable-key="pk_test_c21vb3RoLWphY2thbC0xOC5jbGVyay5hY2NvdW50cy5kZXYk"
     onload="window.__clerkScriptLoaded = true;"
     onerror="window.__clerkScriptFailed = true;"
-    src="https://smooth-jackal-18.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5.22.0/dist/clerk.browser.js"
     type="text/javascript"
   ></script>
   
@@ -262,40 +262,53 @@
 
     /* Category pills custom premium styling */
     .category-pill {
-      background: white;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      border-radius: 9999px;
-      padding: 10px 18px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 0;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
       flex-shrink: 0;
+      transition: transform 0.2s ease;
       -webkit-tap-highlight-color: transparent;
     }
-    .category-pill.active {
-      background: #004D3C !important;
-      border-color: #004D3C !important;
-      box-shadow: 0 8px 16px -4px rgba(0, 77, 60, 0.3) !important;
+    .category-pill:active {
+      transform: scale(0.95);
+    }
+    .cat-icon-wrapper {
+      width: 56px;
+      height: 56px;
+      border-radius: 1.25rem; /* squircle */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     }
     .category-pill .cat-label {
-      color: #475569;
-      font-size: 11px;
+      color: #64748B;
+      font-size: 10px;
       font-weight: 700;
-      transition: all 0.3s ease;
+      margin-top: 6px;
+      transition: color 0.3s ease;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .category-pill.active .cat-icon-wrapper {
+      background: #004D3C !important;
+      border-color: #004D3C !important;
+      box-shadow: 0 8px 20px rgba(0, 77, 60, 0.25) !important;
+      transform: translateY(-2px);
+    }
+    .category-pill.active .cat-icon-wrapper .material-symbols-outlined {
+      color: #D4AF37 !important; /* Gold icons inside active emerald pills look extremely premium! */
     }
     .category-pill.active .cat-label {
-      color: white !important;
+      color: #004D3C !important;
       font-weight: 800 !important;
-    }
-    .category-pill .material-symbols-outlined {
-      font-size: 18px;
-      transition: all 0.3s ease;
-    }
-    .category-pill.active .material-symbols-outlined {
-      color: #D4AF37 !important; /* Gold icons inside active emerald pills look extremely premium! */
     }
 
     /* Route live timeline styling */
@@ -960,31 +973,41 @@
       <div class="flex gap-3 overflow-x-auto pb-3 scrollbar-none px-margin-mobile -mx-margin-mobile select-none" style="-webkit-overflow-scrolling: touch;">
         <!-- All Pill -->
         <button class="category-pill active" onclick="filterCategory('all', this)">
-          <span class="material-symbols-outlined text-primary">apps</span>
+          <div class="cat-icon-wrapper bg-emerald-50 border border-emerald-100/50">
+            <span class="material-symbols-outlined text-primary text-[28px]">apps</span>
+          </div>
           <span class="cat-label">All Items</span>
         </button>
 
         <!-- Snacks Pill -->
         <button class="category-pill" onclick="filterCategory('snacks', this)">
-          <span class="material-symbols-outlined text-amber-500">cookie</span>
+          <div class="cat-icon-wrapper bg-amber-50 border border-amber-100/50">
+            <span class="material-symbols-outlined text-amber-500 text-[28px]">cookie</span>
+          </div>
           <span class="cat-label">Snacks</span>
         </button>
 
         <!-- Drinks Pill -->
         <button class="category-pill" onclick="filterCategory('beverages', this)">
-          <span class="material-symbols-outlined text-sky-500">local_cafe</span>
+          <div class="cat-icon-wrapper bg-sky-50 border border-sky-100/50">
+            <span class="material-symbols-outlined text-sky-500 text-[28px]">local_cafe</span>
+          </div>
           <span class="cat-label">Drinks</span>
         </button>
 
         <!-- Hygiene Pill -->
         <button class="category-pill" onclick="filterCategory('hygiene', this)">
-          <span class="material-symbols-outlined text-emerald-600">clean_hands</span>
+          <div class="cat-icon-wrapper bg-emerald-50 border border-emerald-100/50">
+            <span class="material-symbols-outlined text-emerald-600 text-[28px]">clean_hands</span>
+          </div>
           <span class="cat-label">Hygiene</span>
         </button>
 
         <!-- Tech Pill -->
         <button class="category-pill" onclick="filterCategory('tech', this)">
-          <span class="material-symbols-outlined text-violet-600">devices</span>
+          <div class="cat-icon-wrapper bg-purple-50 border border-purple-100/50">
+            <span class="material-symbols-outlined text-violet-600 text-[28px]">devices</span>
+          </div>
           <span class="cat-label">Tech &amp; Comfort</span>
         </button>
       </div>
